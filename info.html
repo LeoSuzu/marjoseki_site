@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marjo Seki | Information</title>
+    <meta
+      name="description"
+      content="Contact information, biography, and services for Marjo Seki."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="info">
+    <header class="site-header">
+      <div class="shell site-header__inner">
+        <a class="brand" href="index.html">
+          <span class="brand__eyebrow" id="brand-eyebrow">Author · Japanese Food Chef · Teacher</span>
+          <span class="brand__name" id="brand-name">Marjo Seki</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          Menu
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+          <a data-nav="home" href="index.html">Home</a>
+          <a data-nav="info" href="info.html">Information</a>
+          <a data-nav="events" href="events.html">Events</a>
+          <a data-nav="store" href="store.html">Books & Courses</a>
+          <a class="button button--ghost admin-trigger" href="admin/">Edit Site</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="shell page-hero__grid">
+          <div>
+            <p class="eyebrow">Information</p>
+            <h1 id="info-title">Contact, background, and collaboration details.</h1>
+            <p id="info-lead">
+              This page gives visitors one clear place to learn about the work and get in touch.
+            </p>
+          </div>
+          <div class="page-hero__image">
+            <img
+              id="info-image"
+              src="assets/uploads/books-placeholder.svg"
+              alt="Books and notes placeholder"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell two-column">
+          <article class="panel panel--soft">
+            <p class="eyebrow">Biography</p>
+            <h2 id="info-bio-title">A warm voice with practical experience.</h2>
+            <p id="info-bio-text">
+              Use this space for a longer introduction, professional story, or message about the
+              mission behind the books and courses.
+            </p>
+          </article>
+          <aside class="panel">
+            <p class="eyebrow">Contact</p>
+            <div class="contact-list" id="contact-list"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell">
+          <div class="section-heading">
+            <p class="eyebrow">Services</p>
+            <h2>Ways to work together</h2>
+          </div>
+          <div class="feature-grid" id="services-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell site-footer__inner">
+        <div>
+          <p class="site-footer__title" id="footer-name">Marjo Seki</p>
+          <p id="footer-tagline">Books, courses, and events that create space for reflection.</p>
+        </div>
+        <div class="site-footer__links" id="footer-links"></div>
+      </div>
+    </footer>
+
+    <script src="assets/site.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,136 @@
+local_backend: true
+
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+site_url: "/"
+display_url: "/"
+logo_url: "/assets/uploads/portrait-placeholder.svg"
+
+collections:
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "Site Content"
+        name: "site"
+        file: "content/site.json"
+        format: "json"
+        fields:
+          - label: "Global"
+            name: "global"
+            widget: "object"
+            fields:
+              - { label: "Site Name", name: "siteName", widget: "string" }
+              - { label: "Footer Tagline", name: "footerTagline", widget: "string" }
+              - label: "Footer Links"
+                name: "footerLinks"
+                widget: "list"
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "URL", name: "url", widget: "string" }
+                  - { label: "External", name: "external", widget: "boolean", required: false }
+          - label: "Home"
+            name: "home"
+            widget: "object"
+            fields:
+              - label: "Hero"
+                name: "hero"
+                widget: "object"
+                fields:
+                  - { label: "Kicker", name: "kicker", widget: "string" }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Text", name: "text", widget: "text" }
+                  - { label: "Primary CTA Label", name: "primaryCtaLabel", widget: "string" }
+                  - { label: "Secondary CTA Label", name: "secondaryCtaLabel", widget: "string" }
+                  - { label: "Hero Image", name: "image", widget: "image" }
+                  - { label: "Hero Image Alt", name: "imageAlt", widget: "string" }
+                  - { label: "Badge Text", name: "badge", widget: "string" }
+              - label: "Intro"
+                name: "intro"
+                widget: "object"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Text", name: "text", widget: "text" }
+              - label: "Feature Cards"
+                name: "features"
+                widget: "list"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Text", name: "text", widget: "text" }
+          - label: "Information Page"
+            name: "info"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Lead", name: "lead", widget: "text" }
+              - { label: "Image", name: "image", widget: "image" }
+              - { label: "Image Alt", name: "imageAlt", widget: "string" }
+              - { label: "Bio Title", name: "bioTitle", widget: "string" }
+              - { label: "Bio Text", name: "bioText", widget: "text" }
+              - label: "Contact Items"
+                name: "contactItems"
+                widget: "list"
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "Value", name: "value", widget: "string" }
+              - label: "Services"
+                name: "services"
+                widget: "list"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Text", name: "text", widget: "text" }
+          - label: "Events Page"
+            name: "events"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Lead", name: "lead", widget: "text" }
+              - { label: "Image", name: "image", widget: "image" }
+              - { label: "Image Alt", name: "imageAlt", widget: "string" }
+              - label: "Upcoming Events"
+                name: "upcoming"
+                widget: "list"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Date", name: "date", widget: "string" }
+                  - { label: "Location", name: "location", widget: "string" }
+                  - { label: "Text", name: "text", widget: "text" }
+                  - { label: "Button Label", name: "buttonLabel", widget: "string", required: false }
+                  - { label: "Button URL", name: "buttonUrl", widget: "string", required: false }
+              - label: "Social Window"
+                name: "social"
+                widget: "object"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Note", name: "note", widget: "text" }
+                  - { label: "Embed URL", name: "embedUrl", widget: "string", required: false }
+
+  - name: "store"
+    label: "Store"
+    files:
+      - label: "Store Products"
+        name: "store-products"
+        file: "content/store.json"
+        format: "json"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Lead", name: "lead", widget: "text" }
+          - label: "Products"
+            name: "products"
+            widget: "list"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Type", name: "type", widget: "string" }
+              - { label: "Format", name: "format", widget: "string" }
+              - { label: "Description", name: "text", widget: "text" }
+              - { label: "Price Label", name: "priceLabel", widget: "string" }
+              - { label: "Buy Label", name: "buyLabel", widget: "string", required: false }
+              - { label: "Buy URL", name: "buyUrl", widget: "string", required: false }
+              - { label: "Info Label", name: "infoLabel", widget: "string", required: false }
+              - { label: "Info URL", name: "infoUrl", widget: "string", required: false }
+              - { label: "Image", name: "image", widget: "image" }
+              - { label: "Image Alt", name: "imageAlt", widget: "string", required: false }

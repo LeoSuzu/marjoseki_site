@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marjo Seki | Store</title>
+    <meta
+      name="description"
+      content="A lightweight catalogue demo for books and courses with simple inquiry links."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="store">
+    <header class="site-header">
+      <div class="shell site-header__inner">
+        <a class="brand" href="index.html">
+          <span class="brand__eyebrow" id="brand-eyebrow">Author · Japanese Food Chef · Teacher</span>
+          <span class="brand__name" id="brand-name">Marjo Seki</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          Menu
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+          <a data-nav="home" href="index.html">Home</a>
+          <a data-nav="info" href="info.html">Information</a>
+          <a data-nav="events" href="events.html">Events</a>
+          <a data-nav="store" href="store.html">Books & Courses</a>
+          <a class="button button--ghost admin-trigger" href="admin/">Edit Site</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="shell page-hero__grid">
+          <div>
+            <p class="eyebrow">Store</p>
+            <h1 id="store-title">Books and courses in a simple, easy-to-manage catalogue.</h1>
+            <p id="store-lead">
+              This demo uses product cards that can point to email, PayPal, or a simple booking
+              flow later.
+            </p>
+          </div>
+          <div class="page-hero__image">
+            <img
+              src="assets/uploads/books-placeholder.svg"
+              alt="Books placeholder"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell">
+          <div class="store-grid" id="store-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell site-footer__inner">
+        <div>
+          <p class="site-footer__title" id="footer-name">Marjo Seki</p>
+          <p id="footer-tagline">Books, courses, and events that create space for reflection.</p>
+        </div>
+        <div class="site-footer__links" id="footer-links"></div>
+      </div>
+    </footer>
+
+    <script src="assets/site.js" type="module"></script>
+  </body>
+</html>

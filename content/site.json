@@ -1,0 +1,137 @@
+{
+  "global": {
+    "siteName": "Marjo Seki",
+    "brandLine": "Book Writer · Japanese Food Chef · Teacher",
+    "footerTagline": "Warm stories, Japanese food culture, and thoughtful teaching from Kouvola, Finland.",
+    "footerLinks": [
+      {
+        "label": "Email",
+        "url": "mailto:marjoseki@hotmail.com",
+        "external": false
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/marjo_seki",
+        "external": true
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/marjo.seki",
+        "external": true
+      }
+    ]
+  },
+  "home": {
+    "hero": {
+      "kicker": "Book Writer · Japanese Food Chef · Teacher",
+      "title": "Warm stories, Japanese food culture, and inspiring teaching in one welcoming place.",
+      "text": "Marjo Seki is a book writer, professional Japanese food chef, and teacher based in Kouvola, Finland. This site introduces her work, upcoming events, books, courses, and ways to get in touch.",
+      "primaryCtaLabel": "Explore Books & Courses",
+      "secondaryCtaLabel": "See Events",
+      "image": "assets/uploads/portrait-placeholder.svg",
+      "imageAlt": "Illustrated portrait placeholder",
+      "badge": "Now welcoming workshop, speaking, and course inquiries"
+    },
+    "intro": {
+      "title": "A calm online home for readers, food lovers, and course participants.",
+      "text": "The site is designed to feel warm, personal, and easy to update. Marjo can share new events, replace images, and refresh the text without touching code."
+    },
+    "features": [
+      {
+        "title": "Books and writing",
+        "text": "Present books, articles, and the voice behind Marjo's writing in a personal and memorable way."
+      },
+      {
+        "title": "Japanese food teaching",
+        "text": "Share cooking classes, food culture workshops, and authentic Japanese culinary experiences."
+      },
+      {
+        "title": "Courses and events",
+        "text": "Keep upcoming and past events visible, with clear contact details for reservations and questions."
+      }
+    ]
+  },
+  "info": {
+    "title": "About Marjo, her background, and ways to collaborate.",
+    "lead": "Visitors can learn who Marjo is, what she offers, and how to get in touch for courses, events, and speaking opportunities.",
+    "image": "assets/uploads/books-placeholder.svg",
+    "imageAlt": "Illustrated stack of books placeholder",
+    "bioTitle": "A warm voice shaped by books, Japanese food, and teaching.",
+    "bioText": "Marjo Seki is a book writer, professional Japanese food chef, and teacher. Her work brings together storytelling, authentic food culture, and human-centered teaching. This space can be used to share her biography, teaching philosophy, and the heart behind her courses and events.",
+    "contactItems": [
+      {
+        "label": "Email",
+        "value": "marjoseki@hotmail.com"
+      },
+      {
+        "label": "Location",
+        "value": "Kouvola, Finland"
+      },
+      {
+        "label": "Facebook",
+        "value": "facebook.com/marjo.seki"
+      }
+    ],
+    "services": [
+      {
+        "title": "Author visits and talks",
+        "text": "Book-centered talks, interviews, and literary appearances for libraries, communities, and events."
+      },
+      {
+        "title": "Japanese cooking classes",
+        "text": "Professional teaching in Japanese food, flavors, techniques, and cultural understanding."
+      },
+      {
+        "title": "Courses and workshops",
+        "text": "Warm and practical teaching sessions for groups, organizations, and private events."
+      }
+    ]
+  },
+  "events": {
+    "title": "Upcoming and past events, courses, and gatherings.",
+    "lead": "Use this page to present current events, past highlights, and easy contact for reservations or questions.",
+    "image": "assets/uploads/event-placeholder.svg",
+    "imageAlt": "Illustrated event room placeholder",
+    "upcoming": [
+      {
+        "title": "Japanese Home Cooking Evening",
+        "date": "June 18, 2026",
+        "location": "Kouvola",
+        "text": "A warm small-group class focused on practical Japanese home cooking, ingredients, and food culture.",
+        "buttonLabel": "Reserve a place",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Japanese%20Home%20Cooking%20Evening"
+      },
+      {
+        "title": "Author Talk and Book Discussion",
+        "date": "August 9, 2026",
+        "location": "Online",
+        "text": "An online session where Marjo shares the ideas behind her writing and answers audience questions.",
+        "buttonLabel": "Ask for details",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Author%20Talk%20and%20Book%20Discussion"
+      }
+    ],
+    "past": [
+      {
+        "title": "Spring Japanese Tea and Food Workshop",
+        "date": "April 2026",
+        "location": "Kouvola",
+        "text": "A hands-on gathering exploring Japanese tea culture, simple dishes, and the beauty of shared meals.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      },
+      {
+        "title": "Community Reading Circle",
+        "date": "February 2026",
+        "location": "Online",
+        "text": "A reflective reading session focused on meaningful conversation, writing, and connection.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      }
+    ],
+    "social": {
+      "title": "Social highlight",
+      "note": "This block can show a YouTube video, event trailer, or another embeddable social highlight. Facebook and Instagram links are shown in the footer.",
+      "embedUrl": "https://www.youtube.com/embed/ScMzIvxBSi4"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "title": "Books, courses, and selected offerings.",
+  "lead": "This page presents books, classes, and other offerings without requiring an online checkout.",
+  "products": [
+    {
+      "title": "Signed Book",
+      "type": "Book",
+      "format": "Paperback",
+      "text": "A signed book offering with a short introduction, a warm description, and an easy contact button.",
+      "priceLabel": "Ask for availability",
+      "buyLabel": "Order by Email",
+      "buyUrl": "mailto:marjoseki@hotmail.com?subject=Signed%20Book%20Order",
+      "infoLabel": "Ask a question",
+      "infoUrl": "mailto:marjoseki@hotmail.com?subject=Question%20about%20the%20book",
+      "image": "assets/uploads/books-placeholder.svg",
+      "imageAlt": "Book placeholder"
+    },
+    {
+      "title": "Japanese Cooking Course",
+      "type": "Course",
+      "format": "Small Group",
+      "text": "A practical and welcoming Japanese cooking experience with room for questions, stories, and shared discovery.",
+      "priceLabel": "Ask for dates and fee",
+      "buyLabel": "Reserve a Place",
+      "buyUrl": "mailto:marjoseki@hotmail.com?subject=Japanese%20Cooking%20Course",
+      "infoLabel": "Course details",
+      "infoUrl": "mailto:marjoseki@hotmail.com?subject=Question%20about%20Japanese%20Cooking%20Course",
+      "image": "assets/uploads/event-placeholder.svg",
+      "imageAlt": "Course placeholder"
+    },
+    {
+      "title": "Private Workshop Inquiry",
+      "type": "Workshop",
+      "format": "Custom",
+      "text": "For libraries, communities, teams, and private groups looking for a custom experience around books or Japanese food culture.",
+      "priceLabel": "Quote on request",
+      "buyLabel": "Request an offer",
+      "buyUrl": "mailto:marjoseki@hotmail.com?subject=Private%20Workshop%20Inquiry",
+      "infoLabel": "More information",
+      "infoUrl": "mailto:marjoseki@hotmail.com?subject=Private%20Workshop%20Details",
+      "image": "assets/uploads/portrait-placeholder.svg",
+      "imageAlt": "Workshop placeholder"
+    }
+  ]
+}

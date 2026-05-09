@@ -1,0 +1,288 @@
+media:
+  input: assets/uploads
+  output: /assets/uploads
+  rename: safe
+  categories: [image]
+
+settings:
+  hide: true
+  content:
+    merge: true
+  commit:
+    identity: user
+    templates:
+      create: "Create {path} by {userEmail}"
+      update: "Update {path} by {userEmail}"
+      delete: "Delete {path} by {userEmail}"
+      rename: "Rename {oldPath} to {newPath} by {userEmail}"
+
+content:
+  - name: website
+    label: Website Content
+    type: group
+    items:
+      - name: site
+        label: Site Pages
+        type: file
+        path: content/site.json
+        format: json
+        fields:
+          - name: global
+            label: Global Settings
+            type: object
+            fields:
+              - name: siteName
+                label: Site Name
+                type: string
+                description: Main name shown in the header and footer.
+              - name: footerTagline
+                label: Footer Tagline
+                type: text
+                description: Short sentence shown at the bottom of every page.
+              - name: footerLinks
+                label: Footer Social and Contact Links
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{label}"
+                fields:
+                  - name: label
+                    label: Link Label
+                    type: string
+                  - name: url
+                    label: Link URL
+                    type: string
+                    description: Use full links like https://instagram.com/... or mailto:name@example.com
+                  - name: external
+                    label: Open in New Tab
+                    type: boolean
+
+          - name: home
+            label: Home Page
+            type: object
+            fields:
+              - name: hero
+                label: Hero Area
+                type: object
+                fields:
+                  - name: kicker
+                    label: Small Heading
+                    type: string
+                  - name: title
+                    label: Main Heading
+                    type: text
+                  - name: text
+                    label: Intro Text
+                    type: text
+                  - name: primaryCtaLabel
+                    label: Main Button Text
+                    type: string
+                  - name: secondaryCtaLabel
+                    label: Secondary Button Text
+                    type: string
+                  - name: image
+                    label: Main Image
+                    type: image
+                  - name: imageAlt
+                    label: Main Image Description
+                    type: string
+                  - name: badge
+                    label: Badge Text
+                    type: string
+              - name: intro
+                label: Intro Section
+                type: object
+                fields:
+                  - name: title
+                    label: Title
+                    type: text
+                  - name: text
+                    label: Text
+                    type: text
+              - name: features
+                label: Feature Cards
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - name: title
+                    label: Card Title
+                    type: string
+                  - name: text
+                    label: Card Text
+                    type: text
+
+          - name: info
+            label: Information Page
+            type: object
+            fields:
+              - name: title
+                label: Page Title
+                type: text
+              - name: lead
+                label: Lead Text
+                type: text
+              - name: image
+                label: Page Image
+                type: image
+              - name: imageAlt
+                label: Page Image Description
+                type: string
+              - name: bioTitle
+                label: Biography Title
+                type: string
+              - name: bioText
+                label: Biography Text
+                type: text
+              - name: contactItems
+                label: Contact Items
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{label}"
+                fields:
+                  - name: label
+                    label: Field Name
+                    type: string
+                  - name: value
+                    label: Field Value
+                    type: string
+              - name: services
+                label: Services
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - name: title
+                    label: Service Title
+                    type: string
+                  - name: text
+                    label: Service Text
+                    type: text
+
+          - name: events
+            label: Events Page
+            type: object
+            fields:
+              - name: title
+                label: Page Title
+                type: text
+              - name: lead
+                label: Lead Text
+                type: text
+              - name: image
+                label: Page Image
+                type: image
+              - name: imageAlt
+                label: Page Image Description
+                type: string
+              - name: upcoming
+                label: Upcoming Events
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - name: title
+                    label: Event Title
+                    type: string
+                  - name: date
+                    label: Event Date
+                    type: string
+                  - name: location
+                    label: Event Location
+                    type: string
+                  - name: text
+                    label: Event Description
+                    type: text
+                  - name: buttonLabel
+                    label: Button Text
+                    type: string
+                    required: false
+                  - name: buttonUrl
+                    label: Button Link
+                    type: string
+                    required: false
+              - name: social
+                label: Social Window
+                type: object
+                fields:
+                  - name: title
+                    label: Section Title
+                    type: string
+                  - name: note
+                    label: Help Text
+                    type: text
+                  - name: embedUrl
+                    label: Embed URL
+                    type: string
+                    required: false
+                    description: Best for embeddable video or social links, such as YouTube embed URLs.
+
+      - name: store
+        label: Books and Courses
+        type: file
+        path: content/store.json
+        format: json
+        fields:
+          - name: title
+            label: Store Title
+            type: text
+          - name: lead
+            label: Store Intro Text
+            type: text
+          - name: products
+            label: Products
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{title}"
+            fields:
+              - name: title
+                label: Product Title
+                type: string
+              - name: type
+                label: Product Type
+                type: select
+                options:
+                  values: [Book, Course, Workshop, Other]
+              - name: format
+                label: Format
+                type: string
+              - name: text
+                label: Description
+                type: text
+              - name: priceLabel
+                label: Price Label
+                type: string
+              - name: buyLabel
+                label: Main Button Text
+                type: string
+                required: false
+              - name: buyUrl
+                label: Main Button Link
+                type: string
+                required: false
+              - name: infoLabel
+                label: Secondary Button Text
+                type: string
+                required: false
+              - name: infoUrl
+                label: Secondary Button Link
+                type: string
+                required: false
+              - name: image
+                label: Product Image
+                type: image
+              - name: imageAlt
+                label: Product Image Description
+                type: string
+                required: false

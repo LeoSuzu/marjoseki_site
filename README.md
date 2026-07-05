@@ -1,168 +1,114 @@
-# Marjo Seki Website Demo
+# Marjo Seki -kotisivu
 
-This is a lightweight 4-page personal website demo with:
+Japanilais-henkinen (sakura, mänty/pine, momiji) 4-sivuinen kotisivu:
 
-- `Home`
-- `Information`
-- `Events`
-- `Store`
-- `/admin` scaffolding for owner editing with Decap CMS
-- `.pages.yml` config for Pages CMS as a future-proof editing option
+- `Home` — esittely + kuvia
+- `Palvelut` — japanilaisen ruoan kurssit, kuvien kanssa
+- `Tapahtumia` — tulevat/menneet tapahtumat + Facebook/Instagram-linkit
+- `Yhteystiedot` — yhteystiedot
 
-## Why this setup
+Sisältö on tiedostossa `content/site.json`. Sivu on staattinen (HTML/CSS/JS), eikä tarvitse tietokantaa.
 
-The site itself is a static website, which keeps hosting simple and cheap. The content lives in JSON files:
+## Muokkaustila ("Edit")
 
-- `content/site.json`
-- `content/store.json`
+Etusivun ja muiden sivujen ylätunnisteessa on pieni huomaamaton kynä-painike (✎), ei
+näkyvä "Edit Site" -linkki navigaatiossa — niin sivu ei näytä vierailijoille rekisteröitymislomakkeelta.
 
-That makes it easy to:
+Painike avaa käyttäjänimi/salasana-kirjautumisen. Kirjautuminen tarkistetaan
+palvelimella (Vercel-funktio `api/login.js`), ei selaimen JavaScriptissä, jotta
+tunnukset eivät näy sivun lähdekoodissa.
 
-- host on Netlify or Cloudflare Pages
-- avoid managing a database
-- let the owner update text and images through a CMS after login
+Kun kirjautuminen onnistuu, sivu siirtyy muokkaustilaan: tekstejä ja kuvia voi
+klikata suoraan sivulla. **Tärkeä rajoitus:** muutokset tallentuvat vain selaimen
+omaan `localStorage`-muistiin (samalla koneella/selaimella). Pysyvää muutosta varten:
 
-## Recommended direction
+1. Tee muutokset, paina "Lataa varmuuskopio" (lataa `marjo-site-backup.json`).
+2. Korvaa tiedoston sisällöllä `content/site.json` ja committaa/pushaa muutos GitHubiin.
 
-If the biggest priority is easy editing for a non-technical owner, keep the first version simple:
+Pysyvämpi, useammalla laitteella toimiva editointi: käytä Pages CMS -palvelua (ks. alla),
+jolloin muutokset tallentuvat suoraan GitHub-repoon ilman tätä vaihetta.
 
-- 4 fixed pages
-- editable text blocks
-- image uploads
-- events list
-- books and courses catalogue
+## Ympäristömuuttujat (kirjautumisen salasana)
 
-Do not force online payment on day one. The catalogue can work with:
+Kirjautumisen tunnukset eivät ole koodissa — ne luetaan ympäristömuuttujista, joita
+selain ei koskaan näe:
 
-- email order requests
-- PayPal links
-- a contact form
+- `ADMIN_USERNAME` — käyttäjänimi
+- `ADMIN_PASSWORD` — salasana
+- `SESSION_SECRET` — pitkä satunnainen merkkijono istunnon allekirjoitukseen (esim. `openssl rand -hex 32`)
 
-That keeps the site easy to manage and avoids unnecessary setup.
+Paikallista testausta varten: kopioi `.env.example` nimelle `.env` ja täytä arvot.
+**`.env`-tiedostoa ei koskaan committata** (se on `.gitignore`-listalla).
 
-## Recommended auth and editor setup
+Vercelissä: Project Settings → Environment Variables → lisää samat kolme muuttujaa.
 
-As of May 8, 2026, the cleanest recommendation for a new project is:
+## Testaaminen paikallisesti
 
-1. Host the public site on Cloudflare Pages or Netlify as a normal static site.
-2. Keep content in this repository.
-3. Use Pages CMS as the editing interface.
-4. Invite the owner as a collaborator by email.
-
-Why:
-
-- no custom auth code in the website
-- no database required for the public site
-- drag-and-drop media management
-- easier long-term direction than starting a new project on deprecated Netlify Identity and Git Gateway features
-
-Pages CMS config for this repo is already included in:
-
-- `.pages.yml`
-
-## About the current `/admin`
-
-This repo also includes a Decap CMS `/admin` demo because it is quick to show locally.
-
-Important:
-
-- Netlify currently documents Identity and Git Gateway as deprecated for new configurations
-- because of that, I recommend Pages CMS for production rather than building a new site around Netlify Identity
-
-## Run locally
-
-### Option 1: Docker
+### Vaihtoehto 1: Vercel CLI (suositus — kirjautuminen toimii)
 
 ```bash
-docker compose up --build
+npm install -g vercel
+cp .env.example .env   # täytä oikeat arvot tiedostoon
+vercel dev
 ```
 
-Then open:
+Avaa selaimessa osoite, jonka `vercel dev` tulostaa (oletuksena `http://localhost:3000`).
+Tämä ajaa myös `/api`-kansion funktiot, joten kynä-painikkeella kirjautuminen toimii.
 
-```text
-http://localhost:8080
-```
-
-### Option 2: Any static server
-
-Because the pages load JSON with `fetch`, do not open the HTML files directly from disk. Use a local web server instead.
-
-For example:
+### Vaihtoehto 2: tavallinen staattinen palvelin (vain ulkoasun katselu)
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Then open:
+Avaa `http://localhost:8080`. Sivu latautuu ja näyttää oikein, mutta kirjautuminen
+epäonnistuu hallitusti ("kirjautumispalvelu ei käytössä"), koska `/api`-funktiot
+tarvitsevat Vercelin (tai `vercel dev`).
 
-```text
-http://localhost:8080
+### Vaihtoehto 3: Docker (vain ulkoasun katselu, ei kirjautumista)
+
+```bash
+docker compose up --build
 ```
 
-## Editing content without code
+Avaa `http://localhost:8080`.
 
-### Best long-term path: Pages CMS
+## Mitä testata ennen julkaisua
 
-1. Push this project to GitHub.
-2. Open `https://app.pagescms.org`.
-3. Sign in with the repository owner account.
-4. Install the Pages CMS GitHub App for the repository.
-5. Use the included `.pages.yml` config.
-6. Invite the editor by email if they should edit without a GitHub account.
+1. Kaikki 4 sivua avautuvat ja navigaatio toimii (Home, Palvelut, Tapahtumia, Yhteystiedot).
+2. `vercel dev` käynnissä: kynäpainike avaa kirjautumisen, oikeilla tunnuksilla kirjautuminen
+   onnistuu ja muokkaustila tulee näkyviin; väärällä salasanalla näkyy virheilmoitus.
+3. Muokkaustilassa: tekstin/kuvan klikkaus avaa muokkausikkunan, tallennus näkyy sivulla.
+4. "Lataa varmuuskopio" lataa toimivan JSON-tiedoston.
+5. "Kirjaudu ulos" poistaa muokkaustilan ja uudelleenlataus pysyy uloskirjautuneena.
+6. Facebook/Instagram-painikkeet Tapahtumia-sivulla avautuvat oikeisiin osoitteisiin.
+7. Mobiililaajuudessa (selaimen kaventaminen) valikko muuttuu pudotusvalikoksi.
 
-Pages CMS documentation says collaborators can be invited by email and can edit content and media without a GitHub account.
+## Julkaisu Verceliin
 
-### Alternative path: Netlify + Decap CMS
+1. Pushaa repo GitHubiin (`git push`).
+2. Vercel.com → New Project → tuo GitHub-repo `marjoseki_site`.
+3. Framework Preset: "Other" (staattinen sivusto + `/api`-funktiot, Vercel tunnistaa automaattisesti).
+4. Lisää ympäristömuuttujat (`ADMIN_USERNAME`, `ADMIN_PASSWORD`, `SESSION_SECRET`) Project Settings → Environment Variables.
+5. Deploy. Vercel antaa osoitteen `https://<projekti>.vercel.app` — voit liittää oman domainin myöhemmin.
+6. Testaa tuotannossa: avaa sivu, kokeile kynäpainikkeen kirjautumista oikeilla tunnuksilla.
 
-For the real deployment, the easiest old no-database path is:
+## Vaihtoehto: Pages CMS pysyvään, moninlaitteiseen editointiin
 
-1. Push this project to GitHub.
-2. Deploy it on Netlify.
-3. In Netlify, enable:
-   - Identity
-   - Git Gateway
-4. Invite the owner by email.
-5. The owner logs in at:
+Jos haluat, että Marjo voi muokata sisältöä eri laitteilla niin, että muutokset
+tallentuvat suoraan repoon (ei vain yhteen selaimeen):
 
-```text
-/admin
-```
+1. Avaa `https://app.pagescms.org`.
+2. Kirjaudu repon omistajan GitHub-tunnuksella.
+3. Asenna Pages CMS GitHub App repolle.
+4. Konfiguraatio on jo valmiina tiedostossa `.pages.yml`.
+5. Kutsu Marjo mukaan sähköpostilla — hän voi editoida ilman omaa GitHub-tunnusta.
 
-Then they can:
+Tämä on erillinen, vaihtoehtoinen reitti — se ei liity kynäpainikkeen kirjautumiseen.
 
-- edit text
-- upload images
-- update events
-- change store items
+## Tiedostot, joita muokkaat useimmin
 
-## Store recommendation
-
-For the first version, treat the store as a catalogue instead of a full ecommerce system:
-
-- list books and courses
-- add prices if wanted
-- use email or PayPal links
-- add full online checkout only later if it becomes necessary
-
-This is a good fit when the main goal is easy updates.
-
-## CMS editing experience
-
-After deployment, the owner can use `/admin` to:
-
-- change page text
-- add or replace pictures
-- update event cards
-- add or remove store items
-
-## Important note about local `/admin`
-
-The CMS page is included in this demo, but real login and publishing work after deployment with Netlify Identity and Git Gateway connected to a Git repository.
-
-## Files you will likely edit first
-
-- `content/site.json`
-- `content/store.json`
-- `assets/styles.css`
-- `admin/config.yml`
-- `.pages.yml`
+- `content/site.json` — kaikki tekstit, kuvat, kurssit, tapahtumat
+- `assets/uploads/` — kuvat (korvaa placeholder-tiedostot oikeilla kuvilla)
+- `assets/styles.css` — ulkoasu
+- `.env` (paikallisesti) / Vercelin Environment Variables (tuotannossa) — kirjautumistunnukset

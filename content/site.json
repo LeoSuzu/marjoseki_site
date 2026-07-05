@@ -1,11 +1,11 @@
 {
   "global": {
     "siteName": "Marjo Seki",
-    "brandLine": "Book Writer · Japanese Food Chef · Teacher",
-    "footerTagline": "Warm stories, Japanese food culture, and thoughtful teaching from Kouvola, Finland.",
+    "brandLine": "Kirjailija · Japanilaisen ruoan opettaja",
+    "footerTagline": "Lämpimiä tarinoita, japanilaista ruokakulttuuria ja opetusta Kouvolasta.",
     "footerLinks": [
       {
-        "label": "Email",
+        "label": "Sähköposti",
         "url": "mailto:marjoseki@hotmail.com",
         "external": false
       },
@@ -23,115 +23,192 @@
   },
   "home": {
     "hero": {
-      "kicker": "Book Writer · Japanese Food Chef · Teacher",
-      "title": "Warm stories, Japanese food culture, and inspiring teaching in one welcoming place.",
-      "text": "Marjo Seki is a book writer, professional Japanese food chef, and teacher based in Kouvola, Finland. This site introduces her work, upcoming events, books, courses, and ways to get in touch.",
-      "primaryCtaLabel": "Explore Books & Courses",
-      "secondaryCtaLabel": "See Events",
+      "kicker": "Tervetuloa",
+      "title": "Tarinoita, japanilaista ruokaa ja lämmintä opetusta.",
+      "text": "Marjo Seki on kirjailija ja japanilaisen ruoan opettaja Kouvolasta. Tällä sivulla voit tutustua hänen taustaansa, palveluihinsa ja tuleviin tapahtumiin.",
+      "primaryCtaLabel": "Tutustu palveluihin",
+      "secondaryCtaLabel": "Katso tapahtumat",
       "image": "assets/uploads/portrait-placeholder.svg",
-      "imageAlt": "Illustrated portrait placeholder",
-      "badge": "Now welcoming workshop, speaking, and course inquiries"
+      "imageAlt": "Marjo Seki -muotokuva",
+      "badge": "Uusia ruokakursseja syksylle"
     },
     "intro": {
-      "title": "A calm online home for readers, food lovers, and course participants.",
-      "text": "The site is designed to feel warm, personal, and easy to update. Marjo can share new events, replace images, and refresh the text without touching code."
+      "title": "Tervehdys",
+      "text": "Lisää tähän oma esittelysi: tausta, into japanilaiseen ruokaan, ja se mikä saa sinut opettamaan ja kirjoittamaan. Kuva oikealla auttaa vierailijaa tuntemaan sinut paremmin."
+    },
+    "gallery": {
+      "title": "Kuvia matkan varrelta",
+      "images": [
+        {
+          "image": "assets/uploads/portrait-placeholder.svg",
+          "imageAlt": "Kuva 1"
+        },
+        {
+          "image": "assets/uploads/food-placeholder.svg",
+          "imageAlt": "Kuva 2"
+        },
+        {
+          "image": "assets/uploads/books-placeholder.svg",
+          "imageAlt": "Kuva 3"
+        }
+      ]
     },
     "features": [
       {
-        "title": "Books and writing",
-        "text": "Present books, articles, and the voice behind Marjo's writing in a personal and memorable way."
+        "title": "Kirjailija",
+        "text": "Kirjoja ja tarinoita, jotka tuovat japanilaista kulttuuria lähemmäs lukijaa."
       },
       {
-        "title": "Japanese food teaching",
-        "text": "Share cooking classes, food culture workshops, and authentic Japanese culinary experiences."
+        "title": "Ruokakurssit",
+        "text": "Käytännönläheistä opetusta japanilaisesta ruoasta pienryhmissä."
       },
       {
-        "title": "Courses and events",
-        "text": "Keep upcoming and past events visible, with clear contact details for reservations and questions."
+        "title": "Tapahtumat",
+        "text": "Työpajoja ja tilaisuuksia, joista löydät lisää Tapahtumia-sivulta."
       }
     ]
   },
-  "info": {
-    "title": "About Marjo, her background, and ways to collaborate.",
-    "lead": "Visitors can learn who Marjo is, what she offers, and how to get in touch for courses, events, and speaking opportunities.",
+  "palvelut": {
+    "title": "Japanilaisen ruoan kurssit ja palvelut.",
+    "lead": "Tällä sivulla voit esitellä tarjoamiasi ruokakursseja kuvien kanssa: mitä kurssilla tehdään, kenelle se sopii ja miten ilmoittutuu.",
+    "image": "assets/uploads/food-placeholder.svg",
+    "imageAlt": "Japanilaista ruokaa",
+    "courses": [
+      {
+        "title": "Sushikurssi alkeisiin",
+        "format": "Pienryhmä",
+        "text": "Perusteet sushin valmistukseen: riisi, täytteet ja rullaustekniikka rauhallisessa tahdissa.",
+        "priceLabel": "Kysy hintaa ja ajankohtaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Sushikurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Kurssilla käydään läpi riisin keitto, täytteiden valmistus ja rullaustekniikka rauhallisessa tahdissa pienessä ryhmässä. Kesto noin 3 tuntia, tarvikkeet sisältyvät hintaan.",
+        "image": "assets/uploads/food-placeholder.svg",
+        "imageAlt": "Sushikurssi"
+      },
+      {
+        "title": "Japanilainen kotiruoka",
+        "format": "Pienryhmä",
+        "text": "Arkisia ja maukkaita japanilaisia kotiruokia: keitot, kastikkeet ja perinteiset ainekset.",
+        "priceLabel": "Kysy hintaa ja ajankohtaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Japanilainen%20kotiruoka",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Opettelemme arkisia ja maukkaita japanilaisia kotiruokia: keittoja, kastikkeita ja perinteisiä aineksia. Sopii kaikentasoisille osallistujille, ei aiempaa kokemusta tarvita.",
+        "image": "assets/uploads/portrait-placeholder.svg",
+        "imageAlt": "Kotiruokakurssi"
+      },
+      {
+        "title": "Yksityinen ryhmäkurssi",
+        "format": "Räätälöity",
+        "text": "Yksityistilaisuus yritykselle, yhteisölle tai ystäväporukalle toivomanne teeman mukaan.",
+        "priceLabel": "Tarjous pyynnöstä",
+        "buyLabel": "Pyydä tarjous",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Yksityinen%20kurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Räätälöity tilaisuus yritykselle, yhteisölle tai ystäväporukalle toivotun teeman mukaan. Kerro ryhmän koko ja toiveet, niin saat tarjouksen nopeasti.",
+        "image": "assets/uploads/books-placeholder.svg",
+        "imageAlt": "Yksityinen kurssi"
+      }
+    ]
+  },
+  "kirjat": {
+    "title": "Kirjat",
+    "lead": "Tutustu julkaistuihin kirjoihin ja tilaa oma kappaleesi suoraan tällä sivulla.",
     "image": "assets/uploads/books-placeholder.svg",
-    "imageAlt": "Illustrated stack of books placeholder",
-    "bioTitle": "A warm voice shaped by books, Japanese food, and teaching.",
-    "bioText": "Marjo Seki is a book writer, professional Japanese food chef, and teacher. Her work brings together storytelling, authentic food culture, and human-centered teaching. This space can be used to share her biography, teaching philosophy, and the heart behind her courses and events.",
+    "imageAlt": "Kirjoja",
+    "books": [
+      {
+        "title": "Kirjan nimi",
+        "status": "Myynnissä",
+        "text": "Lyhyt kuvaus kirjasta: mistä se kertoo ja kenelle se sopii.",
+        "image": "assets/uploads/books-placeholder.svg",
+        "imageAlt": "Kirjan kansi"
+      }
+    ],
+    "order": {
+      "title": "Tilaa kirja!",
+      "instructions": "Maksu MobilePaylla numeroon 040 123 4567. Postituskulut lisätään tilaukseen. Toimitamme tällä hetkellä vain Suomeen.",
+      "successMessage": "Kiitos tilauksesta! Vahvistus ja maksuohjeet lähetetään sinulle pian."
+    }
+  },
+  "yhteystiedot": {
+    "title": "Yhteystiedot",
+    "lead": "Ota yhteyttä kursseja, tapahtumia tai muita kysymyksiä varten.",
+    "image": "assets/uploads/books-placeholder.svg",
+    "imageAlt": "Yhteystiedot",
     "contactItems": [
       {
-        "label": "Email",
+        "label": "Sähköposti",
         "value": "marjoseki@hotmail.com"
       },
       {
-        "label": "Location",
-        "value": "Kouvola, Finland"
+        "label": "Sijainti",
+        "value": "Kouvola, Suomi"
       },
       {
         "label": "Facebook",
         "value": "facebook.com/marjo.seki"
+      },
+      {
+        "label": "Instagram",
+        "value": "instagram.com/marjo_seki"
       }
     ],
-    "services": [
-      {
-        "title": "Author visits and talks",
-        "text": "Book-centered talks, interviews, and literary appearances for libraries, communities, and events."
-      },
-      {
-        "title": "Japanese cooking classes",
-        "text": "Professional teaching in Japanese food, flavors, techniques, and cultural understanding."
-      },
-      {
-        "title": "Courses and workshops",
-        "text": "Warm and practical teaching sessions for groups, organizations, and private events."
-      }
-    ]
+    "inquiry": {
+      "title": "Kysely tilaisuudesta",
+      "intro": "Suunnitteletko tilaisuutta tai kurssia? Täytä lomake, niin palaan asiaan pian.",
+      "successMessage": "Kiitos kyselystä! Vastaan sinulle mahdollisimman pian."
+    }
   },
-  "events": {
-    "title": "Upcoming and past events, courses, and gatherings.",
-    "lead": "Use this page to present current events, past highlights, and easy contact for reservations or questions.",
+  "tapahtumia": {
+    "title": "Tapahtumia",
+    "lead": "Tulevat ja menneet tapahtumat, kurssit ja tilaisuudet.",
     "image": "assets/uploads/event-placeholder.svg",
-    "imageAlt": "Illustrated event room placeholder",
+    "imageAlt": "Tapahtumakuva",
     "upcoming": [
       {
-        "title": "Japanese Home Cooking Evening",
-        "date": "June 18, 2026",
+        "title": "Japanilainen kotiruokailta",
+        "date": "18.6.2026",
         "location": "Kouvola",
-        "text": "A warm small-group class focused on practical Japanese home cooking, ingredients, and food culture.",
-        "buttonLabel": "Reserve a place",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Japanese%20Home%20Cooking%20Evening"
+        "text": "Lämmin pienryhmäkurssi japanilaisesta kotiruoasta, raaka-aineista ja ruokakulttuurista.",
+        "buttonLabel": "Varaa paikka",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Japanilainen%20kotiruokailta"
       },
       {
-        "title": "Author Talk and Book Discussion",
-        "date": "August 9, 2026",
-        "location": "Online",
-        "text": "An online session where Marjo shares the ideas behind her writing and answers audience questions.",
-        "buttonLabel": "Ask for details",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Author%20Talk%20and%20Book%20Discussion"
+        "title": "Kirjailijailta",
+        "date": "9.8.2026",
+        "location": "Verkossa",
+        "text": "Verkkotilaisuus, jossa Marjo kertoo kirjoittamisestaan ja vastaa yleisön kysymyksiin.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Kirjailijailta"
       }
     ],
     "past": [
       {
-        "title": "Spring Japanese Tea and Food Workshop",
-        "date": "April 2026",
+        "title": "Kevään teehetki ja ruokatyöpaja",
+        "date": "Huhtikuu 2026",
         "location": "Kouvola",
-        "text": "A hands-on gathering exploring Japanese tea culture, simple dishes, and the beauty of shared meals.",
+        "text": "Käytännöllinen tilaisuus japanilaisesta teekulttuurista ja yhteisestä ruokahetkestä.",
         "buttonLabel": "",
         "buttonUrl": ""
       },
       {
-        "title": "Community Reading Circle",
-        "date": "February 2026",
-        "location": "Online",
-        "text": "A reflective reading session focused on meaningful conversation, writing, and connection.",
+        "title": "Lukupiiri",
+        "date": "Helmikuu 2026",
+        "location": "Verkossa",
+        "text": "Pohdiskeleva lukuhetki keskustelun ja kirjoittamisen merkeissä.",
         "buttonLabel": "",
         "buttonUrl": ""
       }
     ],
     "social": {
-      "title": "Social highlight",
-      "note": "This block can show a YouTube video, event trailer, or another embeddable social highlight. Facebook and Instagram links are shown in the footer.",
-      "embedUrl": "https://www.youtube.com/embed/ScMzIvxBSi4"
+      "title": "Seuraa sosiaalisessa mediassa",
+      "note": "Tuoreimmat kuulumiset ja kuvat näkyvät täällä suoraan, kun haluat lisätä sosiaalisen median upotukset.",
+      "facebookUrl": "https://www.facebook.com/marjo.seki",
+      "instagramUrl": "https://www.instagram.com/marjo_seki",
+      "facebookEmbedUrl": "",
+      "instagramEmbedUrl": ""
     }
   }
 }

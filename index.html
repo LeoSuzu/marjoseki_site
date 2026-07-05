@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Marjo Seki | Home</title>
+    <title>Marjo Seki | Etusivu</title>
     <meta
       name="description"
-      content="Personal website demo for Marjo Seki with editable content, events, and a small store."
+      content="Marjo Sekin kotisivu: kirjailija ja japanilaisen ruoan opettaja Kouvolasta."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/styles.css" />
@@ -20,19 +20,22 @@
     <header class="site-header">
       <div class="shell site-header__inner">
         <a class="brand" href="index.html">
-          <span class="brand__eyebrow" id="brand-eyebrow">Author · Japanese Food Chef · Teacher</span>
+          <span class="brand__eyebrow" id="brand-eyebrow">Kirjailija · Japanilaisen ruoan opettaja</span>
           <span class="brand__name" id="brand-name">Marjo Seki</span>
         </a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-          Menu
+          Valikko
         </button>
-        <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+        <nav class="site-nav" id="site-nav" aria-label="Päävalikko">
           <a data-nav="home" href="index.html">Home</a>
-          <a data-nav="info" href="info.html">Information</a>
-          <a data-nav="events" href="events.html">Events</a>
-          <a data-nav="store" href="store.html">Books & Courses</a>
-          <a class="button button--ghost admin-trigger" href="admin/">Edit Site</a>
+          <a data-nav="palvelut" href="palvelut.html">Palvelut</a>
+          <a data-nav="tapahtumia" href="tapahtumia.html">Tapahtumia</a>
+          <a data-nav="kirjat" href="kirjat.html">Kirjat</a>
+          <a data-nav="yhteystiedot" href="yhteystiedot.html">Yhteystiedot</a>
         </nav>
+        <button class="owner-access" type="button" aria-label="Omistajan kirjautuminen" title="Omistajan kirjautuminen">
+          ✎
+        </button>
       </div>
     </header>
 
@@ -40,15 +43,15 @@
       <section class="hero">
         <div class="shell hero__grid">
           <div class="hero__copy">
-            <p class="eyebrow" id="home-hero-kicker">Welcome</p>
-            <h1 id="home-hero-title">Stories, teaching, and gentle transformation.</h1>
+            <p class="eyebrow" id="home-hero-kicker">Tervetuloa</p>
+            <h1 id="home-hero-title">Tarinoita, japanilaista ruokaa ja lämmintä opetusta.</h1>
             <p class="hero__lead" id="home-hero-text">
-              A calm and welcoming place to discover books, courses, and upcoming community events.
+              Rauhallinen ja lämmin paikka tutustua kirjoihin, ruokakursseihin ja tuleviin tapahtumiin.
             </p>
             <div class="hero__actions">
-              <a class="button" href="store.html" id="home-primary-cta">Explore the Store</a>
-              <a class="button button--secondary" href="events.html" id="home-secondary-cta">
-                View Events
+              <a class="button" href="palvelut.html" id="home-primary-cta">Tutustu palveluihin</a>
+              <a class="button button--secondary" href="tapahtumia.html" id="home-secondary-cta">
+                Katso tapahtumat
               </a>
             </div>
           </div>
@@ -56,9 +59,9 @@
             <img
               id="home-hero-image"
               src="assets/uploads/portrait-placeholder.svg"
-              alt="Portrait placeholder"
+              alt="Marjo Seki -muotokuva"
             />
-            <div class="hero__badge" id="home-hero-badge">Now booking workshops for autumn</div>
+            <div class="hero__badge" id="home-hero-badge">Uusia ruokakursseja syksylle</div>
           </div>
         </div>
       </section>
@@ -66,11 +69,11 @@
       <section class="section">
         <div class="shell">
           <div class="section-heading">
-            <p class="eyebrow">Introduction</p>
-            <h2 id="home-intro-title">A place for meaningful words and practical guidance.</h2>
+            <p class="eyebrow">Esittely</p>
+            <h2 id="home-intro-title">Tervehdys</h2>
             <p id="home-intro-text">
-              This website is designed to feel personal, clear, and easy to update whenever new
-              events, books, or messages are ready to share.
+              Lisää tähän oma esittelysi: tausta, into japanilaiseen ruokaan, ja se mikä saa sinut
+              opettamaan ja kirjoittamaan.
             </p>
           </div>
           <div class="feature-grid" id="home-feature-grid"></div>
@@ -78,21 +81,12 @@
       </section>
 
       <section class="section section--accent">
-        <div class="shell spotlight">
-          <div>
-            <p class="eyebrow">Why this setup works</p>
-            <h2>Simple for visitors, simple for the owner.</h2>
+        <div class="shell">
+          <div class="section-heading">
+            <p class="eyebrow">Kuvia</p>
+            <h2 id="home-gallery-title">Kuvia matkan varrelta</h2>
           </div>
-          <div class="spotlight__text">
-            <p>
-              After deployment, the owner can log in, update text, upload images, and publish new
-              content without touching code.
-            </p>
-            <p>
-              This demo now focuses on direct editing in a calm visual interface, so the site feels
-              approachable for a non-technical owner.
-            </p>
-          </div>
+          <div class="photo-gallery" id="home-gallery"></div>
         </div>
       </section>
     </main>
@@ -101,7 +95,7 @@
       <div class="shell site-footer__inner">
         <div>
           <p class="site-footer__title" id="footer-name">Marjo Seki</p>
-          <p id="footer-tagline">Books, courses, and events that create space for reflection.</p>
+          <p id="footer-tagline">Lämpimiä tarinoita, japanilaista ruokakulttuuria ja opetusta Kouvolasta.</p>
         </div>
         <div class="site-footer__links" id="footer-links"></div>
       </div>

@@ -25,6 +25,7 @@ collections:
             widget: "object"
             fields:
               - { label: "Site Name", name: "siteName", widget: "string" }
+              - { label: "Brand Line", name: "brandLine", widget: "string" }
               - { label: "Footer Tagline", name: "footerTagline", widget: "string" }
               - label: "Footer Links"
                 name: "footerLinks"
@@ -61,30 +62,89 @@ collections:
                 fields:
                   - { label: "Title", name: "title", widget: "string" }
                   - { label: "Text", name: "text", widget: "text" }
-          - label: "Information Page"
-            name: "info"
+              - label: "Gallery"
+                name: "gallery"
+                widget: "object"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - label: "Images"
+                    name: "images"
+                    widget: "list"
+                    fields:
+                      - { label: "Image", name: "image", widget: "image" }
+                      - { label: "Image Alt", name: "imageAlt", widget: "string" }
+          - label: "Palvelut Page"
+            name: "palvelut"
             widget: "object"
             fields:
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Lead", name: "lead", widget: "text" }
               - { label: "Image", name: "image", widget: "image" }
               - { label: "Image Alt", name: "imageAlt", widget: "string" }
-              - { label: "Bio Title", name: "bioTitle", widget: "string" }
-              - { label: "Bio Text", name: "bioText", widget: "text" }
+              - label: "Courses"
+                name: "courses"
+                widget: "list"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Format", name: "format", widget: "string" }
+                  - { label: "Description", name: "text", widget: "text" }
+                  - { label: "Price Label", name: "priceLabel", widget: "string" }
+                  - { label: "Buy Label", name: "buyLabel", widget: "string", required: false }
+                  - { label: "Buy URL", name: "buyUrl", widget: "string", required: false }
+                  - { label: "Info Button Label", name: "infoLabel", widget: "string", required: false }
+                  - { label: "Info Overlay Text", name: "infoText", widget: "text", required: false }
+                  - { label: "Image", name: "image", widget: "image" }
+                  - { label: "Image Alt", name: "imageAlt", widget: "string", required: false }
+          - label: "Kirjat Page"
+            name: "kirjat"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Lead", name: "lead", widget: "text" }
+              - { label: "Image", name: "image", widget: "image" }
+              - { label: "Image Alt", name: "imageAlt", widget: "string" }
+              - label: "Books"
+                name: "books"
+                widget: "list"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - label: "Status"
+                    name: "status"
+                    widget: "select"
+                    options: ["Myynnissä", "Loppuunmyyty", "Tulossa"]
+                  - { label: "Description", name: "text", widget: "text" }
+                  - { label: "Cover Image", name: "image", widget: "image" }
+                  - { label: "Cover Image Alt", name: "imageAlt", widget: "string", required: false }
+              - label: "Order Section"
+                name: "order"
+                widget: "object"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Payment & Shipping Instructions", name: "instructions", widget: "text" }
+                  - { label: "Success Message", name: "successMessage", widget: "string" }
+          - label: "Yhteystiedot Page"
+            name: "yhteystiedot"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Lead", name: "lead", widget: "text" }
+              - { label: "Image", name: "image", widget: "image" }
+              - { label: "Image Alt", name: "imageAlt", widget: "string" }
               - label: "Contact Items"
                 name: "contactItems"
                 widget: "list"
                 fields:
                   - { label: "Label", name: "label", widget: "string" }
                   - { label: "Value", name: "value", widget: "string" }
-              - label: "Services"
-                name: "services"
-                widget: "list"
+              - label: "Event Inquiry Form"
+                name: "inquiry"
+                widget: "object"
                 fields:
                   - { label: "Title", name: "title", widget: "string" }
-                  - { label: "Text", name: "text", widget: "text" }
-          - label: "Events Page"
-            name: "events"
+                  - { label: "Intro Text", name: "intro", widget: "text" }
+                  - { label: "Success Message", name: "successMessage", widget: "string" }
+          - label: "Tapahtumia Page"
+            name: "tapahtumia"
             widget: "object"
             fields:
               - { label: "Title", name: "title", widget: "string" }
@@ -101,36 +161,23 @@ collections:
                   - { label: "Text", name: "text", widget: "text" }
                   - { label: "Button Label", name: "buttonLabel", widget: "string", required: false }
                   - { label: "Button URL", name: "buttonUrl", widget: "string", required: false }
-              - label: "Social Window"
+              - label: "Past Events"
+                name: "past"
+                widget: "list"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Date", name: "date", widget: "string" }
+                  - { label: "Location", name: "location", widget: "string" }
+                  - { label: "Text", name: "text", widget: "text" }
+                  - { label: "Button Label", name: "buttonLabel", widget: "string", required: false }
+                  - { label: "Button URL", name: "buttonUrl", widget: "string", required: false }
+              - label: "Social"
                 name: "social"
                 widget: "object"
                 fields:
                   - { label: "Title", name: "title", widget: "string" }
                   - { label: "Note", name: "note", widget: "text" }
-                  - { label: "Embed URL", name: "embedUrl", widget: "string", required: false }
-
-  - name: "store"
-    label: "Store"
-    files:
-      - label: "Store Products"
-        name: "store-products"
-        file: "content/store.json"
-        format: "json"
-        fields:
-          - { label: "Title", name: "title", widget: "string" }
-          - { label: "Lead", name: "lead", widget: "text" }
-          - label: "Products"
-            name: "products"
-            widget: "list"
-            fields:
-              - { label: "Title", name: "title", widget: "string" }
-              - { label: "Type", name: "type", widget: "string" }
-              - { label: "Format", name: "format", widget: "string" }
-              - { label: "Description", name: "text", widget: "text" }
-              - { label: "Price Label", name: "priceLabel", widget: "string" }
-              - { label: "Buy Label", name: "buyLabel", widget: "string", required: false }
-              - { label: "Buy URL", name: "buyUrl", widget: "string", required: false }
-              - { label: "Info Label", name: "infoLabel", widget: "string", required: false }
-              - { label: "Info URL", name: "infoUrl", widget: "string", required: false }
-              - { label: "Image", name: "image", widget: "image" }
-              - { label: "Image Alt", name: "imageAlt", widget: "string", required: false }
+                  - { label: "Facebook URL", name: "facebookUrl", widget: "string", required: false }
+                  - { label: "Instagram URL", name: "instagramUrl", widget: "string", required: false }
+                  - { label: "Facebook Embed URL", name: "facebookEmbedUrl", widget: "string", required: false }
+                  - { label: "Instagram Embed URL", name: "instagramEmbedUrl", widget: "string", required: false }

@@ -1,17 +1,11 @@
 const currentPage = document.body.dataset.page;
 
-const STORAGE_KEY = "marjo-site-content-v2";
-const AUTH_KEY = "marjo-site-admin-auth-v1";
-const ADMIN_EMAIL = "marjoseki@hotmail.com";
-const ADMIN_PASSWORD_HASH =
-  "08a3d2dc7693d7166eef51ec0194ae6009c7636af128d4a208a14d1b5293c3cd";
+const STORAGE_KEY = "marjo-site-content-v3";
 
 const state = {
   data: null,
-  isAdmin: sessionStorage.getItem(AUTH_KEY) === "1",
+  isAdmin: false,
 };
-
-const deepClone = (value) => JSON.parse(JSON.stringify(value));
 
 const getByPath = (object, path) => {
   return path.split(".").reduce((current, segment) => {
@@ -73,22 +67,13 @@ const registerEditable = (node, meta) => {
   node.__editMeta = meta;
 };
 
-const escapeHtml = (value) =>
-  String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-
 const saveToBrowser = () => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
-  updateAdminMessage("Saved to this browser.");
+  updateAdminMessage("Tallennettu tähän selaimeen.");
 };
 
 const resetBrowserEdits = async () => {
   localStorage.removeItem(STORAGE_KEY);
-  sessionStorage.removeItem(AUTH_KEY);
-  state.isAdmin = false;
   state.data = await loadSite();
   renderPage();
   updateAdminChrome();
@@ -104,7 +89,7 @@ const downloadBackup = () => {
   anchor.download = "marjo-site-backup.json";
   anchor.click();
   URL.revokeObjectURL(url);
-  updateAdminMessage("Backup downloaded.");
+  updateAdminMessage("Varmuuskopio ladattu.");
 };
 
 const fileToDataUrl = (file) =>
@@ -138,6 +123,9 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
   const form = document.createElement("form");
   form.className = "editor-form";
   const refs = {};
+  const errorNode = document.createElement("p");
+  errorNode.className = "editor-form__error";
+  errorNode.hidden = true;
 
   fields.forEach((field) => {
     const wrap = document.createElement("label");
@@ -175,7 +163,7 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
       const urlInput = document.createElement("input");
       urlInput.type = "text";
       urlInput.value = field.value || "";
-      urlInput.placeholder = "Paste image URL or keep current";
+      urlInput.placeholder = "Liitä kuvan osoite tai jätä nykyinen";
       wrap.append(urlInput);
 
       const upload = document.createElement("input");
@@ -187,7 +175,7 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
         const preview = document.createElement("img");
         preview.className = "editor-field__preview";
         preview.src = field.value;
-        preview.alt = "Preview";
+        preview.alt = "Esikatselu";
         wrap.append(preview);
       }
 
@@ -196,6 +184,9 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
       const input = document.createElement("input");
       input.type = field.type === "password" ? "password" : "text";
       input.value = field.value || "";
+      if (field.autocomplete) {
+        input.autocomplete = field.autocomplete;
+      }
       wrap.append(input);
       refs[field.name] = input;
     }
@@ -209,6 +200,8 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
 
     form.append(wrap);
   });
+
+  form.append(errorNode);
 
   const actions = document.createElement("div");
   actions.className = "editor-actions";
@@ -228,7 +221,7 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
   const cancelButton = document.createElement("button");
   cancelButton.type = "button";
   cancelButton.className = "button button--ghost";
-  cancelButton.textContent = "Cancel";
+  cancelButton.textContent = "Peruuta";
   cancelButton.addEventListener("click", closeModal);
   actions.append(cancelButton);
 
@@ -245,6 +238,7 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    errorNode.hidden = true;
 
     const values = {};
     for (const field of fields) {
@@ -260,11 +254,20 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
       }
     }
 
-    const shouldClose = await onSubmit(values);
-    if (shouldClose !== false) {
+    const result = await onSubmit(values);
+    if (result && result.error) {
+      errorNode.textContent = result.error;
+      errorNode.hidden = false;
+      return;
+    }
+
+    if (result !== false) {
       closeModal();
     }
   });
+
+  const firstField = form.querySelector("input, textarea, select");
+  firstField?.focus();
 };
 
 const closeModal = () => {
@@ -280,13 +283,13 @@ const updateAdminMessage = (message) => {
 
 const openTextEditor = (meta) => {
   showModal({
-    title: meta.title || "Edit text",
-    description: "Change the text and save. The page refreshes immediately.",
-    submitLabel: "Save text",
+    title: meta.title || "Muokkaa tekstiä",
+    description: "Muuta teksti ja tallenna. Sivu päivittyy heti.",
+    submitLabel: "Tallenna teksti",
     fields: [
       {
         name: "value",
-        label: "Text",
+        label: "Teksti",
         type: "textarea",
         value: getByPath(state.data, meta.path) || "",
         rows: meta.rows || 5,
@@ -302,19 +305,19 @@ const openTextEditor = (meta) => {
 
 const openImageEditor = (meta) => {
   showModal({
-    title: meta.title || "Edit image",
-    description: "Paste an image URL or upload a new image from this computer.",
-    submitLabel: "Save image",
+    title: meta.title || "Muokkaa kuvaa",
+    description: "Liitä kuvan osoite tai lataa uusi kuva tältä koneelta.",
+    submitLabel: "Tallenna kuva",
     fields: [
       {
         name: "image",
-        label: "Image",
+        label: "Kuva",
         type: "image",
         value: getByPath(state.data, meta.path) || "",
       },
       {
         name: "alt",
-        label: "Image description",
+        label: "Kuvan kuvaus",
         type: "text",
         value: getByPath(state.data, meta.altPath) || "",
       },
@@ -331,9 +334,9 @@ const openImageEditor = (meta) => {
 const openObjectEditor = (meta, schema) => {
   const current = getByPath(state.data, meta.path);
   showModal({
-    title: meta.title || "Edit section",
-    description: meta.description || "Update the details and save them back to the page.",
-    submitLabel: "Save changes",
+    title: meta.title || "Muokkaa osiota",
+    description: meta.description || "Päivitä tiedot ja tallenna ne sivulle.",
+    submitLabel: "Tallenna muutokset",
     fields: schema.map((field) => ({
       ...field,
       value: current[field.name],
@@ -341,7 +344,7 @@ const openObjectEditor = (meta, schema) => {
     dangerAction:
       typeof meta.index === "number" && meta.listPath
         ? {
-            label: "Delete item",
+            label: "Poista kohde",
             onClick: () => {
               removeFromList(state.data, meta.listPath, meta.index);
               saveToBrowser();
@@ -350,6 +353,12 @@ const openObjectEditor = (meta, schema) => {
           }
         : null,
     onSubmit: async (values) => {
+      if (typeof meta.validate === "function") {
+        const error = meta.validate(values);
+        if (error) {
+          return { error };
+        }
+      }
       setByPath(state.data, meta.path, values);
       saveToBrowser();
       renderPage();
@@ -374,108 +383,279 @@ const openEditor = (meta) => {
 
   if (meta.kind === "link") {
     openObjectEditor(meta, [
-      { name: "label", label: "Link label", type: "text" },
-      { name: "url", label: "Link URL", type: "text" },
-      { name: "external", label: "Open in new tab", type: "checkbox" },
+      { name: "label", label: "Linkin teksti", type: "text" },
+      { name: "url", label: "Linkin osoite", type: "text" },
+      { name: "external", label: "Avaa uuteen välilehteen", type: "checkbox" },
     ]);
     return;
   }
 
-  if (meta.kind === "feature" || meta.kind === "service") {
+  if (meta.kind === "feature") {
     openObjectEditor(meta, [
-      { name: "title", label: "Title", type: "text" },
-      { name: "text", label: "Text", type: "textarea" },
+      { name: "title", label: "Otsikko", type: "text" },
+      { name: "text", label: "Teksti", type: "textarea" },
+    ]);
+    return;
+  }
+
+  if (meta.kind === "gallery-image") {
+    openObjectEditor(meta, [
+      { name: "image", label: "Kuva", type: "image" },
+      { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
     ]);
     return;
   }
 
   if (meta.kind === "contact") {
     openObjectEditor(meta, [
-      { name: "label", label: "Field name", type: "text" },
-      { name: "value", label: "Field value", type: "text" },
+      { name: "label", label: "Kentän nimi", type: "text" },
+      { name: "value", label: "Kentän arvo", type: "text" },
     ]);
     return;
   }
 
   if (meta.kind === "event") {
-    openObjectEditor(meta, [
-      { name: "title", label: "Event title", type: "text" },
-      { name: "date", label: "Date", type: "text" },
-      { name: "location", label: "Location", type: "text" },
-      { name: "text", label: "Description", type: "textarea" },
-      { name: "buttonLabel", label: "Button text", type: "text" },
-      { name: "buttonUrl", label: "Button link", type: "text" },
-    ]);
+    const isUpcomingList = meta.listPath === "site.tapahtumia.upcoming";
+    openObjectEditor(
+      {
+        ...meta,
+        validate: (values) => {
+          if (!values.date) {
+            return "Päivämäärä on pakollinen.";
+          }
+          if (!values.location) {
+            return "Paikka on pakollinen.";
+          }
+          if (isUpcomingList) {
+            if (!values.buttonLabel) {
+              return "Napin teksti on pakollinen tulevalle tapahtumalle.";
+            }
+            if (!values.buttonUrl) {
+              return "Napin linkki on pakollinen tulevalle tapahtumalle.";
+            }
+          }
+          return null;
+        },
+      },
+      [
+        { name: "title", label: "Tapahtuman otsikko", type: "text" },
+        { name: "date", label: "Päivämäärä", type: "text" },
+        { name: "location", label: "Sijainti", type: "text" },
+        { name: "text", label: "Kuvaus", type: "textarea" },
+        { name: "buttonLabel", label: "Painikkeen teksti", type: "text" },
+        { name: "buttonUrl", label: "Painikkeen linkki", type: "text" },
+      ],
+    );
     return;
   }
 
   if (meta.kind === "social") {
     openObjectEditor(meta, [
-      { name: "title", label: "Title", type: "text" },
-      { name: "note", label: "Text", type: "textarea" },
-      {
-        name: "embedUrl",
-        label: "Embed URL",
-        type: "text",
-      },
+      { name: "title", label: "Otsikko", type: "text" },
+      { name: "note", label: "Teksti", type: "textarea" },
+      { name: "facebookUrl", label: "Facebook-osoite", type: "text" },
+      { name: "instagramUrl", label: "Instagram-osoite", type: "text" },
     ]);
     return;
   }
 
-  if (meta.kind === "product") {
+  if (meta.kind === "book") {
     openObjectEditor(meta, [
-      { name: "title", label: "Title", type: "text" },
-      {
-        name: "type",
-        label: "Type",
-        type: "select",
-        options: ["Book", "Course", "Workshop", "Other"],
-      },
-      { name: "format", label: "Format", type: "text" },
-      { name: "text", label: "Description", type: "textarea" },
-      { name: "priceLabel", label: "Price or note", type: "text" },
-      { name: "buyLabel", label: "Main button text", type: "text" },
-      { name: "buyUrl", label: "Main button link", type: "text" },
-      { name: "infoLabel", label: "Secondary button text", type: "text" },
-      { name: "infoUrl", label: "Secondary button link", type: "text" },
-      { name: "image", label: "Product image", type: "image" },
-      { name: "imageAlt", label: "Image description", type: "text" },
+      { name: "title", label: "Kirjan nimi", type: "text" },
+      { name: "status", label: "Tila", type: "select", options: ["Myynnissä", "Loppuunmyyty", "Tulossa"] },
+      { name: "text", label: "Kuvaus", type: "textarea" },
+      { name: "image", label: "Kansikuva", type: "image" },
+      { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
+    ]);
+    return;
+  }
+
+  if (meta.kind === "course") {
+    openObjectEditor(meta, [
+      { name: "title", label: "Otsikko", type: "text" },
+      { name: "format", label: "Muoto", type: "text" },
+      { name: "text", label: "Kuvaus", type: "textarea" },
+      { name: "priceLabel", label: "Hinta tai huomautus", type: "text" },
+      { name: "buyLabel", label: "Painikkeen teksti", type: "text" },
+      { name: "buyUrl", label: "Painikkeen linkki", type: "text" },
+      { name: "infoLabel", label: "Tarkemmat tiedot -painikkeen teksti", type: "text" },
+      { name: "infoText", label: "Tarkemmat tiedot -ikkunan teksti", type: "textarea", rows: 6 },
+      { name: "image", label: "Kurssin kuva", type: "image" },
+      { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
     ]);
   }
 };
 
-const hashText = async (value) => {
-  const data = new TextEncoder().encode(value);
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("");
+const openInfoOverlay = ({ title, bodyText, editMeta }) => {
+  closeModal();
+
+  const overlay = document.createElement("div");
+  overlay.className = "editor-modal info-modal";
+
+  const card = document.createElement("div");
+  card.className = "editor-modal__card";
+
+  const heading = document.createElement("h2");
+  heading.textContent = title;
+  card.append(heading);
+
+  const copy = document.createElement("p");
+  copy.className = "editor-modal__description";
+  copy.textContent = bodyText || "Lisätietoja tulossa pian.";
+  card.append(copy);
+
+  const actions = document.createElement("div");
+  actions.className = "editor-actions";
+
+  if (state.isAdmin && editMeta) {
+    const editButton = document.createElement("button");
+    editButton.type = "button";
+    editButton.className = "button button--ghost";
+    editButton.textContent = "Muokkaa tekstiä";
+    editButton.addEventListener("click", () => {
+      closeModal();
+      openTextEditor(editMeta);
+    });
+    actions.append(editButton);
+  }
+
+  const closeButton = document.createElement("button");
+  closeButton.type = "button";
+  closeButton.className = "button";
+  closeButton.textContent = "Sulje";
+  closeButton.addEventListener("click", closeModal);
+  actions.append(closeButton);
+
+  card.append(actions);
+  overlay.append(card);
+  document.body.append(overlay);
 };
 
 const openLoginModal = () => {
   showModal({
-    title: "Sign in to edit",
-    description:
-      "This local visual editor lets Marjo click directly on texts and images. For a public production site, the final authentication should be moved to a proper CMS or host integration.",
-    submitLabel: "Sign in",
+    title: "Kirjaudu muokataksesi",
+    description: "Kirjautuminen on tarkoitettu sivuston omistajalle sisällön päivitykseen.",
+    submitLabel: "Kirjaudu",
     fields: [
-      { name: "email", label: "Email", type: "text", value: "" },
-      { name: "password", label: "Password", type: "password", value: "" },
+      { name: "username", label: "Käyttäjänimi", type: "text", value: "", autocomplete: "username" },
+      { name: "password", label: "Salasana", type: "password", value: "", autocomplete: "current-password" },
     ],
     onSubmit: async (values) => {
-      const passwordHash = await hashText(values.password);
-      if (values.email.toLowerCase() !== ADMIN_EMAIL || passwordHash !== ADMIN_PASSWORD_HASH) {
-        window.alert("Login failed. Check the email or password.");
-        return false;
+      try {
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values),
+        });
+
+        if (!response.ok) {
+          return { error: "Kirjautuminen epäonnistui. Tarkista käyttäjänimi tai salasana." };
+        }
+      } catch (error) {
+        return {
+          error:
+            "Kirjautumispalvelu ei ole käytössä tässä esikatselussa. Käytä \"vercel dev\" -komentoa testataksesi kirjautumista paikallisesti.",
+        };
       }
 
       state.isAdmin = true;
-      sessionStorage.setItem(AUTH_KEY, "1");
       renderPage();
       updateAdminChrome();
-      updateAdminMessage("Edit mode enabled.");
+      updateAdminMessage("Muokkaustila käytössä.");
     },
   });
+};
+
+const submitForm = async (formType, fields, honeypot) => {
+  try {
+    const response = await fetch("/api/submit-form", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ formType, fields, website: honeypot || "" }),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.ok) {
+      return { ok: false, error: payload.error || "Lähetys epäonnistui. Yritä myöhemmin uudelleen." };
+    }
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, error: "Lähetys epäonnistui. Tarkista verkkoyhteys ja yritä uudelleen." };
+  }
+};
+
+const handleFormSubmit = async (form, formType, successMessage) => {
+  const messageNode = form.querySelector("[data-form-message]");
+  const submitButton = form.querySelector('button[type="submit"]');
+  const formData = new FormData(form);
+  const honeypot = formData.get("website");
+  const fields = {};
+  formData.forEach((value, key) => {
+    if (key === "website") {
+      return;
+    }
+    fields[key] = String(value).trim();
+  });
+
+  if (messageNode) {
+    messageNode.hidden = true;
+    messageNode.classList.remove("form-message--error", "form-message--success");
+  }
+  if (submitButton) {
+    submitButton.disabled = true;
+  }
+
+  const result = await submitForm(formType, fields, honeypot);
+
+  if (submitButton) {
+    submitButton.disabled = false;
+  }
+
+  if (messageNode) {
+    messageNode.hidden = false;
+    if (result.ok) {
+      messageNode.textContent = successMessage || "Kiitos! Viesti lähetettiin.";
+      messageNode.classList.add("form-message--success");
+      form.reset();
+    } else {
+      messageNode.textContent = result.error;
+      messageNode.classList.add("form-message--error");
+    }
+  }
+};
+
+const setupPublicForms = () => {
+  const bookForm = document.getElementById("book-order-form");
+  if (bookForm) {
+    bookForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      await handleFormSubmit(bookForm, "book-order", state.data.site.kirjat.order.successMessage);
+    });
+  }
+
+  const inquiryForm = document.getElementById("event-inquiry-form");
+  if (inquiryForm) {
+    inquiryForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      await handleFormSubmit(
+        inquiryForm,
+        "event-inquiry",
+        state.data.site.yhteystiedot.inquiry.successMessage,
+      );
+    });
+  }
+};
+
+const checkSession = async () => {
+  try {
+    const response = await fetch("/api/session");
+    if (!response.ok) {
+      return false;
+    }
+    const payload = await response.json();
+    return Boolean(payload.isAdmin);
+  } catch (error) {
+    return false;
+  }
 };
 
 const createCard = (title, textValue, meta) => {
@@ -509,7 +689,7 @@ const createFooterLinks = (links) => {
     registerEditable(anchor, {
       kind: "link",
       path: `site.global.footerLinks.${index}`,
-      title: `Edit ${link.label} link`,
+      title: `Muokkaa linkkiä: ${link.label}`,
     });
     wrapper.append(anchor);
   });
@@ -540,50 +720,50 @@ const renderHome = (home) => {
   text("home-hero-kicker", home.hero.kicker, {
     kind: "text",
     path: "site.home.hero.kicker",
-    title: "Edit home hero kicker",
+    title: "Muokkaa yläosan tunnuslausetta",
   });
   text("home-hero-title", home.hero.title, {
     kind: "text",
     path: "site.home.hero.title",
-    title: "Edit home hero title",
+    title: "Muokkaa pääotsikkoa",
   });
   text("home-hero-text", home.hero.text, {
     kind: "text",
     path: "site.home.hero.text",
-    title: "Edit home hero intro",
+    title: "Muokkaa johdantotekstiä",
     rows: 6,
   });
   text("home-primary-cta", home.hero.primaryCtaLabel, {
     kind: "text",
     path: "site.home.hero.primaryCtaLabel",
-    title: "Edit main button text",
+    title: "Muokkaa päänapin tekstiä",
   });
   text("home-secondary-cta", home.hero.secondaryCtaLabel, {
     kind: "text",
     path: "site.home.hero.secondaryCtaLabel",
-    title: "Edit secondary button text",
+    title: "Muokkaa toisen napin tekstiä",
   });
   setImage("home-hero-image", home.hero.image, home.hero.imageAlt, {
     kind: "image",
     path: "site.home.hero.image",
     altPath: "site.home.hero.imageAlt",
-    title: "Edit home hero image",
+    title: "Muokkaa pääkuvaa",
   });
   text("home-hero-badge", home.hero.badge, {
     kind: "text",
     path: "site.home.hero.badge",
-    title: "Edit home badge text",
+    title: "Muokkaa merkin tekstiä",
   });
   text("home-intro-title", home.intro.title, {
     kind: "text",
     path: "site.home.intro.title",
-    title: "Edit intro title",
+    title: "Muokkaa esittelyn otsikkoa",
   });
   text("home-intro-text", home.intro.text, {
     kind: "text",
     path: "site.home.intro.text",
-    title: "Edit intro text",
-    rows: 6,
+    title: "Muokkaa esittelytekstiä",
+    rows: 8,
   });
 
   const grid = document.getElementById("home-feature-grid");
@@ -596,55 +776,305 @@ const renderHome = (home) => {
           path: `site.home.features.${index}`,
           listPath: "site.home.features",
           index,
-          title: `Edit highlight ${index + 1}`,
+          title: `Muokkaa kohokohtaa ${index + 1}`,
         }),
       );
     });
   }
+
+  text("home-gallery-title", home.gallery?.title, {
+    kind: "text",
+    path: "site.home.gallery.title",
+    title: "Muokkaa kuvagallerian otsikkoa",
+  });
+
+  const gallery = document.getElementById("home-gallery");
+  if (gallery) {
+    gallery.innerHTML = "";
+    (home.gallery?.images || []).forEach((item, index) => {
+      const figure = document.createElement("figure");
+      figure.className = "gallery-item";
+      registerEditable(figure, {
+        kind: "gallery-image",
+        path: `site.home.gallery.images.${index}`,
+        listPath: "site.home.gallery.images",
+        index,
+        title: `Muokkaa kuvaa ${index + 1}`,
+      });
+
+      const image = document.createElement("img");
+      image.src = item.image;
+      image.alt = item.imageAlt || "";
+      figure.append(image);
+      gallery.append(figure);
+    });
+  }
 };
 
-const renderInfo = (info, site) => {
-  text("info-title", info.title, {
+const renderPalvelut = (palvelut, site) => {
+  text("palvelut-title", palvelut.title, {
     kind: "text",
-    path: "site.info.title",
-    title: "Edit information page title",
+    path: "site.palvelut.title",
+    title: "Muokkaa Palvelut-sivun otsikkoa",
   });
-  text("info-lead", info.lead, {
+  text("palvelut-lead", palvelut.lead, {
     kind: "text",
-    path: "site.info.lead",
-    title: "Edit information page intro",
+    path: "site.palvelut.lead",
+    title: "Muokkaa Palvelut-sivun johdantoa",
     rows: 5,
   });
-  setImage("info-image", info.image, info.imageAlt, {
+  setImage("palvelut-image", palvelut.image, palvelut.imageAlt, {
     kind: "image",
-    path: "site.info.image",
-    altPath: "site.info.imageAlt",
-    title: "Edit information page image",
+    path: "site.palvelut.image",
+    altPath: "site.palvelut.imageAlt",
+    title: "Muokkaa Palvelut-sivun kuvaa",
   });
-  text("info-bio-title", info.bioTitle, {
+
+  const grid = document.getElementById("palvelut-grid");
+  if (grid) {
+    grid.innerHTML = "";
+    palvelut.courses.forEach((course, index) => {
+      const article = document.createElement("article");
+      article.className = "store-card";
+      registerEditable(article, {
+        kind: "course",
+        path: `site.palvelut.courses.${index}`,
+        listPath: "site.palvelut.courses",
+        index,
+        title: `Muokkaa kurssia ${index + 1}`,
+      });
+
+      const image = document.createElement("img");
+      image.src = course.image;
+      image.alt = course.imageAlt || course.title;
+
+      const meta = document.createElement("div");
+      meta.className = "store-card__meta";
+      if (course.format) {
+        const pill = document.createElement("span");
+        pill.className = "pill";
+        pill.textContent = course.format;
+        meta.append(pill);
+      }
+
+      const heading = document.createElement("h3");
+      heading.textContent = course.title;
+
+      const paragraph = document.createElement("p");
+      paragraph.textContent = course.text;
+
+      const price = document.createElement("p");
+      price.className = "price";
+      price.textContent = course.priceLabel;
+
+      const actions = document.createElement("div");
+      actions.className = "store-card__actions";
+
+      if (course.buyUrl) {
+        const buy = document.createElement("a");
+        buy.className = "button";
+        buy.href = course.buyUrl;
+        buy.textContent = course.buyLabel || "Ota yhteyttä";
+        actions.append(buy);
+      }
+
+      if (course.infoText) {
+        const more = document.createElement("button");
+        more.type = "button";
+        more.className = "button button--secondary";
+        more.textContent = course.infoLabel || "Tarkemmat tiedot";
+        more.addEventListener("click", (event) => {
+          event.stopPropagation();
+          openInfoOverlay({
+            title: course.title,
+            bodyText: course.infoText,
+            editMeta: {
+              path: `site.palvelut.courses.${index}.infoText`,
+              title: `Muokkaa: ${course.title}`,
+              rows: 6,
+            },
+          });
+        });
+        actions.append(more);
+      }
+
+      article.append(image, meta, heading, paragraph, price, actions);
+      grid.append(article);
+    });
+  }
+
+  document.title = `${site.siteName} | Palvelut`;
+};
+
+const BOOK_STATUS_CLASSES = {
+  Myynnissä: "book-status--available",
+  Loppuunmyyty: "book-status--sold-out",
+  Tulossa: "book-status--coming-soon",
+};
+
+const selectBookForOrder = (title) => {
+  const select = document.getElementById("book-order-select");
+  if (select) {
+    select.value = title;
+  }
+  document.getElementById("book-order-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
+const createBookCard = (book, meta) => {
+  const article = document.createElement("article");
+  article.className = "store-card book-card";
+  registerEditable(article, meta);
+
+  const imageWrap = document.createElement("div");
+  imageWrap.className = "book-card__image";
+
+  const image = document.createElement("img");
+  image.src = book.image;
+  image.alt = book.imageAlt || book.title;
+  imageWrap.append(image);
+
+  if (book.status) {
+    const badge = document.createElement("span");
+    badge.className = `book-status ${BOOK_STATUS_CLASSES[book.status] || ""}`.trim();
+    badge.textContent = book.status;
+    imageWrap.append(badge);
+  }
+
+  const heading = document.createElement("h3");
+  heading.textContent = book.title;
+
+  const paragraph = document.createElement("p");
+  paragraph.textContent = book.text;
+
+  article.append(imageWrap, heading, paragraph);
+
+  if (book.status === "Myynnissä") {
+    const actions = document.createElement("div");
+    actions.className = "store-card__actions";
+
+    const orderButton = document.createElement("button");
+    orderButton.type = "button";
+    orderButton.className = "button button--secondary";
+    orderButton.textContent = "Tilaa tämä kirja";
+    orderButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      selectBookForOrder(book.title);
+    });
+    actions.append(orderButton);
+
+    article.append(actions);
+  }
+
+  return article;
+};
+
+const renderKirjat = (kirjat, site) => {
+  text("kirjat-title", kirjat.title, {
     kind: "text",
-    path: "site.info.bioTitle",
-    title: "Edit biography title",
+    path: "site.kirjat.title",
+    title: "Muokkaa Kirjat-sivun otsikkoa",
   });
-  text("info-bio-text", info.bioText, {
+  text("kirjat-lead", kirjat.lead, {
     kind: "text",
-    path: "site.info.bioText",
-    title: "Edit biography text",
-    rows: 8,
+    path: "site.kirjat.lead",
+    title: "Muokkaa Kirjat-sivun johdantoa",
+    rows: 5,
+  });
+  setImage("kirjat-image", kirjat.image, kirjat.imageAlt, {
+    kind: "image",
+    path: "site.kirjat.image",
+    altPath: "site.kirjat.imageAlt",
+    title: "Muokkaa Kirjat-sivun kuvaa",
+  });
+
+  const grid = document.getElementById("kirjat-grid");
+  if (grid) {
+    grid.innerHTML = "";
+    (kirjat.books || []).forEach((book, index) => {
+      grid.append(
+        createBookCard(book, {
+          kind: "book",
+          path: `site.kirjat.books.${index}`,
+          listPath: "site.kirjat.books",
+          index,
+          title: `Muokkaa kirjaa ${index + 1}`,
+        }),
+      );
+    });
+  }
+
+  text("kirjat-order-title", kirjat.order.title, {
+    kind: "text",
+    path: "site.kirjat.order.title",
+    title: "Muokkaa tilausosion otsikkoa",
+  });
+  text("kirjat-order-instructions", kirjat.order.instructions, {
+    kind: "text",
+    path: "site.kirjat.order.instructions",
+    title: "Muokkaa maksu- ja toimitusohjeita",
+    rows: 6,
+  });
+
+  const select = document.getElementById("book-order-select");
+  if (select) {
+    const previousValue = select.value;
+    select.innerHTML = "";
+    const availableBooks = (kirjat.books || []).filter((book) => book.status === "Myynnissä");
+
+    if (availableBooks.length === 0) {
+      const option = document.createElement("option");
+      option.value = "";
+      option.textContent = "Ei tällä hetkellä myynnissä olevia kirjoja";
+      select.append(option);
+      select.disabled = true;
+    } else {
+      select.disabled = false;
+      availableBooks.forEach((book) => {
+        const option = document.createElement("option");
+        option.value = book.title;
+        option.textContent = book.title;
+        select.append(option);
+      });
+      if (availableBooks.some((book) => book.title === previousValue)) {
+        select.value = previousValue;
+      }
+    }
+  }
+
+  document.title = `${site.siteName} | Kirjat`;
+};
+
+const renderYhteystiedot = (yhteystiedot, site) => {
+  text("yhteystiedot-title", yhteystiedot.title, {
+    kind: "text",
+    path: "site.yhteystiedot.title",
+    title: "Muokkaa Yhteystiedot-sivun otsikkoa",
+  });
+  text("yhteystiedot-lead", yhteystiedot.lead, {
+    kind: "text",
+    path: "site.yhteystiedot.lead",
+    title: "Muokkaa Yhteystiedot-sivun johdantoa",
+    rows: 5,
+  });
+  setImage("yhteystiedot-image", yhteystiedot.image, yhteystiedot.imageAlt, {
+    kind: "image",
+    path: "site.yhteystiedot.image",
+    altPath: "site.yhteystiedot.imageAlt",
+    title: "Muokkaa Yhteystiedot-sivun kuvaa",
   });
 
   const contactList = document.getElementById("contact-list");
   if (contactList) {
     contactList.innerHTML = "";
-    info.contactItems.forEach((item, index) => {
+    yhteystiedot.contactItems.forEach((item, index) => {
       const block = document.createElement("div");
       block.className = "contact-item";
       registerEditable(block, {
         kind: "contact",
-        path: `site.info.contactItems.${index}`,
-        listPath: "site.info.contactItems",
+        path: `site.yhteystiedot.contactItems.${index}`,
+        listPath: "site.yhteystiedot.contactItems",
         index,
-        title: `Edit contact item ${index + 1}`,
+        title: `Muokkaa yhteystietoa ${index + 1}`,
       });
       const heading = document.createElement("strong");
       heading.textContent = item.label;
@@ -655,26 +1085,98 @@ const renderInfo = (info, site) => {
     });
   }
 
-  const services = document.getElementById("services-grid");
-  if (services) {
-    services.innerHTML = "";
-    info.services.forEach((service, index) => {
-      services.append(
-        createCard(service.title, service.text, {
-          kind: "service",
-          path: `site.info.services.${index}`,
-          listPath: "site.info.services",
-          index,
-          title: `Edit service ${index + 1}`,
-        }),
-      );
-    });
-  }
+  text("inquiry-title", yhteystiedot.inquiry?.title, {
+    kind: "text",
+    path: "site.yhteystiedot.inquiry.title",
+    title: "Muokkaa kyselylomakkeen otsikkoa",
+  });
+  text("inquiry-intro", yhteystiedot.inquiry?.intro, {
+    kind: "text",
+    path: "site.yhteystiedot.inquiry.intro",
+    title: "Muokkaa kyselylomakkeen johdantoa",
+    rows: 4,
+  });
 
-  document.title = `${site.siteName} | Information`;
+  document.title = `${site.siteName} | Yhteystiedot`;
 };
 
-const createEventCard = (event, meta) => {
+const parseEventDate = (value) => {
+  if (!value) {
+    return null;
+  }
+
+  const trimmed = String(value).trim();
+  const monthNames = {
+    tammi: 0,
+    helmi: 1,
+    maalis: 2,
+    huhti: 3,
+    touko: 4,
+    kesä: 5,
+    heinä: 6,
+    elo: 7,
+    syys: 8,
+    loka: 9,
+    marras: 10,
+    joulu: 11,
+  };
+
+  const simpleDate = trimmed.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  if (simpleDate) {
+    const [, day, month, year] = simpleDate;
+    return new Date(Number(year), Number(month) - 1, Number(day));
+  }
+
+  const monthDate = trimmed.match(/^([A-Za-zäöÅÄÖ]+)\s+(\d{4})$/i);
+  if (monthDate) {
+    const [, monthLabel, year] = monthDate;
+    const normalized = monthLabel.toLowerCase();
+    const monthIndex = monthNames[normalized];
+    if (typeof monthIndex === "number") {
+      return new Date(Number(year), monthIndex, 1);
+    }
+  }
+
+  const isoDate = trimmed.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (isoDate) {
+    const [, year, month, day] = isoDate;
+    return new Date(Number(year), Number(month) - 1, Number(day));
+  }
+
+  return null;
+};
+
+const isPastEvent = (event) => {
+  const parsed = parseEventDate(event.date);
+  if (!parsed) {
+    return false;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return parsed < today;
+};
+
+const compareEventDates = (left, right) => {
+  const leftDate = parseEventDate(left.date);
+  const rightDate = parseEventDate(right.date);
+
+  if (!leftDate && !rightDate) {
+    return 0;
+  }
+
+  if (!leftDate) {
+    return 1;
+  }
+
+  if (!rightDate) {
+    return -1;
+  }
+
+  return rightDate - leftDate;
+};
+
+const createEventCard = (event, meta, isPast = false) => {
   const article = document.createElement("article");
   article.className = "event-card";
   registerEditable(article, meta);
@@ -683,7 +1185,7 @@ const createEventCard = (event, meta) => {
   metaRow.className = "event-card__meta";
   [event.date, event.location].filter(Boolean).forEach((value) => {
     const pill = document.createElement("span");
-    pill.className = "pill";
+    pill.className = isPast ? "pill pill--muted" : "pill";
     pill.textContent = value;
     metaRow.append(pill);
   });
@@ -695,7 +1197,7 @@ const createEventCard = (event, meta) => {
   paragraph.textContent = event.text;
   article.append(metaRow, heading, paragraph);
 
-  if (event.buttonLabel && event.buttonUrl) {
+  if (!isPast && event.buttonLabel && event.buttonUrl) {
     const link = document.createElement("a");
     link.className = "button button--secondary";
     link.href = event.buttonUrl;
@@ -706,220 +1208,200 @@ const createEventCard = (event, meta) => {
   return article;
 };
 
-const renderEvents = (events, site) => {
-  text("events-title", events.title, {
+const createSocialEmbedCard = ({ label, url, embedUrl, themeClass }) => {
+  const article = document.createElement("article");
+  article.className = `social-embed-card ${themeClass || ""}`.trim();
+
+  const heading = document.createElement("h3");
+  heading.textContent = label;
+
+  const copy = document.createElement("p");
+  copy.textContent = url
+    ? "Voit päivittää tämän kortin suoraan sosiaalisen median upotussisällöllä tai pitää nykyisen linkin."
+    : "Lisää upotuskoodi tai URL-osoite, niin sisältö näkyy täällä suoraan.";
+
+  article.append(heading, copy);
+
+  if (embedUrl) {
+    const frame = document.createElement("iframe");
+    frame.className = "social-embed-card__frame";
+    frame.src = embedUrl;
+    frame.title = `${label} -upotus`;
+    frame.loading = "lazy";
+    frame.referrerPolicy = "strict-origin-when-cross-origin";
+    frame.allow = "fullscreen";
+    article.append(frame);
+  }
+
+  if (url) {
+    const link = document.createElement("a");
+    link.className = "button button--secondary";
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = `Avaa ${label}`;
+    article.append(link);
+  }
+
+  return article;
+};
+
+const renderTapahtumia = (tapahtumia, site) => {
+  text("tapahtumia-title", tapahtumia.title, {
     kind: "text",
-    path: "site.events.title",
-    title: "Edit events page title",
+    path: "site.tapahtumia.title",
+    title: "Muokkaa Tapahtumia-sivun otsikkoa",
   });
-  text("events-lead", events.lead, {
+  text("tapahtumia-lead", tapahtumia.lead, {
     kind: "text",
-    path: "site.events.lead",
-    title: "Edit events intro",
+    path: "site.tapahtumia.lead",
+    title: "Muokkaa Tapahtumia-sivun johdantoa",
     rows: 5,
   });
-  setImage("events-image", events.image, events.imageAlt, {
+  setImage("tapahtumia-image", tapahtumia.image, tapahtumia.imageAlt, {
     kind: "image",
-    path: "site.events.image",
-    altPath: "site.events.imageAlt",
-    title: "Edit events page image",
+    path: "site.tapahtumia.image",
+    altPath: "site.tapahtumia.imageAlt",
+    title: "Muokkaa Tapahtumia-sivun kuvaa",
   });
-  text("social-title", events.social.title, {
+  text("social-title", tapahtumia.social.title, {
     kind: "text",
-    path: "site.events.social.title",
-    title: "Edit social section title",
+    path: "site.tapahtumia.social.title",
+    title: "Muokkaa sosiaalisen median otsikkoa",
   });
-  text("social-note", events.social.note, {
+  text("social-note", tapahtumia.social.note, {
     kind: "text",
-    path: "site.events.social.note",
-    title: "Edit social section text",
+    path: "site.tapahtumia.social.note",
+    title: "Muokkaa sosiaalisen median tekstiä",
     rows: 5,
   });
+
+  const upcomingEntries = (tapahtumia.upcoming || []).map((event, index) => ({
+    event,
+    meta: {
+      kind: "event",
+      path: `site.tapahtumia.upcoming.${index}`,
+      listPath: "site.tapahtumia.upcoming",
+      index,
+      title: `Muokkaa tulevaa tapahtumaa ${index + 1}`,
+    },
+  }));
+  const upcomingEvents = upcomingEntries.filter(({ event }) => !isPastEvent(event));
+  const pastEntries = (tapahtumia.past || []).map((event, index) => ({
+    event,
+    meta: {
+      kind: "event",
+      path: `site.tapahtumia.past.${index}`,
+      listPath: "site.tapahtumia.past",
+      index,
+      title: `Muokkaa mennyttä tapahtumaa ${index + 1}`,
+    },
+  }));
+  const upcomingPastEntries = upcomingEntries.filter(({ event }) => isPastEvent(event));
+  const recentEntries = [...pastEntries, ...upcomingPastEntries]
+    .sort((left, right) => compareEventDates(left.event, right.event))
+    .slice(0, 4);
 
   const list = document.getElementById("events-list");
   if (list) {
     list.innerHTML = "";
-    events.upcoming.forEach((event, index) => {
-      list.append(
-        createEventCard(event, {
-          kind: "event",
-          path: `site.events.upcoming.${index}`,
-          listPath: "site.events.upcoming",
-          index,
-          title: `Edit upcoming event ${index + 1}`,
-        }),
-      );
-    });
+
+    if (upcomingEvents.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "empty-state";
+      empty.textContent = "Ei tulevia tapahtumia juuri nyt.";
+      list.append(empty);
+    } else {
+      upcomingEvents.forEach(({ event, meta }) => {
+        list.append(createEventCard(event, meta));
+      });
+    }
   }
 
   const pastList = document.getElementById("past-events-list");
   if (pastList) {
     pastList.innerHTML = "";
-    events.past.forEach((event, index) => {
-      pastList.append(
-        createEventCard(event, {
-          kind: "event",
-          path: `site.events.past.${index}`,
-          listPath: "site.events.past",
-          index,
-          title: `Edit past event ${index + 1}`,
+
+    if (recentEntries.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "empty-state";
+      empty.textContent = "Ei vielä viimeaikaisia hetkiä.";
+      pastList.append(empty);
+    } else {
+      recentEntries.forEach(({ event, meta }) => {
+        pastList.append(createEventCard(event, meta, true));
+      });
+    }
+  }
+
+  const embeds = document.getElementById("social-embeds");
+  if (embeds) {
+    embeds.innerHTML = "";
+    registerEditable(embeds, {
+      kind: "social",
+      path: "site.tapahtumia.social",
+      title: "Muokkaa sosiaalisen median linkkejä",
+    });
+
+    if (tapahtumia.social.facebookUrl || tapahtumia.social.facebookEmbedUrl) {
+      embeds.append(
+        createSocialEmbedCard({
+          label: "Facebook",
+          url: tapahtumia.social.facebookUrl,
+          embedUrl: tapahtumia.social.facebookEmbedUrl,
+          themeClass: "social-embed-card--facebook",
         }),
       );
-    });
-  }
-
-  const embed = document.getElementById("social-embed");
-  if (embed) {
-    embed.innerHTML = "";
-    registerEditable(embed, {
-      kind: "social",
-      path: "site.events.social",
-      title: "Edit social highlight block",
-    });
-
-    if (events.social.embedUrl) {
-      const iframe = document.createElement("iframe");
-      iframe.src = events.social.embedUrl;
-      iframe.loading = "lazy";
-      iframe.allow =
-        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-      iframe.allowFullscreen = true;
-      embed.append(iframe);
-    } else {
-      const placeholder = document.createElement("div");
-      placeholder.className = "social-placeholder";
-      placeholder.textContent = "Add an embeddable social or video link to show it here.";
-      embed.append(placeholder);
     }
 
-    if (state.isAdmin) {
-      const editButton = document.createElement("button");
-      editButton.type = "button";
-      editButton.className = "social-edit-chip";
-      editButton.textContent = "Edit social block";
-      embed.append(editButton);
+    if (tapahtumia.social.instagramUrl || tapahtumia.social.instagramEmbedUrl) {
+      embeds.append(
+        createSocialEmbedCard({
+          label: "Instagram",
+          url: tapahtumia.social.instagramUrl,
+          embedUrl: tapahtumia.social.instagramEmbedUrl,
+          themeClass: "social-embed-card--instagram",
+        }),
+      );
     }
   }
 
-  document.title = `${site.siteName} | Events`;
-};
-
-const renderStore = (store, site) => {
-  text("store-title", store.title, {
-    kind: "text",
-    path: "store.title",
-    title: "Edit books and courses title",
-  });
-  text("store-lead", store.lead, {
-    kind: "text",
-    path: "store.lead",
-    title: "Edit books and courses intro",
-    rows: 5,
-  });
-
-  const grid = document.getElementById("store-grid");
-  if (grid) {
-    grid.innerHTML = "";
-    store.products.forEach((product, index) => {
-      const article = document.createElement("article");
-      article.className = "store-card";
-      registerEditable(article, {
-        kind: "product",
-        path: `store.products.${index}`,
-        listPath: "store.products",
-        index,
-        title: `Edit offering ${index + 1}`,
-      });
-
-      const image = document.createElement("img");
-      image.src = product.image;
-      image.alt = product.imageAlt || product.title;
-
-      const meta = document.createElement("div");
-      meta.className = "store-card__meta";
-      [product.type, product.format].filter(Boolean).forEach((value) => {
-        const pill = document.createElement("span");
-        pill.className = "pill";
-        pill.textContent = value;
-        meta.append(pill);
-      });
-
-      const heading = document.createElement("h3");
-      heading.textContent = product.title;
-
-      const paragraph = document.createElement("p");
-      paragraph.textContent = product.text;
-
-      const price = document.createElement("p");
-      price.className = "price";
-      price.textContent = product.priceLabel;
-
-      const actions = document.createElement("div");
-      actions.className = "store-card__actions";
-
-      if (product.buyUrl) {
-        const buy = document.createElement("a");
-        buy.className = "button";
-        buy.href = product.buyUrl;
-        buy.textContent = product.buyLabel || "Contact";
-        actions.append(buy);
-      }
-
-      if (product.infoUrl) {
-        const more = document.createElement("a");
-        more.className = "button button--secondary";
-        more.href = product.infoUrl;
-        more.textContent = product.infoLabel || "Learn more";
-        actions.append(more);
-      }
-
-      article.append(image, meta, heading, paragraph, price, actions);
-      grid.append(article);
-    });
-  }
-
-  document.title = `${site.siteName} | Books & Courses`;
+  document.title = `${site.siteName} | Tapahtumia`;
 };
 
 const renderGlobal = (data) => {
   text("brand-name", data.siteName, {
     kind: "text",
     path: "site.global.siteName",
-    title: "Edit site name",
+    title: "Muokkaa sivuston nimeä",
   });
   text("brand-eyebrow", data.brandLine, {
     kind: "text",
     path: "site.global.brandLine",
-    title: "Edit brand line",
+    title: "Muokkaa brändilausetta",
   });
   text("footer-name", data.siteName, {
     kind: "text",
     path: "site.global.siteName",
-    title: "Edit site name",
+    title: "Muokkaa sivuston nimeä",
   });
   text("footer-tagline", data.footerTagline, {
     kind: "text",
     path: "site.global.footerTagline",
-    title: "Edit footer tagline",
+    title: "Muokkaa alatunnisteen tekstiä",
     rows: 4,
   });
   createFooterLinks(data.footerLinks);
 };
 
 const loadSite = async () => {
-  const [siteResponse, storeResponse] = await Promise.all([
-    fetch("content/site.json"),
-    fetch("content/store.json"),
-  ]);
+  const siteResponse = await fetch("content/site.json");
 
-  if (!siteResponse.ok || !storeResponse.ok) {
-    throw new Error("Failed to load content files.");
+  if (!siteResponse.ok) {
+    throw new Error("Sisältötiedoston lataus epäonnistui.");
   }
 
-  const fallback = {
-    site: await siteResponse.json(),
-    store: await storeResponse.json(),
-  };
+  const fallback = { site: await siteResponse.json() };
 
   const localCopy = localStorage.getItem(STORAGE_KEY);
   if (!localCopy) {
@@ -929,7 +1411,7 @@ const loadSite = async () => {
   try {
     return JSON.parse(localCopy);
   } catch (error) {
-    console.error("Failed to parse local saved content.", error);
+    console.error("Tallennetun sisällön jäsentäminen epäonnistui.", error);
     return fallback;
   }
 };
@@ -944,16 +1426,15 @@ const createAdminChrome = () => {
   bar.innerHTML = `
     <div class="admin-bar__inner">
       <div class="admin-bar__copy">
-        <strong>Visual Editor</strong>
-        <span data-admin-message>Sign in to edit texts and images directly on the page.</span>
+        <strong>Muokkaustila</strong>
+        <span data-admin-message>Muokkaustila käytössä.</span>
       </div>
       <div class="admin-bar__actions">
-        <button type="button" class="button button--ghost" data-admin-action="toggle-login">Sign in</button>
-        <button type="button" class="button button--ghost" data-admin-action="save">Save to browser</button>
-        <button type="button" class="button button--ghost" data-admin-action="download">Download backup</button>
-        <button type="button" class="button button--ghost" data-admin-action="upload">Upload backup</button>
-        <button type="button" class="button button--ghost" data-admin-action="reset">Reset edits</button>
-        <button type="button" class="button button--ghost" data-admin-action="logout">Log out</button>
+        <button type="button" class="button button--ghost" data-admin-action="save">Tallenna selaimeen</button>
+        <button type="button" class="button button--ghost" data-admin-action="download">Lataa varmuuskopio</button>
+        <button type="button" class="button button--ghost" data-admin-action="upload">Tuo varmuuskopio</button>
+        <button type="button" class="button button--ghost" data-admin-action="reset">Nollaa muutokset</button>
+        <button type="button" class="button button--ghost" data-admin-action="logout">Kirjaudu ulos</button>
       </div>
       <div class="admin-bar__page-actions" data-page-actions></div>
       <input type="file" accept="application/json" hidden data-upload-input />
@@ -974,77 +1455,90 @@ const createPageActionButtons = () => {
 
   if (currentPage === "home") {
     actions.push({
-      label: "Add highlight",
+      label: "Lisää kohokohta",
       onClick: () =>
         addListItem("site.home.features", {
-          title: "New highlight",
-          text: "Click this card to edit the text.",
+          title: "Uusi kohokohta",
+          text: "Klikkaa tätä korttia muokataksesi tekstiä.",
+        }),
+    });
+    actions.push({
+      label: "Lisää kuva galleriaan",
+      onClick: () =>
+        addListItem("site.home.gallery.images", {
+          image: "assets/uploads/portrait-placeholder.svg",
+          imageAlt: "Uusi kuva",
         }),
     });
   }
 
-  if (currentPage === "info") {
+  if (currentPage === "yhteystiedot") {
     actions.push({
-      label: "Add contact item",
+      label: "Lisää yhteystieto",
       onClick: () =>
-        addListItem("site.info.contactItems", {
-          label: "New item",
-          value: "Add a value",
-        }),
-    });
-    actions.push({
-      label: "Add service",
-      onClick: () =>
-        addListItem("site.info.services", {
-          title: "New service",
-          text: "Describe this service here.",
+        addListItem("site.yhteystiedot.contactItems", {
+          label: "Uusi kenttä",
+          value: "Lisää arvo",
         }),
     });
   }
 
-  if (currentPage === "events") {
+  if (currentPage === "tapahtumia") {
     actions.push({
-      label: "Add upcoming event",
+      label: "Lisää tuleva tapahtuma",
       onClick: () =>
-        addListItem("site.events.upcoming", {
-          title: "New upcoming event",
-          date: "Add date",
-          location: "Add location",
-          text: "Describe the event here.",
-          buttonLabel: "Ask for details",
-          buttonUrl: "mailto:marjoseki@hotmail.com?subject=Event%20Question",
+        addListItem("site.tapahtumia.upcoming", {
+          title: "Uusi tuleva tapahtuma",
+          date: "",
+          location: "",
+          text: "Kuvaile tapahtuma tässä.",
+          buttonLabel: "Kysy lisää",
+          buttonUrl: "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys",
         }),
     });
     actions.push({
-      label: "Add past event",
+      label: "Lisää mennyt tapahtuma",
       onClick: () =>
-        addListItem("site.events.past", {
-          title: "New past event",
-          date: "Add date",
-          location: "Add location",
-          text: "Describe the event here.",
+        addListItem("site.tapahtumia.past", {
+          title: "Uusi mennyt tapahtuma",
+          date: "",
+          location: "",
+          text: "Kuvaile tapahtuma tässä.",
           buttonLabel: "",
           buttonUrl: "",
         }),
     });
   }
 
-  if (currentPage === "store") {
+  if (currentPage === "palvelut") {
     actions.push({
-      label: "Add offering",
+      label: "Lisää kurssi",
       onClick: () =>
-        addListItem("store.products", {
-          title: "New offering",
-          type: "Other",
-          format: "Format",
-          text: "Describe the item here.",
-          priceLabel: "Ask for details",
-          buyLabel: "Contact",
-          buyUrl: "mailto:marjoseki@hotmail.com?subject=New%20Offering",
-          infoLabel: "More information",
-          infoUrl: "mailto:marjoseki@hotmail.com?subject=New%20Offering%20Details",
+        addListItem("site.palvelut.courses", {
+          title: "Uusi kurssi",
+          format: "Muoto",
+          text: "Kuvaile kurssi tässä.",
+          priceLabel: "Kysy hintaa",
+          buyLabel: "Tiedustele sähköpostilla",
+          buyUrl: "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
+          infoLabel: "Tarkemmat tiedot",
+          infoText: "Kirjoita tähän kurssin tarkemmat tiedot.",
+          image: "assets/uploads/food-placeholder.svg",
+          imageAlt: "Uuden kurssin kuva",
+        }),
+    });
+  }
+
+  if (currentPage === "kirjat") {
+    actions.push({
+      label: "Lisää kirja",
+      onClick: () =>
+        addListItem("site.kirjat.books", {
+          title: "Uusi kirja",
+          status: "Tulossa",
+          text: "Kuvaile kirja tässä.",
           image: "assets/uploads/books-placeholder.svg",
-          imageAlt: "New offering image",
+          imageAlt: "Uuden kirjan kansi",
         }),
     });
   }
@@ -1060,37 +1554,22 @@ const updateAdminChrome = () => {
   }
 
   createAdminChrome();
+  document.body.classList.add("admin-mode");
 
-  document.body.classList.toggle("admin-mode", state.isAdmin);
-
-  const actions = document.querySelector(".admin-bar__actions");
   const pageActions = document.querySelector("[data-page-actions]");
-  const signInButton = document.querySelector('[data-admin-action="toggle-login"]');
-
-  if (!actions || !pageActions || !signInButton) {
+  if (!pageActions) {
     return;
   }
 
-  signInButton.textContent = state.isAdmin ? "Editing enabled" : "Sign in";
-  signInButton.disabled = state.isAdmin;
-
-  actions.querySelectorAll("button").forEach((button) => {
-    if (button.dataset.adminAction !== "toggle-login") {
-      button.style.display = state.isAdmin ? "inline-flex" : "none";
-    }
-  });
-
   pageActions.innerHTML = "";
-  if (state.isAdmin) {
-    createPageActionButtons().forEach((action) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "button button--secondary";
-      button.textContent = action.label;
-      button.addEventListener("click", action.onClick);
-      pageActions.append(button);
-    });
-  }
+  createPageActionButtons().forEach((action) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "button button--secondary";
+    button.textContent = action.label;
+    button.addEventListener("click", action.onClick);
+    pageActions.append(button);
+  });
 };
 
 const renderPage = () => {
@@ -1100,16 +1579,20 @@ const renderPage = () => {
     renderHome(state.data.site.home);
   }
 
-  if (currentPage === "info") {
-    renderInfo(state.data.site.info, state.data.site.global);
+  if (currentPage === "palvelut") {
+    renderPalvelut(state.data.site.palvelut, state.data.site.global);
   }
 
-  if (currentPage === "events") {
-    renderEvents(state.data.site.events, state.data.site.global);
+  if (currentPage === "kirjat") {
+    renderKirjat(state.data.site.kirjat, state.data.site.global);
   }
 
-  if (currentPage === "store") {
-    renderStore(state.data.store, state.data.site.global);
+  if (currentPage === "yhteystiedot") {
+    renderYhteystiedot(state.data.site.yhteystiedot, state.data.site.global);
+  }
+
+  if (currentPage === "tapahtumia") {
+    renderTapahtumia(state.data.site.tapahtumia, state.data.site.global);
   }
 
   updateAdminChrome();
@@ -1117,8 +1600,8 @@ const renderPage = () => {
 
 const setupEditorEvents = () => {
   document.addEventListener("click", async (event) => {
-    const adminTrigger = event.target.closest(".admin-trigger");
-    if (adminTrigger) {
+    const ownerAccess = event.target.closest(".owner-access");
+    if (ownerAccess) {
       event.preventDefault();
       openLoginModal();
       return;
@@ -1127,10 +1610,6 @@ const setupEditorEvents = () => {
     const adminAction = event.target.closest("[data-admin-action]");
     if (adminAction) {
       const action = adminAction.dataset.adminAction;
-
-      if (action === "toggle-login") {
-        openLoginModal();
-      }
 
       if (action === "save") {
         saveToBrowser();
@@ -1149,7 +1628,11 @@ const setupEditorEvents = () => {
       }
 
       if (action === "logout") {
-        sessionStorage.removeItem(AUTH_KEY);
+        try {
+          await fetch("/api/logout", { method: "POST" });
+        } catch (error) {
+          // Sign-out still proceeds locally even if the API call fails.
+        }
         state.isAdmin = false;
         closeModal();
         updateAdminChrome();
@@ -1180,10 +1663,10 @@ const setupEditorEvents = () => {
       state.data = JSON.parse(textValue);
       saveToBrowser();
       renderPage();
-      updateAdminMessage("Backup imported.");
+      updateAdminMessage("Varmuuskopio tuotu.");
     } catch (error) {
       console.error(error);
-      updateAdminMessage("Import failed. Check the backup file.");
+      updateAdminMessage("Tuonti epäonnistui. Tarkista varmuuskopiotiedosto.");
     } finally {
       input.value = "";
     }
@@ -1194,9 +1677,11 @@ const boot = async () => {
   setupMenu();
   markActiveNav();
   setupEditorEvents();
+  setupPublicForms();
 
   try {
     state.data = await loadSite();
+    state.isAdmin = await checkSession();
     renderPage();
   } catch (error) {
     console.error(error);

@@ -1,38 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Marjo Seki | Events</title>
+    <title>Marjo Seki | Tapahtumia</title>
     <meta
       name="description"
-      content="Upcoming events, workshops, and social highlights for Marjo Seki."
+      content="Tulevat ja menneet tapahtumat, sekä linkit Facebookiin ja Instagramiin."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/styles.css" />
   </head>
-  <body data-page="events">
+  <body data-page="tapahtumia">
     <header class="site-header">
       <div class="shell site-header__inner">
         <a class="brand" href="index.html">
-          <span class="brand__eyebrow" id="brand-eyebrow">Author · Japanese Food Chef · Teacher</span>
+          <span class="brand__eyebrow" id="brand-eyebrow">Kirjailija · Japanilaisen ruoan opettaja</span>
           <span class="brand__name" id="brand-name">Marjo Seki</span>
         </a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-          Menu
+          Valikko
         </button>
-        <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+        <nav class="site-nav" id="site-nav" aria-label="Päävalikko">
           <a data-nav="home" href="index.html">Home</a>
-          <a data-nav="info" href="info.html">Information</a>
-          <a data-nav="events" href="events.html">Events</a>
-          <a data-nav="store" href="store.html">Books & Courses</a>
-          <a class="button button--ghost admin-trigger" href="admin/">Edit Site</a>
+          <a data-nav="palvelut" href="palvelut.html">Palvelut</a>
+          <a data-nav="tapahtumia" href="tapahtumia.html">Tapahtumia</a>
+          <a data-nav="kirjat" href="kirjat.html">Kirjat</a>
+          <a data-nav="yhteystiedot" href="yhteystiedot.html">Yhteystiedot</a>
         </nav>
+        <button class="owner-access" type="button" aria-label="Omistajan kirjautuminen" title="Omistajan kirjautuminen">
+          ✎
+        </button>
       </div>
     </header>
 
@@ -40,18 +43,17 @@
       <section class="page-hero">
         <div class="shell page-hero__grid">
           <div>
-            <p class="eyebrow">Events</p>
-            <h1 id="events-title">Upcoming gatherings and current happenings.</h1>
-            <p id="events-lead">
-              Share workshops, readings, courses, or retreat dates in one place that is easy to
-              refresh.
+            <p class="eyebrow">Tapahtumia</p>
+            <h1 id="tapahtumia-title">Tapahtumia</h1>
+            <p id="tapahtumia-lead">
+              Tulevat ja menneet tapahtumat, kurssit ja tilaisuudet.
             </p>
           </div>
           <div class="page-hero__image">
             <img
-              id="events-image"
+              id="tapahtumia-image"
               src="assets/uploads/event-placeholder.svg"
-              alt="Event placeholder"
+              alt="Tapahtumakuva"
             />
           </div>
         </div>
@@ -60,8 +62,8 @@
       <section class="section">
         <div class="shell">
           <div class="section-heading">
-            <p class="eyebrow">On Going Events</p>
-            <h2>What visitors can join right now</h2>
+            <p class="eyebrow">Tulevat tapahtumat</p>
+            <h2>Mihin voit liittyä juuri nyt</h2>
           </div>
           <div class="event-list" id="events-list"></div>
         </div>
@@ -70,8 +72,8 @@
       <section class="section">
         <div class="shell">
           <div class="section-heading">
-            <p class="eyebrow">Past Events</p>
-            <h2>Recent moments and previous gatherings</h2>
+            <p class="eyebrow">Menneet tapahtumat</p>
+            <h2>Viimeaikaisia hetkiä</h2>
           </div>
           <div class="event-list" id="past-events-list"></div>
         </div>
@@ -80,13 +82,13 @@
       <section class="section section--accent">
         <div class="shell social-wall">
           <div class="social-wall__copy">
-            <p class="eyebrow">Social Window</p>
-            <h2 id="social-title">Latest social highlight</h2>
+            <p class="eyebrow">Sosiaalinen media</p>
+            <h2 id="social-title">Seuraa sosiaalisessa mediassa</h2>
             <p id="social-note">
-              Paste a YouTube, Vimeo, or other embeddable social/video link here later.
+              Tuoreimmat kuulumiset ja kuvat näkyvät täällä suoraan, kun haluat lisätä sosiaalisen median upotukset.
             </p>
+            <div class="social-embeds" id="social-embeds"></div>
           </div>
-          <div class="social-wall__embed" id="social-embed"></div>
         </div>
       </section>
     </main>
@@ -95,7 +97,7 @@
       <div class="shell site-footer__inner">
         <div>
           <p class="site-footer__title" id="footer-name">Marjo Seki</p>
-          <p id="footer-tagline">Books, courses, and events that create space for reflection.</p>
+          <p id="footer-tagline">Lämpimiä tarinoita, japanilaista ruokakulttuuria ja opetusta Kouvolasta.</p>
         </div>
         <div class="site-footer__links" id="footer-links"></div>
       </div>

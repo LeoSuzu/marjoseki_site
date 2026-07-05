@@ -35,6 +35,9 @@ content:
                 label: Site Name
                 type: string
                 description: Main name shown in the header and footer.
+              - name: brandLine
+                label: Brand Line
+                type: string
               - name: footerTagline
                 label: Footer Tagline
                 type: text
@@ -114,9 +117,30 @@ content:
                   - name: text
                     label: Card Text
                     type: text
+              - name: gallery
+                label: Photo Gallery
+                type: object
+                fields:
+                  - name: title
+                    label: Gallery Title
+                    type: string
+                  - name: images
+                    label: Images
+                    type: object
+                    list:
+                      collapsible:
+                        collapsed: true
+                        summary: "{imageAlt}"
+                    fields:
+                      - name: image
+                        label: Image
+                        type: image
+                      - name: imageAlt
+                        label: Image Description
+                        type: string
 
-          - name: info
-            label: Information Page
+          - name: palvelut
+            label: Palvelut Page
             type: object
             fields:
               - name: title
@@ -131,12 +155,66 @@ content:
               - name: imageAlt
                 label: Page Image Description
                 type: string
-              - name: bioTitle
-                label: Biography Title
-                type: string
-              - name: bioText
-                label: Biography Text
+              - name: courses
+                label: Courses
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - name: title
+                    label: Course Title
+                    type: string
+                  - name: format
+                    label: Format
+                    type: string
+                  - name: text
+                    label: Description
+                    type: text
+                  - name: priceLabel
+                    label: Price Label
+                    type: string
+                  - name: buyLabel
+                    label: Main Button Text
+                    type: string
+                    required: false
+                  - name: buyUrl
+                    label: Main Button Link
+                    type: string
+                    required: false
+                  - name: infoLabel
+                    label: Secondary Button Text
+                    type: string
+                    required: false
+                  - name: infoUrl
+                    label: Secondary Button Link
+                    type: string
+                    required: false
+                  - name: image
+                    label: Course Image
+                    type: image
+                  - name: imageAlt
+                    label: Course Image Description
+                    type: string
+                    required: false
+
+          - name: yhteystiedot
+            label: Yhteystiedot Page
+            type: object
+            fields:
+              - name: title
+                label: Page Title
                 type: text
+              - name: lead
+                label: Lead Text
+                type: text
+              - name: image
+                label: Page Image
+                type: image
+              - name: imageAlt
+                label: Page Image Description
+                type: string
               - name: contactItems
                 label: Contact Items
                 type: object
@@ -151,23 +229,9 @@ content:
                   - name: value
                     label: Field Value
                     type: string
-              - name: services
-                label: Services
-                type: object
-                list:
-                  collapsible:
-                    collapsed: true
-                    summary: "{title}"
-                fields:
-                  - name: title
-                    label: Service Title
-                    type: string
-                  - name: text
-                    label: Service Text
-                    type: text
 
-          - name: events
-            label: Events Page
+          - name: tapahtumia
+            label: Tapahtumia Page
             type: object
             fields:
               - name: title
@@ -210,6 +274,34 @@ content:
                     label: Button Link
                     type: string
                     required: false
+              - name: past
+                label: Past Events
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - name: title
+                    label: Event Title
+                    type: string
+                  - name: date
+                    label: Event Date
+                    type: string
+                  - name: location
+                    label: Event Location
+                    type: string
+                  - name: text
+                    label: Event Description
+                    type: text
+                  - name: buttonLabel
+                    label: Button Text
+                    type: string
+                    required: false
+                  - name: buttonUrl
+                    label: Button Link
+                    type: string
+                    required: false
               - name: social
                 label: Social Window
                 type: object
@@ -220,69 +312,11 @@ content:
                   - name: note
                     label: Help Text
                     type: text
-                  - name: embedUrl
-                    label: Embed URL
+                  - name: facebookUrl
+                    label: Facebook URL
                     type: string
                     required: false
-                    description: Best for embeddable video or social links, such as YouTube embed URLs.
-
-      - name: store
-        label: Books and Courses
-        type: file
-        path: content/store.json
-        format: json
-        fields:
-          - name: title
-            label: Store Title
-            type: text
-          - name: lead
-            label: Store Intro Text
-            type: text
-          - name: products
-            label: Products
-            type: object
-            list:
-              collapsible:
-                collapsed: true
-                summary: "{title}"
-            fields:
-              - name: title
-                label: Product Title
-                type: string
-              - name: type
-                label: Product Type
-                type: select
-                options:
-                  values: [Book, Course, Workshop, Other]
-              - name: format
-                label: Format
-                type: string
-              - name: text
-                label: Description
-                type: text
-              - name: priceLabel
-                label: Price Label
-                type: string
-              - name: buyLabel
-                label: Main Button Text
-                type: string
-                required: false
-              - name: buyUrl
-                label: Main Button Link
-                type: string
-                required: false
-              - name: infoLabel
-                label: Secondary Button Text
-                type: string
-                required: false
-              - name: infoUrl
-                label: Secondary Button Link
-                type: string
-                required: false
-              - name: image
-                label: Product Image
-                type: image
-              - name: imageAlt
-                label: Product Image Description
-                type: string
-                required: false
+                  - name: instagramUrl
+                    label: Instagram URL
+                    type: string
+                    required: false

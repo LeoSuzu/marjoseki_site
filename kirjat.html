@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marjo Seki | Kirjat</title>
+    <meta
+      name="description"
+      content="Marjo Sekin julkaistut kirjat ja mahdollisuus tilata kappale suoraan."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="kirjat">
+    <header class="site-header">
+      <div class="shell site-header__inner">
+        <a class="brand" href="index.html">
+          <span class="brand__eyebrow" id="brand-eyebrow">Kirjailija · Japanilaisen ruoan opettaja</span>
+          <span class="brand__name" id="brand-name">Marjo Seki</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          Valikko
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Päävalikko">
+          <a data-nav="home" href="index.html">Home</a>
+          <a data-nav="palvelut" href="palvelut.html">Palvelut</a>
+          <a data-nav="tapahtumia" href="tapahtumia.html">Tapahtumia</a>
+          <a data-nav="kirjat" href="kirjat.html">Kirjat</a>
+          <a data-nav="yhteystiedot" href="yhteystiedot.html">Yhteystiedot</a>
+        </nav>
+        <button class="owner-access" type="button" aria-label="Omistajan kirjautuminen" title="Omistajan kirjautuminen">
+          ✎
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="shell page-hero__grid">
+          <div>
+            <p class="eyebrow">Kirjat</p>
+            <h1 id="kirjat-title">Kirjat</h1>
+            <p id="kirjat-lead">
+              Tutustu julkaistuihin kirjoihin ja tilaa oma kappaleesi suoraan tällä sivulla.
+            </p>
+          </div>
+          <div class="page-hero__image">
+            <img
+              id="kirjat-image"
+              src="assets/uploads/books-placeholder.svg"
+              alt="Kirjoja"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell">
+          <div class="book-grid" id="kirjat-grid"></div>
+        </div>
+      </section>
+
+      <section class="section section--accent">
+        <div class="shell two-column">
+          <div>
+            <p class="eyebrow">Tilaukset</p>
+            <h2 id="kirjat-order-title">Tilaa kirja!</h2>
+            <p id="kirjat-order-instructions">
+              Maksu MobilePaylla, postituskulut lisätään tilaukseen. Toimitamme tällä hetkellä vain Suomeen.
+            </p>
+          </div>
+
+          <form class="panel simple-form" id="book-order-form" novalidate>
+            <p class="form-message" data-form-message hidden></p>
+
+            <label class="form-field">
+              <span>Kirja</span>
+              <select name="bookTitle" id="book-order-select" required></select>
+            </label>
+
+            <label class="form-field">
+              <span>Nimi</span>
+              <input type="text" name="name" required autocomplete="name" />
+            </label>
+
+            <label class="form-field">
+              <span>Osoite</span>
+              <input type="text" name="address" required autocomplete="street-address" />
+            </label>
+
+            <label class="form-field">
+              <span>Postinumero ja postitoimipaikka</span>
+              <input type="text" name="postalCode" required autocomplete="postal-code" />
+            </label>
+
+            <label class="form-field">
+              <span>Puhelinnumero</span>
+              <input type="tel" name="phone" required autocomplete="tel" />
+            </label>
+
+            <label class="form-field">
+              <span>Omistuskirjoitus tai muita toiveita</span>
+              <textarea name="notes" rows="3"></textarea>
+            </label>
+
+            <label class="form-field form-field--honeypot" aria-hidden="true">
+              <span>Älä täytä tätä kenttää</span>
+              <input type="text" name="website" tabindex="-1" autocomplete="off" />
+            </label>
+
+            <button class="button" type="submit">Lähetä tilaus</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell site-footer__inner">
+        <div>
+          <p class="site-footer__title" id="footer-name">Marjo Seki</p>
+          <p id="footer-tagline">Lämpimiä tarinoita, japanilaista ruokakulttuuria ja opetusta Kouvolasta.</p>
+        </div>
+        <div class="site-footer__links" id="footer-links"></div>
+      </div>
+    </footer>
+
+    <script src="assets/site.js" type="module"></script>
+  </body>
+</html>

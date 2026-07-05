@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marjo Seki | Yhteystiedot</title>
+    <meta
+      name="description"
+      content="Marjo Sekin yhteystiedot kursseja ja tapahtumia varten."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="yhteystiedot">
+    <header class="site-header">
+      <div class="shell site-header__inner">
+        <a class="brand" href="index.html">
+          <span class="brand__eyebrow" id="brand-eyebrow">Kirjailija · Japanilaisen ruoan opettaja</span>
+          <span class="brand__name" id="brand-name">Marjo Seki</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          Valikko
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Päävalikko">
+          <a data-nav="home" href="index.html">Home</a>
+          <a data-nav="palvelut" href="palvelut.html">Palvelut</a>
+          <a data-nav="tapahtumia" href="tapahtumia.html">Tapahtumia</a>
+          <a data-nav="kirjat" href="kirjat.html">Kirjat</a>
+          <a data-nav="yhteystiedot" href="yhteystiedot.html">Yhteystiedot</a>
+        </nav>
+        <button class="owner-access" type="button" aria-label="Omistajan kirjautuminen" title="Omistajan kirjautuminen">
+          ✎
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="shell page-hero__grid">
+          <div>
+            <p class="eyebrow">Yhteystiedot</p>
+            <h1 id="yhteystiedot-title">Yhteystiedot</h1>
+            <p id="yhteystiedot-lead">
+              Ota yhteyttä kursseja, tapahtumia tai muita kysymyksiä varten.
+            </p>
+          </div>
+          <div class="page-hero__image">
+            <img
+              id="yhteystiedot-image"
+              src="assets/uploads/books-placeholder.svg"
+              alt="Yhteystiedot"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell">
+          <aside class="panel">
+            <p class="eyebrow">Yhteystiedot</p>
+            <div class="contact-list" id="contact-list"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section--accent">
+        <div class="shell two-column">
+          <div>
+            <p class="eyebrow">Tilaisuudet</p>
+            <h2 id="inquiry-title">Kysely tilaisuudesta</h2>
+            <p id="inquiry-intro">
+              Suunnitteletko tilaisuutta tai kurssia? Täytä lomake, niin palaan asiaan pian.
+            </p>
+          </div>
+
+          <form class="panel simple-form" id="event-inquiry-form" novalidate>
+            <p class="form-message" data-form-message hidden></p>
+
+            <label class="form-field">
+              <span>Nimi</span>
+              <input type="text" name="name" required autocomplete="name" />
+            </label>
+
+            <label class="form-field">
+              <span>Puhelin</span>
+              <input type="tel" name="phone" autocomplete="tel" />
+            </label>
+
+            <label class="form-field">
+              <span>Sähköposti</span>
+              <input type="email" name="email" required autocomplete="email" />
+            </label>
+
+            <label class="form-field">
+              <span>Minkälainen tilaisuus</span>
+              <input type="text" name="eventType" required />
+            </label>
+
+            <label class="form-field">
+              <span>Missä tilaisuus pidetään</span>
+              <input type="text" name="eventLocation" required />
+            </label>
+
+            <label class="form-field">
+              <span>Henkilömäärä</span>
+              <input type="text" name="guestCount" required />
+            </label>
+
+            <label class="form-field">
+              <span>Vapaa sana: toiveita tai muita huomioita</span>
+              <textarea name="notes" rows="3"></textarea>
+            </label>
+
+            <label class="form-field form-field--honeypot" aria-hidden="true">
+              <span>Älä täytä tätä kenttää</span>
+              <input type="text" name="website" tabindex="-1" autocomplete="off" />
+            </label>
+
+            <button class="button" type="submit">Lähetä kysely</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell site-footer__inner">
+        <div>
+          <p class="site-footer__title" id="footer-name">Marjo Seki</p>
+          <p id="footer-tagline">Lämpimiä tarinoita, japanilaista ruokakulttuuria ja opetusta Kouvolasta.</p>
+        </div>
+        <div class="site-footer__links" id="footer-links"></div>
+      </div>
+    </footer>
+
+    <script src="assets/site.js" type="module"></script>
+  </body>
+</html>

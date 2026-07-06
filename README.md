@@ -1,114 +1,47 @@
-# Marjo Seki -kotisivu
+# Marjo Seki — Website
 
-Japanilais-henkinen (sakura, mänty/pine, momiji) 4-sivuinen kotisivu:
+Static site for Marjo Seki: a Japanese-inspired brand for Japanese cooking courses, books, and events. Built by **Leo Suzuki** (Oy Findaco Ltd) for the client, Marjo Seki.
 
-- `Home` — esittely + kuvia
-- `Palvelut` — japanilaisen ruoan kurssit, kuvien kanssa
-- `Tapahtumia` — tulevat/menneet tapahtumat + Facebook/Instagram-linkit
-- `Yhteystiedot` — yhteystiedot
+## Product
 
-Sisältö on tiedostossa `content/site.json`. Sivu on staattinen (HTML/CSS/JS), eikä tarvitse tietokantaa.
+Four pages (content in Finnish):
 
-## Muokkaustila ("Edit")
+- `Home` — introduction and gallery
+- `Palvelut` — cooking courses, with images and pricing
+- `Kirjat` — books, with an order form
+- `Tapahtumia` — upcoming/past events, Facebook/Instagram links
+- `Yhteystiedot` — contact details and an inquiry form
 
-Etusivun ja muiden sivujen ylätunnisteessa on pieni huomaamaton kynä-painike (✎), ei
-näkyvä "Edit Site" -linkki navigaatiossa — niin sivu ei näytä vierailijoille rekisteröitymislomakkeelta.
+All copy, images, and course/event data live in `content/site.json`. The site itself is static HTML/CSS/JS — no database.
 
-Painike avaa käyttäjänimi/salasana-kirjautumisen. Kirjautuminen tarkistetaan
-palvelimella (Vercel-funktio `api/login.js`), ei selaimen JavaScriptissä, jotta
-tunnukset eivät näy sivun lähdekoodissa.
+A small pencil icon (✎) in the header opens a login for a lightweight in-browser edit mode (text/images editable inline). Login is verified server-side via a Vercel function (`api/login.js`), so credentials never reach the browser. Edits save to the browser's `localStorage`; a "download backup" button exports a JSON file that can replace `content/site.json` for a permanent change. For persistent, multi-device editing without that manual step, the repo also has a [Pages CMS](https://app.pagescms.org) config (`.pages.yml`) that writes straight to GitHub.
 
-Kun kirjautuminen onnistuu, sivu siirtyy muokkaustilaan: tekstejä ja kuvia voi
-klikata suoraan sivulla. **Tärkeä rajoitus:** muutokset tallentuvat vain selaimen
-omaan `localStorage`-muistiin (samalla koneella/selaimella). Pysyvää muutosta varten:
+The two order/inquiry forms (`Kirjat`, `Yhteystiedot`) submit through `api/submit-form.js`, which sends email via [Resend](https://resend.com).
 
-1. Tee muutokset, paina "Lataa varmuuskopio" (lataa `marjo-site-backup.json`).
-2. Korvaa tiedoston sisällöllä `content/site.json` ja committaa/pushaa muutos GitHubiin.
+## Stack
 
-Pysyvämpi, useammalla laitteella toimiva editointi: käytä Pages CMS -palvelua (ks. alla),
-jolloin muutokset tallentuvat suoraan GitHub-repoon ilman tätä vaihetta.
+- Static HTML/CSS/JS, no build step, no framework
+- Vercel serverless functions under `api/` for login/session and form submission
+- Deployed on Vercel
 
-## Ympäristömuuttujat (kirjautumisen salasana)
+## Environment variables
 
-Kirjautumisen tunnukset eivät ole koodissa — ne luetaan ympäristömuuttujista, joita
-selain ei koskaan näe:
+Set these in Vercel → Project Settings → Environment Variables (see `.env.example` for local `vercel dev` testing):
 
-- `ADMIN_USERNAME` — käyttäjänimi
-- `ADMIN_PASSWORD` — salasana
-- `SESSION_SECRET` — pitkä satunnainen merkkijono istunnon allekirjoitukseen (esim. `openssl rand -hex 32`)
+- `ADMIN_USERNAME`, `ADMIN_PASSWORD` — edit-mode login
+- `SESSION_SECRET` — long random string signing the session cookie
+- `RESEND_API_KEY`, `CONTACT_EMAIL`, `FROM_EMAIL` — form email delivery
 
-Paikallista testausta varten: kopioi `.env.example` nimelle `.env` ja täytä arvot.
-**`.env`-tiedostoa ei koskaan committata** (se on `.gitignore`-listalla).
+Never commit a real `.env` — it's gitignored.
 
-Vercelissä: Project Settings → Environment Variables → lisää samat kolme muuttujaa.
+## Local development
 
-## Testaaminen paikallisesti
+See `INSTRUCTIONS.md` for setup, testing, and deployment steps.
 
-### Vaihtoehto 1: Vercel CLI (suositus — kirjautuminen toimii)
+## License
 
-```bash
-npm install -g vercel
-cp .env.example .env   # täytä oikeat arvot tiedostoon
-vercel dev
-```
+Proprietary — see `LICENSE`. All rights reserved by Oy Findaco Ltd. Not for reuse without permission.
 
-Avaa selaimessa osoite, jonka `vercel dev` tulostaa (oletuksena `http://localhost:3000`).
-Tämä ajaa myös `/api`-kansion funktiot, joten kynä-painikkeella kirjautuminen toimii.
-
-### Vaihtoehto 2: tavallinen staattinen palvelin (vain ulkoasun katselu)
-
-```bash
-python3 -m http.server 8080
-```
-
-Avaa `http://localhost:8080`. Sivu latautuu ja näyttää oikein, mutta kirjautuminen
-epäonnistuu hallitusti ("kirjautumispalvelu ei käytössä"), koska `/api`-funktiot
-tarvitsevat Vercelin (tai `vercel dev`).
-
-### Vaihtoehto 3: Docker (vain ulkoasun katselu, ei kirjautumista)
-
-```bash
-docker compose up --build
-```
-
-Avaa `http://localhost:8080`.
-
-## Mitä testata ennen julkaisua
-
-1. Kaikki 4 sivua avautuvat ja navigaatio toimii (Home, Palvelut, Tapahtumia, Yhteystiedot).
-2. `vercel dev` käynnissä: kynäpainike avaa kirjautumisen, oikeilla tunnuksilla kirjautuminen
-   onnistuu ja muokkaustila tulee näkyviin; väärällä salasanalla näkyy virheilmoitus.
-3. Muokkaustilassa: tekstin/kuvan klikkaus avaa muokkausikkunan, tallennus näkyy sivulla.
-4. "Lataa varmuuskopio" lataa toimivan JSON-tiedoston.
-5. "Kirjaudu ulos" poistaa muokkaustilan ja uudelleenlataus pysyy uloskirjautuneena.
-6. Facebook/Instagram-painikkeet Tapahtumia-sivulla avautuvat oikeisiin osoitteisiin.
-7. Mobiililaajuudessa (selaimen kaventaminen) valikko muuttuu pudotusvalikoksi.
-
-## Julkaisu Verceliin
-
-1. Pushaa repo GitHubiin (`git push`).
-2. Vercel.com → New Project → tuo GitHub-repo `marjoseki_site`.
-3. Framework Preset: "Other" (staattinen sivusto + `/api`-funktiot, Vercel tunnistaa automaattisesti).
-4. Lisää ympäristömuuttujat (`ADMIN_USERNAME`, `ADMIN_PASSWORD`, `SESSION_SECRET`) Project Settings → Environment Variables.
-5. Deploy. Vercel antaa osoitteen `https://<projekti>.vercel.app` — voit liittää oman domainin myöhemmin.
-6. Testaa tuotannossa: avaa sivu, kokeile kynäpainikkeen kirjautumista oikeilla tunnuksilla.
-
-## Vaihtoehto: Pages CMS pysyvään, moninlaitteiseen editointiin
-
-Jos haluat, että Marjo voi muokata sisältöä eri laitteilla niin, että muutokset
-tallentuvat suoraan repoon (ei vain yhteen selaimeen):
-
-1. Avaa `https://app.pagescms.org`.
-2. Kirjaudu repon omistajan GitHub-tunnuksella.
-3. Asenna Pages CMS GitHub App repolle.
-4. Konfiguraatio on jo valmiina tiedostossa `.pages.yml`.
-5. Kutsu Marjo mukaan sähköpostilla — hän voi editoida ilman omaa GitHub-tunnusta.
-
-Tämä on erillinen, vaihtoehtoinen reitti — se ei liity kynäpainikkeen kirjautumiseen.
-
-## Tiedostot, joita muokkaat useimmin
-
-- `content/site.json` — kaikki tekstit, kuvat, kurssit, tapahtumat
-- `assets/uploads/` — kuvat (korvaa placeholder-tiedostot oikeilla kuvilla)
-- `assets/styles.css` — ulkoasu
-- `.env` (paikallisesti) / Vercelin Environment Variables (tuotannossa) — kirjautumistunnukset
+**Leo Suzuki**
+Oy Findaco Ltd
+leona.suzuki@gmail.com

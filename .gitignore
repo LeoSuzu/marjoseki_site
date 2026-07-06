@@ -1,5 +1,11 @@
+# Ignore files that are not meant to be committed to the repository.
+
+# Ignore environment variable files that contain sensitive information.
 .env
 .env.local
+.env.example
+
+# Ignore build artifacts and dependencies.
 .vercel
 node_modules
 .claude/

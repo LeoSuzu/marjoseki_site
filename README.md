@@ -34,10 +34,6 @@ Set these in Vercel → Project Settings → Environment Variables (see `.env.ex
 
 Never commit a real `.env` — it's gitignored.
 
-## Local development
-
-See `INSTRUCTIONS.md` for setup, testing, and deployment steps.
-
 ## License
 
 Proprietary — see `LICENSE`. All rights reserved by Oy Findaco Ltd. Not for reuse without permission.

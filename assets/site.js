@@ -92,6 +92,32 @@ const downloadBackup = () => {
   updateAdminMessage("Varmuuskopio ladattu.");
 };
 
+const publishChanges = async () => {
+  updateAdminMessage("Julkaistaan muutoksia…");
+  try {
+    const response = await fetch("/api/publish-content", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ site: state.data.site }),
+    });
+    const payload = await response.json().catch(() => ({}));
+
+    if (!response.ok || !payload.ok) {
+      updateAdminMessage(payload.error || "Julkaisu epäonnistui. Yritä myöhemmin uudelleen.");
+      return;
+    }
+
+    if (payload.unchanged) {
+      updateAdminMessage("Ei uusia muutoksia julkaistavaksi.");
+      return;
+    }
+
+    updateAdminMessage("Julkaistu! Sivu päivittyy kaikille noin minuutissa.");
+  } catch (error) {
+    updateAdminMessage("Julkaisu epäonnistui. Tarkista verkkoyhteys ja yritä uudelleen.");
+  }
+};
+
 const fileToDataUrl = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -1430,7 +1456,7 @@ const createAdminChrome = () => {
         <span data-admin-message>Muokkaustila käytössä.</span>
       </div>
       <div class="admin-bar__actions">
-        <button type="button" class="button button--ghost" data-admin-action="save">Tallenna selaimeen</button>
+        <button type="button" class="button" data-admin-action="publish">Julkaise sivulle</button>
         <button type="button" class="button button--ghost" data-admin-action="download">Lataa varmuuskopio</button>
         <button type="button" class="button button--ghost" data-admin-action="upload">Tuo varmuuskopio</button>
         <button type="button" class="button button--ghost" data-admin-action="reset">Nollaa muutokset</button>
@@ -1611,8 +1637,8 @@ const setupEditorEvents = () => {
     if (adminAction) {
       const action = adminAction.dataset.adminAction;
 
-      if (action === "save") {
-        saveToBrowser();
+      if (action === "publish") {
+        await publishChanges();
       }
 
       if (action === "download") {

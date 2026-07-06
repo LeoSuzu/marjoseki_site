@@ -9,3 +9,6 @@
 .vercel
 node_modules
 .claude/
+
+# Ignore these
+INSTRUCTIONS.md

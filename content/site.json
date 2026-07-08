@@ -119,7 +119,7 @@
     "imageAlt": "Kirjoja",
     "books": [
       {
-        "title": "Kirjan nimi",
+        "title": "Makumatkoja Japaniin",
         "status": "Myynnissä",
         "text": "Lyhyt kuvaus kirjasta: mistä se kertoo ja kenelle se sopii.",
         "image": "assets/uploads/books-placeholder.svg",

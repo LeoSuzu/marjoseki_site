@@ -2,7 +2,7 @@
   "global": {
     "siteName": "Marjo Seki",
     "brandLine": "Kirjailija · Japanilaisen ruoan opettaja",
-    "footerTagline": "Lämpimiä tarinoita, japanilaista ruokakulttuuria ja opetusta Kouvolasta.",
+    "footerTagline": "Iloista kokkaamista, mielenkiintoisia tarinoita japanilaisesta ruokakulttuurista, hyviä vinkkejä kotikeittiöön ja paljon muuta.\nJapanilainen keittiö antaa paljon mahdollisuuksia ja ruoka valmistuu helposti keneltä tahansa. Kaikki ovat tervetulleita kursseilleni.",
     "footerLinks": [
       {
         "label": "Sähköposti",
@@ -34,7 +34,7 @@
     },
     "intro": {
       "title": "Tervehdys",
-      "text": "Lisää tähän oma esittelysi: tausta, into japanilaiseen ruokaan, ja se mikä saa sinut opettamaan ja kirjoittamaan. Kuva oikealla auttaa vierailijaa tuntemaan sinut paremmin."
+      "text": "Olen Marjo Seki, japanilaisen ruokakulttuurin asiantuntija. Asuin Japanissa 20 vuotta. Toimin peruskoulun opettajana Tokiossa kymmenen vuoden ajan sekä ravintoloitsijana Jokohamassa. Japanilaisesta ruoasta minulla on yli 40 vuoden kokemus. \nKun palasin Suomeen, perustin Tampereen ensimmäisen japanilaisen ravintolan Marusekin, joka toimi 18 vuotta.\nTällä hetkellä järjestän ruokakursseja oppilaitoksissa, yrityksissä ja kodeissa. Japanilainen kotiruoka, buddhalaismunkkien valmistama temppeliruoka ja sushit ovat osaamistani. Järjestän myös saken maistelukursseja otsumami-ruokineen, japanilaisia iltoja, Japani Popup-tapahtumia, käyn kirjastoissa esiintymässä ja kirjoitan Japani-aiheisia kirjoja."
     },
     "gallery": {
       "title": "Kuvia matkan varrelta",
@@ -56,11 +56,11 @@
     "features": [
       {
         "title": "Kirjailija",
-        "text": "Kirjoja ja tarinoita, jotka tuovat japanilaista kulttuuria lähemmäs lukijaa."
+        "text": "Kirjoitan kirjoja, jotka tuovat japanilaista kulttuuria lähemmäs lukijaa. \nKirjani Makumatkoja Japaniin on laaja tietopaketti japanilaisesta ruokakulttuurista ja sisältää myös 50 suosittua japanilaista kotiruokareseptiä, jotka on helppo toteuttaa suomalaisessa keittiössä."
       },
       {
         "title": "Ruokakurssit",
-        "text": "Käytännönläheistä opetusta japanilaisesta ruoasta pienryhmissä."
+        "text": "Ruoanvalmistuksen tulee olla hauskaa ja rentoa. Kursseillani valmistetaan helppoja, mutta maukkaita ruokia, jotka on mahdollista toteuttaa Suomessa saatavilla raaka-aineilla. En ole fine dining -kokki, vaan opetan tavallista japanilaista kotiruokaa.\nRyhmän koko vaihtelee viidestä 20:een. Suosituimpia ovat työ- tai kaveriporukalla toteutettavat pienryhmäkurssit.\nRuokakurssien hinnat alkaen 50€/hlö."
       },
       {
         "title": "Tapahtumat",
@@ -82,19 +82,19 @@
         "buyLabel": "Tiedustele sähköpostilla",
         "buyUrl": "mailto:marjoseki@hotmail.com?subject=Sushikurssi",
         "infoLabel": "Tarkemmat tiedot",
-        "infoText": "Kurssilla käydään läpi riisin keitto, täytteiden valmistus ja rullaustekniikka rauhallisessa tahdissa pienessä ryhmässä. Kesto noin 3 tuntia, tarvikkeet sisältyvät hintaan.",
+        "infoText": "Kurssilla käydään läpi riisin keitto ja maustaminen, täytteiden valmistus ja rullaustekniikka rauhallisessa tahdissa pienessä ryhmässä. Kesto noin 3 tuntia, tarvikkeet sisältyvät hintaan.",
         "image": "assets/uploads/food-placeholder.svg",
         "imageAlt": "Sushikurssi"
       },
       {
         "title": "Japanilainen kotiruoka",
         "format": "Pienryhmä",
-        "text": "Arkisia ja maukkaita japanilaisia kotiruokia: keitot, kastikkeet ja perinteiset ainekset.",
+        "text": "Arkisia ja maukkaita japanilaisia kotiruokia: keitot, kastikkeet ja perinteiset ainekset.\nHelposti valmistuvia ruokia, joita voi toteuttaa suomalaisessa keittiössä marketeista saatavilla raaka-aineilla.",
         "priceLabel": "Kysy hintaa ja ajankohtaa",
         "buyLabel": "Tiedustele sähköpostilla",
         "buyUrl": "mailto:marjoseki@hotmail.com?subject=Japanilainen%20kotiruoka",
         "infoLabel": "Tarkemmat tiedot",
-        "infoText": "Opettelemme arkisia ja maukkaita japanilaisia kotiruokia: keittoja, kastikkeita ja perinteisiä aineksia. Sopii kaikentasoisille osallistujille, ei aiempaa kokemusta tarvita.",
+        "infoText": "Opettelemme arkisia ja maukkaita japanilaisia kotiruokia. Sopii kaikentasoisille osallistujille, aiempaa kokemusta ei tarvita.",
         "image": "assets/uploads/portrait-placeholder.svg",
         "imageAlt": "Kotiruokakurssi"
       },
@@ -114,14 +114,14 @@
   },
   "kirjat": {
     "title": "Kirjat",
-    "lead": "Tutustu julkaistuihin kirjoihin ja tilaa oma kappaleesi suoraan tällä sivulla.",
+    "lead": "Pörri ja sukkelat sushit, sushisatukirja lapsille.  \n\nSalaisuuksien sienimetsä, sienisatukirja lapsille.\n\nOKAZU, japanilaisia kasvisruokia.",
     "image": "assets/uploads/books-placeholder.svg",
     "imageAlt": "Kirjoja",
     "books": [
       {
         "title": "Makumatkoja Japaniin",
         "status": "Myynnissä",
-        "text": "Lyhyt kuvaus kirjasta: mistä se kertoo ja kenelle se sopii.",
+        "text": "Omiin kokemuksiin perustuva tarinallinen japanilaista ruokakulttuuria laajasti käsittelevä kirja, joka sisältää myös 50 herkullista kotiruokareseptiä.\nHinta: 30€",
         "image": "assets/uploads/books-placeholder.svg",
         "imageAlt": "Kirjan kansi"
       }
@@ -143,10 +143,6 @@
         "value": "marjoseki@hotmail.com"
       },
       {
-        "label": "Sijainti",
-        "value": "Kouvola, Suomi"
-      },
-      {
         "label": "Facebook",
         "value": "facebook.com/marjo.seki"
       },
@@ -163,7 +159,7 @@
   },
   "tapahtumia": {
     "title": "Tapahtumia",
-    "lead": "Tulevat ja menneet tapahtumat, kurssit ja tilaisuudet.",
+    "lead": "Japani Popup -ravintola Kouvolan torilla Kontissa elokuun 10.-15. päivä. \nTarjolla japanilaisia ruoka-annoksia mukaan tai paikan päällä nautittaviksi.\nMyynnissä myös Japani-aiheisia kirjoja ja muuta Japani-tavaraa.",
     "image": "assets/uploads/event-placeholder.svg",
     "imageAlt": "Tapahtumakuva",
     "upcoming": [
@@ -185,14 +181,6 @@
       }
     ],
     "past": [
-      {
-        "title": "Kevään teehetki ja ruokatyöpaja",
-        "date": "Huhtikuu 2026",
-        "location": "Kouvola",
-        "text": "Käytännöllinen tilaisuus japanilaisesta teekulttuurista ja yhteisestä ruokahetkestä.",
-        "buttonLabel": "",
-        "buttonUrl": ""
-      },
       {
         "title": "Lukupiiri",
         "date": "Helmikuu 2026",

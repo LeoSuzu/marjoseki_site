@@ -1240,21 +1240,20 @@ const createEventCard = (event, meta, isPast = false) => {
   return article;
 };
 
-const buildFacebookEmbedUrl = (pageUrl) => {
-  if (!pageUrl) {
+const buildFacebookEmbedUrl = (postUrl) => {
+  if (!postUrl) {
+    return null;
+  }
+  const trimmed = postUrl.trim();
+  if (!/^https:\/\/(www\.)?(facebook\.com|fb\.watch)\//i.test(trimmed)) {
     return null;
   }
   const params = new URLSearchParams({
-    href: pageUrl,
-    tabs: "timeline",
+    href: trimmed,
+    show_text: "true",
     width: "500",
-    height: "560",
-    small_header: "false",
-    adapt_container_width: "true",
-    hide_cover: "false",
-    show_facepile: "false",
   });
-  return `https://www.facebook.com/plugins/page.php?${params.toString()}`;
+  return `https://www.facebook.com/plugins/post.php?${params.toString()}`;
 };
 
 const buildInstagramEmbedUrl = (postUrl) => {
@@ -1410,8 +1409,7 @@ const renderTapahtumia = (tapahtumia, site) => {
         createSocialEmbedCard({
           label: "Facebook",
           url: tapahtumia.social.facebookUrl,
-          embedUrl:
-            tapahtumia.social.facebookEmbedUrl || buildFacebookEmbedUrl(tapahtumia.social.facebookUrl),
+          embedUrl: buildFacebookEmbedUrl(tapahtumia.social.facebookEmbedUrl),
           themeClass: "social-embed-card--facebook",
         }),
       );

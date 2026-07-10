@@ -1122,6 +1122,12 @@ const renderYhteystiedot = (yhteystiedot, site) => {
     title: "Muokkaa kyselylomakkeen johdantoa",
     rows: 4,
   });
+  setImage("inquiry-image", yhteystiedot.inquiry?.image, yhteystiedot.inquiry?.imageAlt, {
+    kind: "image",
+    path: "site.yhteystiedot.inquiry.image",
+    altPath: "site.yhteystiedot.inquiry.imageAlt",
+    title: "Muokkaa tilaisuuskyselyn kuvaa",
+  });
 
   document.title = `${site.siteName} | Yhteystiedot`;
 };
@@ -1234,6 +1240,34 @@ const createEventCard = (event, meta, isPast = false) => {
   return article;
 };
 
+const buildFacebookEmbedUrl = (pageUrl) => {
+  if (!pageUrl) {
+    return null;
+  }
+  const params = new URLSearchParams({
+    href: pageUrl,
+    tabs: "timeline",
+    width: "500",
+    height: "560",
+    small_header: "false",
+    adapt_container_width: "true",
+    hide_cover: "false",
+    show_facepile: "false",
+  });
+  return `https://www.facebook.com/plugins/page.php?${params.toString()}`;
+};
+
+const buildInstagramEmbedUrl = (postUrl) => {
+  if (!postUrl) {
+    return null;
+  }
+  const trimmed = postUrl.trim();
+  if (!/^https:\/\/(www\.)?instagram\.com\/(p|reel|tv)\//i.test(trimmed)) {
+    return null;
+  }
+  return `${trimmed.replace(/\/?(\?.*)?$/, "")}/embed`;
+};
+
 const createSocialEmbedCard = ({ label, url, embedUrl, themeClass }) => {
   const article = document.createElement("article");
   article.className = `social-embed-card ${themeClass || ""}`.trim();
@@ -1242,9 +1276,11 @@ const createSocialEmbedCard = ({ label, url, embedUrl, themeClass }) => {
   heading.textContent = label;
 
   const copy = document.createElement("p");
-  copy.textContent = url
-    ? "Voit päivittää tämän kortin suoraan sosiaalisen median upotussisällöllä tai pitää nykyisen linkin."
-    : "Lisää upotuskoodi tai URL-osoite, niin sisältö näkyy täällä suoraan.";
+  copy.textContent = embedUrl
+    ? "Tuoreimmat julkaisut näkyvät suoraan täällä."
+    : url
+      ? "Voit päivittää tämän kortin suoraan sosiaalisen median upotussisällöllä tai pitää nykyisen linkin."
+      : "Lisää upotuskoodi tai URL-osoite, niin sisältö näkyy täällä suoraan.";
 
   article.append(heading, copy);
 
@@ -1374,7 +1410,8 @@ const renderTapahtumia = (tapahtumia, site) => {
         createSocialEmbedCard({
           label: "Facebook",
           url: tapahtumia.social.facebookUrl,
-          embedUrl: tapahtumia.social.facebookEmbedUrl,
+          embedUrl:
+            tapahtumia.social.facebookEmbedUrl || buildFacebookEmbedUrl(tapahtumia.social.facebookUrl),
           themeClass: "social-embed-card--facebook",
         }),
       );
@@ -1385,7 +1422,9 @@ const renderTapahtumia = (tapahtumia, site) => {
         createSocialEmbedCard({
           label: "Instagram",
           url: tapahtumia.social.instagramUrl,
-          embedUrl: tapahtumia.social.instagramEmbedUrl,
+          embedUrl:
+            buildInstagramEmbedUrl(tapahtumia.social.instagramEmbedUrl) ||
+            tapahtumia.social.instagramEmbedUrl,
           themeClass: "social-embed-card--instagram",
         }),
       );

@@ -154,7 +154,9 @@
     "inquiry": {
       "title": "Kysely tilaisuudesta",
       "intro": "Suunnitteletko tilaisuutta tai kurssia? Täytä lomake, niin palaan asiaan pian.",
-      "successMessage": "Kiitos kyselystä! Vastaan sinulle mahdollisimman pian."
+      "successMessage": "Kiitos kyselystä! Vastaan sinulle mahdollisimman pian.",
+      "image": "assets/uploads/event-placeholder.svg",
+      "imageAlt": "Tilaisuus"
     }
   },
   "tapahtumia": {

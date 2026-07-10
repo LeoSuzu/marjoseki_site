@@ -285,6 +285,14 @@ button {
   background: #fff;
 }
 
+.social-embed-card--facebook .social-embed-card__frame {
+  min-height: 560px;
+}
+
+.social-embed-card--instagram .social-embed-card__frame {
+  min-height: 480px;
+}
+
 .empty-state {
   color: var(--muted);
   padding: 1rem 0;
@@ -377,6 +385,10 @@ button {
 .hero__visual,
 .page-hero__image {
   position: relative;
+}
+
+.inquiry-image {
+  margin-top: 1.8rem;
 }
 
 .hero__visual img,

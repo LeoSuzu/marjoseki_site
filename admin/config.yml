@@ -143,6 +143,8 @@ collections:
                   - { label: "Title", name: "title", widget: "string" }
                   - { label: "Intro Text", name: "intro", widget: "text" }
                   - { label: "Success Message", name: "successMessage", widget: "string" }
+                  - { label: "Image", name: "image", widget: "image" }
+                  - { label: "Image Alt", name: "imageAlt", widget: "string" }
           - label: "Tapahtumia Page"
             name: "tapahtumia"
             widget: "object"
@@ -177,7 +179,7 @@ collections:
                 fields:
                   - { label: "Title", name: "title", widget: "string" }
                   - { label: "Note", name: "note", widget: "text" }
-                  - { label: "Facebook URL", name: "facebookUrl", widget: "string", required: false }
-                  - { label: "Instagram URL", name: "instagramUrl", widget: "string", required: false }
-                  - { label: "Facebook Embed URL", name: "facebookEmbedUrl", widget: "string", required: false }
-                  - { label: "Instagram Embed URL", name: "instagramEmbedUrl", widget: "string", required: false }
+                  - { label: "Facebook URL", name: "facebookUrl", widget: "string", required: false, hint: "Facebook-sivun osoite, esim. https://www.facebook.com/marjo.seki. Tuorein julkaisuvirta näkyy sivulla automaattisesti tämän perusteella." }
+                  - { label: "Instagram URL", name: "instagramUrl", widget: "string", required: false, hint: "Instagram-profiilin osoite. Näkyy 'Avaa Instagram' -painikkeena." }
+                  - { label: "Facebook Embed URL", name: "facebookEmbedUrl", widget: "string", required: false, hint: "Valinnainen. Täytä vain jos haluat korvata automaattisen upotuksen omalla upotusosoitteella." }
+                  - { label: "Instagram Embed URL", name: "instagramEmbedUrl", widget: "string", required: false, hint: "Liitä tähän linkki yksittäiseen Instagram-julkaisuun tai -reeliin (esim. https://www.instagram.com/p/ABC123/), niin se näkyy upotettuna sivulla. Päivitä linkki uusimpaan julkaisuun aina kun haluat vaihtaa näkyvän postauksen." }

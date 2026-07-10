@@ -24,7 +24,7 @@
   "home": {
     "hero": {
       "kicker": "Tervetuloa",
-      "title": "Tarinoita, japanilaista ruokaa ja lämmintä opetusta.",
+      "title": "Mielenkiintoisia tarinoita, japanilaista ruokaa, sakemaistelua, rentoa ja hauskaa kokkaamista ja ammattitaitoista opetusta vuosien kokemuksella.",
       "text": "Marjo Seki on kirjailija ja japanilaisen ruoan opettaja Kouvolasta. Tällä sivulla voit tutustua hänen taustaansa, palveluihinsa ja tuleviin tapahtumiin.",
       "primaryCtaLabel": "Tutustu palveluihin",
       "secondaryCtaLabel": "Katso tapahtumat",
@@ -94,7 +94,7 @@
         "buyLabel": "Tiedustele sähköpostilla",
         "buyUrl": "mailto:marjoseki@hotmail.com?subject=Japanilainen%20kotiruoka",
         "infoLabel": "Tarkemmat tiedot",
-        "infoText": "Opettelemme arkisia ja maukkaita japanilaisia kotiruokia. Sopii kaikentasoisille osallistujille, aiempaa kokemusta ei tarvita.",
+        "infoText": "Opettelemme arkisia ja maukkaita japanilaisia kotiruokia. Sopii kaikentasoisille osallistujille, aiempaa kokemusta ei tarvita. Kurssi kestää noin 2,5 tuntia ja siinä ajassa oppii monta helposti valmistuvaa kotiruokaa, joita voi toteuttaa omassa kotikeittiössä.",
         "image": "assets/uploads/portrait-placeholder.svg",
         "imageAlt": "Kotiruokakurssi"
       },

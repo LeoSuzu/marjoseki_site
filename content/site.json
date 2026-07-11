@@ -166,7 +166,7 @@
   },
   "tapahtumia": {
     "title": "Tapahtumia",
-    "lead": "Japani Popup -ravintola Kouvolan torilla Kontissa elokuun 10.-15. päivä. \nTarjolla japanilaisia ruoka-annoksia mukaan tai paikan päällä nautittaviksi.\nMyynnissä myös Japani-aiheisia kirjoja ja muuta Japani-tavaraa.",
+    "lead": "Popup-tapahtumia, sakemaisteluja, ruokakursseja, luentoja, kirjastoesiintymisiä",
     "image": "assets/uploads/event-placeholder.svg",
     "imageAlt": "Tapahtumakuva",
     "upcoming": [
@@ -185,6 +185,14 @@
         "text": "Verkkotilaisuus, jossa Marjo kertoo kirjoittamisestaan ja vastaa yleisön kysymyksiin.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Kirjailijailta"
+      },
+      {
+        "title": "Japani Popup Kouvolan torilla Kontissa",
+        "date": "10-15.08.2026",
+        "location": "Kontti, Kouvolan torilla",
+        "text": "Japani Popup -ravintola Kouvolan torilla Kontissa elokuun 10.-15. päivä. Tarjolla japanilaisia ruoka-annoksia mukaan tai paikan päällä nautittaviksi. Myynnissä myös Japani-aiheisia kirjoja ja muuta Japani-tavaraa.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }
     ],
     "past": [

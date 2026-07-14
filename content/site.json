@@ -27,7 +27,7 @@
       "title": "Mielenkiintoisia tarinoita, japanilaista ruokaa, sakemaistelua, rentoa ja hauskaa kokkaamista ja ammattitaitoista opetusta vuosien kokemuksella.",
       "text": "Marjo Seki on kirjailija ja japanilaisen ruoan opettaja Kouvolasta. Tällä sivulla voit tutustua hänen taustaansa, palveluihinsa ja tuleviin tapahtumiin.",
       "primaryCtaLabel": "Tutustu palveluihin",
-      "secondaryCtaLabel": "Katso tapahtumat",
+      "secondaryCtaLabel": "",
       "image": "assets/uploads/portrait-placeholder.svg",
       "imageAlt": "Marjo Seki -muotokuva",
       "badge": "Uusia ruokakursseja syksylle:\n\nLahden Wellamo-opistolla 26.9. Sushikurssi klo 9:30-12:30 sekä Temppeliruokakurssi klo 13:15-17:00. Japanilaisen kotiruoan kurssi 10.10. klo 10-13:45.\n\nItä-Hämeen opistolla aikuinen-lapsi \"Sushia ja eväslaatikoita\" viikonloppukurssi.\n17.-18. lokakuuta. \nTemppeliruokaa ja japanilaista kotiruokaa -viikonloppukurssi 31.10-1.11.\n\nHelsingin työväenopistolla 7.11. Temppeliruokakurssi A sekä 29.11. Temppeliruokakurssi B.\n\nIlmoittautuminen opistolle suoraan."
@@ -64,7 +64,7 @@
       },
       {
         "title": "Tapahtumat",
-        "text": "Työpajoja ja tilaisuuksia, joista löydät lisää Tapahtumia-sivulta."
+        "text": "Ruokakursseja, sakemaisteluiltoja, kirjastoesiintymisiä, popup-tapahtumia, luentoja ja tilaisuuksia, joista löydät lisää Tapahtumia-sivulta."
       }
     ]
   },
@@ -229,7 +229,48 @@
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }
     ],
-    "past": [],
+    "past": [
+      {
+        "title": "Sakemaisteluilta",
+        "date": "8.5. 2026",
+        "location": "Kouvola",
+        "text": "Eri sakelaatujen maistelua sekä niihin sopivia otsumami-ruokia.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      },
+      {
+        "title": "Kirjastoesiintyminen",
+        "date": "11.5.2026",
+        "location": "Porvoon kirjasto",
+        "text": "Japanilaisen ruokakulttuurin esittelyä sekä tarinoita omista kokemuksista Japani-vuosilta.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      },
+      {
+        "title": "Kirjastoesiintyminen",
+        "date": "12.5.2026",
+        "location": "Lahden pääkirjasto",
+        "text": "Omiin kokemuksiin perustuvia tarinoita Japani-vuosilta ja japanilaisen ruokakulttuurin esittelyä.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      },
+      {
+        "title": "Uusi mennyt tapahtuma",
+        "date": "",
+        "location": "",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      },
+      {
+        "title": "Uusi mennyt tapahtuma",
+        "date": "",
+        "location": "",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      }
+    ],
     "social": {
       "title": "Seuraa sosiaalisessa mediassa",
       "note": "Tuoreimmat kuulumiset ja kuvat näkyvät täällä suoraan, kun haluat lisätä sosiaalisen median upotukset.",

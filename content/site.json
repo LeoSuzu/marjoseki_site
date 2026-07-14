@@ -126,23 +126,37 @@
   },
   "kirjat": {
     "title": "Kirjat",
-    "lead": "Pörri ja sukkelat sushit, sushisatukirja lapsille.  \n\nSalaisuuksien sienimetsä, sienisatukirja lapsille.\n\nOKAZU, japanilaisia kasvisruokia.",
+    "lead": "Japani-aiheisia keittokirjoja, satukirjoja lapsille",
     "image": "assets/uploads/books-placeholder.svg",
     "imageAlt": "Kirjoja",
     "books": [
       {
         "title": "Makumatkoja Japaniin",
         "status": "Myynnissä",
-        "text": "Omiin kokemuksiin perustuva tarinallinen japanilaista ruokakulttuuria laajasti käsittelevä kirja, joka sisältää myös 50 herkullista kotiruokareseptiä.\nHinta: 30€",
+        "text": "Omiin kokemuksiin perustuva tarinallinen japanilaista ruokakulttuuria laajasti käsittelevä kirja, joka sisältää myös 50 herkullista kotiruokareseptiä.\nHinta: 30€ + postikulut",
         "image": "assets/uploads/books-placeholder.svg",
         "imageAlt": "Kirjan kansi"
       },
       {
-        "title": "OKAZU japanilaisia kasvisruokia. 25 euroa + postikulut",
+        "title": "OKAZU japanilaisia kasvisruokia.",
         "status": "Myynnissä",
-        "text": "Buddhalaismunkkien temppeleissä valmistamia vegaanisia kasvisruokareseptejä.",
+        "text": "Buddhalaismunkkien temppeleissä valmistamia vegaanisia kasvisruokareseptejä.\nHinta 25€ + postikulut.",
         "image": "assets/uploads/books-placeholder.svg",
         "imageAlt": "Maukkaita, yksinkertaisia kasvisruokia Suomessa saatavilla raaka-aineilla."
+      },
+      {
+        "title": "Pörri ja sukkelat sushit",
+        "status": "Myynnissä",
+        "text": "Sushisatukirja lapsille ja lapsenmielisille.\nHinta 15€ + postikulut",
+        "image": "assets/uploads/books-placeholder.svg",
+        "imageAlt": "Uuden kirjan kansi"
+      },
+      {
+        "title": "Salaisuuksien sienimetsä",
+        "status": "Myynnissä",
+        "text": "Sienisatukirja lapsille. \nHinta 12€ + postikulut.",
+        "image": "assets/uploads/books-placeholder.svg",
+        "imageAlt": "Uuden kirjan kansi"
       }
     ],
     "order": {
@@ -191,32 +205,31 @@
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Japanilainen%20kotiruokailta"
       },
       {
-        "title": "Kirjailijailta",
-        "date": "9.8.2026",
-        "location": "Verkossa",
-        "text": "Verkkotilaisuus, jossa Marjo kertoo kirjoittamisestaan ja vastaa yleisön kysymyksiin.",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Kirjailijailta"
-      },
-      {
         "title": "Japani Popup Kouvolan torilla Kontissa",
         "date": "10-15.08.2026",
         "location": "Kontti, Kouvolan torilla",
         "text": "Japani Popup -ravintola Kouvolan torilla Kontissa elokuun 10.-15. päivä. Tarjolla japanilaisia ruoka-annoksia mukaan tai paikan päällä nautittaviksi. Myynnissä myös Japani-aiheisia kirjoja ja muuta Japani-tavaraa.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
-      }
-    ],
-    "past": [
+      },
       {
-        "title": "Lukupiiri",
-        "date": "Helmikuu 2026",
-        "location": "Verkossa",
-        "text": "Pohdiskeleva lukuhetki keskustelun ja kirjoittamisen merkeissä.",
-        "buttonLabel": "",
-        "buttonUrl": ""
+        "title": "Sieniruokia ja sienitietoutta",
+        "date": "17.-19. syyskuuta",
+        "location": "Kontti, Kouvolan torilla",
+        "text": "Tarjolla mm. japanilaisia sieniruokia ja neuvontaa sienten monipuoliseen käyttöön.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Gluteeniton elämä -messut Tampere-talossa",
+        "date": "24.-25. lokakuuta",
+        "location": "Tampere-talo",
+        "text": "Opastan japanilaisten gluteenittomien ruokien valmistusta sunnuntaina 25.10.\nEsiintymisaikani on klo 12:30.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }
     ],
+    "past": [],
     "social": {
       "title": "Seuraa sosiaalisessa mediassa",
       "note": "Tuoreimmat kuulumiset ja kuvat näkyvät täällä suoraan, kun haluat lisätä sosiaalisen median upotukset.",

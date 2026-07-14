@@ -30,7 +30,7 @@
       "secondaryCtaLabel": "Katso tapahtumat",
       "image": "assets/uploads/portrait-placeholder.svg",
       "imageAlt": "Marjo Seki -muotokuva",
-      "badge": "Uusia ruokakursseja syksylle"
+      "badge": "Uusia ruokakursseja syksylle:\n\nLahden Wellamo-opistolla 26.9. Sushikurssi klo 9:30-12:30 sekä Temppeliruokakurssi klo 13:15-17:00. Japanilaisen kotiruoan kurssi 10.10. klo 10-13:45.\n\nItä-Hämeen opistolla aikuinen-lapsi \"Sushia ja eväslaatikoita\" viikonloppukurssi.\n17.-18. lokakuuta. \nTemppeliruokaa ja japanilaista kotiruokaa -viikonloppukurssi 31.10-1.11.\n\nHelsingin työväenopistolla 7.11. Temppeliruokakurssi A sekä 29.11. Temppeliruokakurssi B.\n\nIlmoittautuminen opistolle suoraan."
     },
     "intro": {
       "title": "Tervehdys",
@@ -82,7 +82,7 @@
         "buyLabel": "Tiedustele sähköpostilla",
         "buyUrl": "mailto:marjoseki@hotmail.com?subject=Sushikurssi",
         "infoLabel": "Tarkemmat tiedot",
-        "infoText": "Kurssilla käydään läpi riisin keitto ja maustaminen, täytteiden valmistus ja rullaustekniikka rauhallisessa tahdissa pienessä ryhmässä. Kesto noin 3 tuntia, tarvikkeet sisältyvät hintaan.",
+        "infoText": "Kurssilla käydään läpi riisin keitto ja maustaminen, täytteiden valmistus ja rullaustekniikka rauhallisessa tahdissa pienessä ryhmässä. Kesto noin 3 tuntia, tarvikkeet sisältyvät hintaan. Hinta alkaen 50€/hlö. Minimi kuusi osallistujaa.",
         "image": "assets/uploads/food-placeholder.svg",
         "imageAlt": "Sushikurssi"
       },
@@ -94,7 +94,7 @@
         "buyLabel": "Tiedustele sähköpostilla",
         "buyUrl": "mailto:marjoseki@hotmail.com?subject=Japanilainen%20kotiruoka",
         "infoLabel": "Tarkemmat tiedot",
-        "infoText": "Opettelemme arkisia ja maukkaita japanilaisia kotiruokia. Sopii kaikentasoisille osallistujille, aiempaa kokemusta ei tarvita. Kurssi kestää noin 2,5 tuntia ja siinä ajassa oppii monta helposti valmistuvaa kotiruokaa, joita voi toteuttaa omassa kotikeittiössä.",
+        "infoText": "Opettelemme arkisia ja maukkaita japanilaisia kotiruokia. Sopii kaikentasoisille osallistujille, aiempaa kokemusta ei tarvita. Kurssi kestää noin 3 tuntia ja siinä ajassa oppii monta helposti valmistuvaa kotiruokaa, joita voi toteuttaa omassa kotikeittiössä.\nHinta alkaen 50€/hlö. Minimi kuusi osallistujaa.",
         "image": "assets/uploads/portrait-placeholder.svg",
         "imageAlt": "Kotiruokakurssi"
       },
@@ -109,6 +109,18 @@
         "infoText": "Räätälöity tilaisuus yritykselle, yhteisölle tai ystäväporukalle toivotun teeman mukaan. Kerro ryhmän koko ja toiveet, niin saat tarjouksen nopeasti.",
         "image": "assets/uploads/books-placeholder.svg",
         "imageAlt": "Yksityinen kurssi"
+      },
+      {
+        "title": "Temppeliruoka",
+        "format": "Muoto",
+        "text": "Temppeliruoka, Shojin ryori, tarkoittaa buddhalaismunkkien valmistamaa vegaanista yksinkertaista kasvisruokaa.",
+        "priceLabel": "Kysy hintaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Kurssilla valmistetaan kiireettömästi helppoja mutta maukkaita ja terveellisiä ruokia temppeliruokafilosofian mukaisin opein.\nHinta alkaen 50€/hlö. Minimi kuusi osallistujaa.",
+        "image": "assets/uploads/food-placeholder.svg",
+        "imageAlt": "Uuden kurssin kuva"
       }
     ]
   },

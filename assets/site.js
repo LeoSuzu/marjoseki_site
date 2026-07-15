@@ -1632,6 +1632,17 @@ const loadSite = async () => {
   }
 };
 
+// The admin bar's height varies (button row wraps differently depending on
+// viewport width and how many page-specific actions the current page adds),
+// so the body offset that keeps it from covering the nav below is measured
+// live instead of guessed as a fixed value.
+const syncAdminBarOffset = () => {
+  const bar = document.querySelector(".admin-bar");
+  document.documentElement.style.setProperty("--admin-bar-offset", bar ? `${bar.offsetHeight}px` : "0px");
+};
+
+let adminBarResizeObserver = null;
+
 const createAdminChrome = () => {
   if (document.querySelector(".admin-bar")) {
     return;
@@ -1658,6 +1669,13 @@ const createAdminChrome = () => {
     </div>
   `;
   document.body.append(bar);
+
+  if ("ResizeObserver" in window) {
+    adminBarResizeObserver?.disconnect();
+    adminBarResizeObserver = new ResizeObserver(syncAdminBarOffset);
+    adminBarResizeObserver.observe(bar);
+  }
+  syncAdminBarOffset();
 };
 
 const addListItem = (path, item) => {
@@ -1769,11 +1787,14 @@ const updateAdminChrome = () => {
   if (!state.isAdmin) {
     document.body.classList.remove("admin-mode");
     document.querySelector(".admin-bar")?.remove();
+    adminBarResizeObserver?.disconnect();
+    adminBarResizeObserver = null;
     return;
   }
 
   createAdminChrome();
   document.body.classList.add("admin-mode");
+  syncAdminBarOffset();
 
   const pageActions = document.querySelector("[data-page-actions]");
   if (!pageActions) {

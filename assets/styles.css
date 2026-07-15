@@ -730,7 +730,7 @@ button {
 }
 
 body.admin-mode {
-  padding-top: 11rem;
+  padding-top: var(--admin-bar-offset, 11rem);
 }
 
 .editable-target {

@@ -70,6 +70,54 @@ const registerEditable = (node, meta) => {
 const saveToBrowser = () => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
   updateAdminMessage("Tallennettu tähän selaimeen.");
+  scheduleDraftSave();
+};
+
+let draftSaveTimer = null;
+
+const scheduleDraftSave = () => {
+  if (draftSaveTimer) {
+    clearTimeout(draftSaveTimer);
+  }
+  draftSaveTimer = setTimeout(saveDraftToServer, 4000);
+};
+
+const saveDraftToServer = async () => {
+  try {
+    const response = await fetch("/api/save-draft", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ site: state.data.site }),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (response.ok && payload.ok && !payload.skipped && !payload.unchanged) {
+      updateAdminMessage("Luonnos varmuuskopioitu palvelimelle.");
+    }
+  } catch (error) {
+    console.warn("Luonnoksen varmuuskopiointi epäonnistui.", error);
+  }
+};
+
+const restoreServerDraft = async () => {
+  if (!confirm("Tämä korvaa selaimen nykyiset muutokset palvelimelle viimeksi varmuuskopioidulla luonnoksella. Jatka?")) {
+    return;
+  }
+  updateAdminMessage("Haetaan luonnosta palvelimelta…");
+  try {
+    const response = await fetch("/api/get-draft");
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.ok) {
+      updateAdminMessage(payload.error || "Palvelimelta ei löytynyt luonnosta.");
+      return;
+    }
+    state.data = { site: payload.site };
+    saveToBrowser();
+    renderPage();
+    updateAdminChrome();
+    updateAdminMessage("Luonnos palautettu palvelimelta.");
+  } catch (error) {
+    updateAdminMessage("Luonnoksen haku epäonnistui. Tarkista verkkoyhteys.");
+  }
 };
 
 const resetBrowserEdits = async () => {
@@ -125,6 +173,59 @@ const fileToDataUrl = (file) =>
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+
+const dataUrlToBlob = async (dataUrl) => {
+  const response = await fetch(dataUrl);
+  return response.blob();
+};
+
+const resizeImageBlob = (blob, maxDimension = 1600, quality = 0.82) =>
+  new Promise((resolve, reject) => {
+    createImageBitmap(blob)
+      .then((bitmap) => {
+        const scale = Math.min(1, maxDimension / Math.max(bitmap.width, bitmap.height));
+        const width = Math.round(bitmap.width * scale) || 1;
+        const height = Math.round(bitmap.height * scale) || 1;
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
+        canvas.toBlob(
+          (result) => (result ? resolve(result) : reject(new Error("Kuvan pienennys epäonnistui."))),
+          "image/jpeg",
+          quality,
+        );
+      })
+      .catch(reject);
+  });
+
+const uploadImageBlob = async (blob) => {
+  const dataUrl = await fileToDataUrl(blob);
+  const response = await fetch("/api/upload-image", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ dataUrl }),
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok || !payload.ok) {
+    throw new Error(payload.error || "Kuvan lataus epäonnistui.");
+  }
+  return payload.path;
+};
+
+// Handles a freshly picked file and legacy data-URL values (e.g. an older
+// localStorage draft) the same way, so both end up as a real uploaded file.
+const resolveImageFieldValue = async (file, currentUrlValue) => {
+  let sourceBlob = file || null;
+  if (!sourceBlob && currentUrlValue && currentUrlValue.startsWith("data:")) {
+    sourceBlob = await dataUrlToBlob(currentUrlValue);
+  }
+  if (!sourceBlob) {
+    return currentUrlValue;
+  }
+  const resized = await resizeImageBlob(sourceBlob);
+  return uploadImageBlob(resized);
+};
 
 const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAction }) => {
   closeModal();
@@ -265,30 +366,43 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     errorNode.hidden = true;
+    submitButton.disabled = true;
+    const originalLabel = submitButton.textContent;
 
-    const values = {};
-    for (const field of fields) {
-      if (field.type === "checkbox") {
-        values[field.name] = refs[field.name].checked;
-      } else if (field.type === "image") {
-        const { urlInput, upload } = refs[field.name];
-        values[field.name] = upload.files[0]
-          ? await fileToDataUrl(upload.files[0])
-          : urlInput.value.trim();
-      } else {
-        values[field.name] = refs[field.name].value.trim();
+    try {
+      const values = {};
+      for (const field of fields) {
+        if (field.type === "checkbox") {
+          values[field.name] = refs[field.name].checked;
+        } else if (field.type === "image") {
+          const { urlInput, upload } = refs[field.name];
+          if (upload.files[0] || urlInput.value.trim().startsWith("data:")) {
+            submitButton.textContent = "Ladataan kuvaa…";
+          }
+          values[field.name] = await resolveImageFieldValue(upload.files[0], urlInput.value.trim());
+        } else {
+          values[field.name] = refs[field.name].value.trim();
+        }
       }
-    }
 
-    const result = await onSubmit(values);
-    if (result && result.error) {
-      errorNode.textContent = result.error;
+      submitButton.textContent = originalLabel;
+
+      const result = await onSubmit(values);
+      if (result && result.error) {
+        errorNode.textContent = result.error;
+        errorNode.hidden = false;
+        return;
+      }
+
+      if (result !== false) {
+        closeModal();
+      }
+    } catch (error) {
+      errorNode.textContent = error.message || "Jokin meni pieleen.";
       errorNode.hidden = false;
-      return;
-    }
-
-    if (result !== false) {
-      closeModal();
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = originalLabel;
     }
   });
 
@@ -1496,6 +1610,7 @@ const createAdminChrome = () => {
         <button type="button" class="button" data-admin-action="publish">Julkaise sivulle</button>
         <button type="button" class="button button--ghost" data-admin-action="download">Lataa varmuuskopio</button>
         <button type="button" class="button button--ghost" data-admin-action="upload">Tuo varmuuskopio</button>
+        <button type="button" class="button button--ghost" data-admin-action="restore-draft">Hae palvelimen luonnos</button>
         <button type="button" class="button button--ghost" data-admin-action="reset">Nollaa muutokset</button>
         <button type="button" class="button button--ghost" data-admin-action="logout">Kirjaudu ulos</button>
       </div>
@@ -1684,6 +1799,10 @@ const setupEditorEvents = () => {
 
       if (action === "upload") {
         document.querySelector("[data-upload-input]")?.click();
+      }
+
+      if (action === "restore-draft") {
+        await restoreServerDraft();
       }
 
       if (action === "reset") {

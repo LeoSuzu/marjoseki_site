@@ -804,6 +804,7 @@ body.admin-mode .editable-target:hover {
 
 .editor-field input[type="text"],
 .editor-field input[type="password"],
+.editor-field input[type="date"],
 .editor-field textarea,
 .editor-field select {
   width: 100%;

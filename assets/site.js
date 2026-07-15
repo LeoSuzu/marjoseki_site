@@ -275,6 +275,12 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
       input.checked = Boolean(field.value);
       wrap.append(input);
       refs[field.name] = input;
+    } else if (field.type === "date") {
+      const input = document.createElement("input");
+      input.type = "date";
+      input.value = field.value || "";
+      wrap.append(input);
+      refs[field.name] = input;
     } else if (field.type === "select") {
       const input = document.createElement("select");
       field.options.forEach((option) => {
@@ -566,6 +572,9 @@ const openEditor = (meta) => {
           if (!values.location) {
             return "Paikka on pakollinen.";
           }
+          if (values.dateEnd && values.dateEnd < values.date) {
+            return "Päättymispäivä ei voi olla ennen alkamispäivää.";
+          }
           if (isUpcomingList) {
             if (!values.buttonLabel) {
               return "Napin teksti on pakollinen tulevalle tapahtumalle.";
@@ -579,7 +588,12 @@ const openEditor = (meta) => {
       },
       [
         { name: "title", label: "Tapahtuman otsikko", type: "text" },
-        { name: "date", label: "Päivämäärä", type: "text" },
+        { name: "date", label: "Päivämäärä", type: "date" },
+        {
+          name: "dateEnd",
+          label: "Päättymispäivä (vain monipäiväiselle tapahtumalle, jätä tyhjäksi muuten)",
+          type: "date",
+        },
         { name: "location", label: "Sijainti", type: "text" },
         { name: "text", label: "Kuvaus", type: "textarea" },
         { name: "buttonLabel", label: "Painikkeen teksti", type: "text" },
@@ -1293,7 +1307,7 @@ const parseEventDate = (value) => {
 };
 
 const isPastEvent = (event) => {
-  const parsed = parseEventDate(event.date);
+  const parsed = parseEventDate(event.dateEnd || event.date);
   if (!parsed) {
     return false;
   }
@@ -1301,6 +1315,31 @@ const isPastEvent = (event) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   return parsed < today;
+};
+
+// Native <input type="date"> values are always "YYYY-MM-DD"; format those
+// into the Finnish d.m.yyyy style used elsewhere on the site. Older
+// freeform date text (entered before the date picker existed) is left
+// exactly as it was published.
+const formatEventDateDisplay = (event) => {
+  const isoPattern = /^\d{4}-\d{2}-\d{2}$/;
+  if (!isoPattern.test(event.date || "")) {
+    return event.date || "";
+  }
+
+  const start = parseEventDate(event.date);
+  if (!event.dateEnd || event.dateEnd === event.date || !isoPattern.test(event.dateEnd)) {
+    return `${start.getDate()}.${start.getMonth() + 1}.${start.getFullYear()}`;
+  }
+
+  const end = parseEventDate(event.dateEnd);
+  if (start.getFullYear() === end.getFullYear() && start.getMonth() === end.getMonth()) {
+    return `${start.getDate()}.–${end.getDate()}.${start.getMonth() + 1}.${start.getFullYear()}`;
+  }
+  if (start.getFullYear() === end.getFullYear()) {
+    return `${start.getDate()}.${start.getMonth() + 1}.–${end.getDate()}.${end.getMonth() + 1}.${start.getFullYear()}`;
+  }
+  return `${start.getDate()}.${start.getMonth() + 1}.${start.getFullYear()}–${end.getDate()}.${end.getMonth() + 1}.${end.getFullYear()}`;
 };
 
 const compareEventDates = (left, right) => {
@@ -1329,7 +1368,7 @@ const createEventCard = (event, meta, isPast = false) => {
 
   const metaRow = document.createElement("div");
   metaRow.className = "event-card__meta";
-  [event.date, event.location].filter(Boolean).forEach((value) => {
+  [formatEventDateDisplay(event), event.location].filter(Boolean).forEach((value) => {
     const pill = document.createElement("span");
     pill.className = isPast ? "pill pill--muted" : "pill";
     pill.textContent = value;
@@ -1668,6 +1707,7 @@ const createPageActionButtons = () => {
         addListItem("site.tapahtumia.upcoming", {
           title: "Uusi tuleva tapahtuma",
           date: "",
+          dateEnd: "",
           location: "",
           text: "Kuvaile tapahtuma tässä.",
           buttonLabel: "Kysy lisää",
@@ -1680,6 +1720,7 @@ const createPageActionButtons = () => {
         addListItem("site.tapahtumia.past", {
           title: "Uusi mennyt tapahtuma",
           date: "",
+          dateEnd: "",
           location: "",
           text: "Kuvaile tapahtuma tässä.",
           buttonLabel: "",

@@ -1,0 +1,365 @@
+{
+  "global": {
+    "siteName": "Marjo Seki",
+    "brandLine": "Kirjailija · Japanilaisen ruoan opettaja",
+    "footerTagline": "Iloista kokkaamista, mielenkiintoisia tarinoita japanilaisesta ruokakulttuurista yli 40 vuoden kokemuksella, hyviä vinkkejä kotikeittiöön ja paljon muuta. \nJapanilainen keittiö antaa paljon mahdollisuuksia ja ruoka valmistuu helposti keneltä tahansa. Kaikki ovat tervetulleita kursseilleni.",
+    "footerLinks": [
+      {
+        "label": "Sähköposti",
+        "url": "mailto:marjoseki@hotmail.com",
+        "external": false
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/marjo_seki",
+        "external": true
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/marjo.seki",
+        "external": true
+      }
+    ]
+  },
+  "home": {
+    "hero": {
+      "kicker": "Tervetuloa",
+      "title": "Mielenkiintoisia tarinoita, japanilaista ruokaa, sakemaistelua, rentoa ja hauskaa kokkaamista ja ammattitaitoista opetusta vuosien kokemuksella.",
+      "text": "Marjo Seki on kirjailija ja japanilaisen ruoan opettaja Kouvolasta. Tällä sivulla voit tutustua hänen taustaansa, palveluihinsa ja tuleviin tapahtumiin.",
+      "primaryCtaLabel": "Tutustu palveluihin",
+      "secondaryCtaLabel": "",
+      "image": "assets/uploads/portrait-placeholder.svg",
+      "imageAlt": "Marjo Seki -muotokuva",
+      "badge": "Uusia ruokakursseja syksylle:\n\nLahden Wellamo-opistolla 26.9. Sushikurssi klo 9:30-12:30 sekä Temppeliruokakurssi klo 13:15-17:00. Japanilaisen kotiruoan kurssi 10.10. klo 10-13:45.\n\nItä-Hämeen opistolla aikuinen-lapsi \"Sushia ja eväslaatikoita\" viikonloppukurssi.\n17.-18. lokakuuta. \nTemppeliruokaa ja japanilaista kotiruokaa -viikonloppukurssi 31.10-1.11.\n\nHelsingin työväenopistolla 7.11. Temppeliruokakurssi A sekä 29.11. Temppeliruokakurssi B.\n\nIlmoittautuminen opistolle suoraan."
+    },
+    "intro": {
+      "title": "Tervehdys",
+      "text": "Olen Marjo Seki, japanilaisen ruokakulttuurin asiantuntija. Asuin Japanissa 20 vuotta. Toimin peruskoulun opettajana Tokiossa kymmenen vuoden ajan sekä ravintoloitsijana Jokohamassa. Japanilaisesta ruoasta minulla on yli 40 vuoden kokemus. \nKun palasin Suomeen, perustin Tampereen ensimmäisen japanilaisen ravintolan Marusekin, joka toimi 18 vuotta.\nTällä hetkellä järjestän ruokakursseja oppilaitoksissa, yrityksissä ja kodeissa. Japanilainen kotiruoka, buddhalaismunkkien valmistama temppeliruoka ja sushit ovat osaamistani. Järjestän myös saken maistelukursseja otsumami-ruokineen, japanilaisia iltoja, Japani Popup-tapahtumia, käyn kirjastoissa esiintymässä ja kirjoitan Japani-aiheisia kirjoja."
+    },
+    "gallery": {
+      "title": "Kuvia matkan varrelta",
+      "images": [
+        {
+          "image": "assets/uploads/portrait-placeholder.svg",
+          "imageAlt": "Kuva 1"
+        },
+        {
+          "image": "assets/uploads/food-placeholder.svg",
+          "imageAlt": "Kuva 2"
+        },
+        {
+          "image": "assets/uploads/books-placeholder.svg",
+          "imageAlt": "Kuva 3"
+        }
+      ]
+    },
+    "features": [
+      {
+        "title": "Kirjailija",
+        "text": "Kirjoitan kirjoja, jotka tuovat japanilaista kulttuuria lähemmäs lukijaa. \nKirjani Makumatkoja Japaniin on laaja tietopaketti japanilaisesta ruokakulttuurista ja sisältää myös 50 suosittua japanilaista kotiruokareseptiä, jotka on helppo toteuttaa suomalaisessa keittiössä."
+      },
+      {
+        "title": "Ruokakurssit",
+        "text": "Ruoanvalmistuksen tulee olla hauskaa ja rentoa. Kursseillani valmistetaan helppoja, mutta maukkaita ruokia, jotka on mahdollista toteuttaa Suomessa saatavilla raaka-aineilla. En ole fine dining -kokki, vaan opetan tavallista japanilaista kotiruokaa.\nRyhmän koko vaihtelee viidestä 20:een. Suosituimpia ovat työ- tai kaveriporukalla toteutettavat pienryhmäkurssit.\nRuokakurssien hinnat alkaen 50€/hlö."
+      },
+      {
+        "title": "Tapahtumat",
+        "text": "Ruokakursseja, sakemaisteluiltoja, kirjastoesiintymisiä, popup-tapahtumia, luentoja ja tilaisuuksia, joista löydät lisää Tapahtumia-sivulta."
+      }
+    ]
+  },
+  "palvelut": {
+    "title": "Japanilaisen ruoan kurssit ja palvelut.",
+    "lead": "Ruokakursseja, Popup-tapahtumia, luentoja japanilaisesta ruokakulttuurista, sakemaisteluja ja paljon muuta yli 40 vuoden Japani-kokemuksella.",
+    "image": "assets/uploads/food-placeholder.svg",
+    "imageAlt": "Japanilaista ruokaa",
+    "courses": [
+      {
+        "title": "Sushikurssi alkeisiin",
+        "format": "Pienryhmä",
+        "text": "Perusteet sushin valmistukseen: riisi, täytteet ja rullaustekniikka rauhallisessa tahdissa.",
+        "priceLabel": "Kysy hintaa ja ajankohtaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Sushikurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Kurssilla käydään läpi riisin keitto ja maustaminen, täytteiden valmistus ja rullaustekniikka rauhallisessa tahdissa pienessä ryhmässä. Kesto noin 3 tuntia, tarvikkeet sisältyvät hintaan. Hinta alkaen 50€/hlö. Minimi kuusi osallistujaa.",
+        "image": "assets/uploads/food-placeholder.svg",
+        "imageAlt": "Sushikurssi"
+      },
+      {
+        "title": "Japanilainen kotiruoka",
+        "format": "Pienryhmä",
+        "text": "Arkisia ja maukkaita japanilaisia kotiruokia: keitot, kastikkeet ja perinteiset ainekset.\nHelposti valmistuvia ruokia, joita voi toteuttaa suomalaisessa keittiössä marketeista saatavilla raaka-aineilla.",
+        "priceLabel": "Kysy hintaa ja ajankohtaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Japanilainen%20kotiruoka",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Opettelemme arkisia ja maukkaita japanilaisia kotiruokia. Sopii kaikentasoisille osallistujille, aiempaa kokemusta ei tarvita. Kurssi kestää noin 3 tuntia ja siinä ajassa oppii monta helposti valmistuvaa kotiruokaa, joita voi toteuttaa omassa kotikeittiössä.\nHinta alkaen 50€/hlö. Minimi kuusi osallistujaa.",
+        "image": "assets/uploads/portrait-placeholder.svg",
+        "imageAlt": "Kotiruokakurssi"
+      },
+      {
+        "title": "Yksityinen ryhmäkurssi",
+        "format": "Räätälöity",
+        "text": "Yksityistilaisuus yritykselle, yhteisölle tai ystäväporukalle toivomanne teeman mukaan.",
+        "priceLabel": "Tarjous pyynnöstä",
+        "buyLabel": "Pyydä tarjous",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Yksityinen%20kurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Räätälöity tilaisuus yritykselle, yhteisölle tai ystäväporukalle toivotun teeman mukaan. Kerro ryhmän koko ja toiveet, niin saat tarjouksen nopeasti.",
+        "image": "assets/uploads/books-placeholder.svg",
+        "imageAlt": "Yksityinen kurssi"
+      },
+      {
+        "title": "Temppeliruoka",
+        "format": "Muoto",
+        "text": "Temppeliruoka, Shojin ryori, tarkoittaa buddhalaismunkkien valmistamaa vegaanista yksinkertaista kasvisruokaa.",
+        "priceLabel": "Kysy hintaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Kurssilla valmistetaan kiireettömästi helppoja mutta maukkaita ja terveellisiä ruokia temppeliruokafilosofian mukaisin opein.\nHinta alkaen 50€/hlö. Minimi kuusi osallistujaa.",
+        "image": "assets/uploads/food-placeholder.svg",
+        "imageAlt": "Uuden kurssin kuva"
+      },
+      {
+        "title": "Uusi kurssi",
+        "format": "Muoto",
+        "text": "Kuvaile kurssi tässä.",
+        "priceLabel": "Kysy hintaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Kirjoita tähän kurssin tarkemmat tiedot.",
+        "image": "assets/uploads/food-placeholder.svg",
+        "imageAlt": "Uuden kurssin kuva"
+      },
+      {
+        "title": "Uusi kurssi",
+        "format": "Muoto",
+        "text": "Kuvaile kurssi tässä.",
+        "priceLabel": "Kysy hintaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Kirjoita tähän kurssin tarkemmat tiedot.",
+        "image": "assets/uploads/food-placeholder.svg",
+        "imageAlt": "Uuden kurssin kuva"
+      },
+      {
+        "title": "Uusi kurssi",
+        "format": "Muoto",
+        "text": "Kuvaile kurssi tässä.",
+        "priceLabel": "Kysy hintaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Kirjoita tähän kurssin tarkemmat tiedot.",
+        "image": "assets/uploads/food-placeholder.svg",
+        "imageAlt": "Uuden kurssin kuva"
+      },
+      {
+        "title": "Uusi kurssi",
+        "format": "Muoto",
+        "text": "Kuvaile kurssi tässä.",
+        "priceLabel": "Kysy hintaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Kirjoita tähän kurssin tarkemmat tiedot.",
+        "image": "assets/uploads/food-placeholder.svg",
+        "imageAlt": "Uuden kurssin kuva"
+      },
+      {
+        "title": "Uusi kurssi",
+        "format": "Muoto",
+        "text": "Kuvaile kurssi tässä.",
+        "priceLabel": "Kysy hintaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Kirjoita tähän kurssin tarkemmat tiedot.",
+        "image": "assets/uploads/food-placeholder.svg",
+        "imageAlt": "Uuden kurssin kuva"
+      },
+      {
+        "title": "Uusi kurssi",
+        "format": "Muoto",
+        "text": "Kuvaile kurssi tässä.",
+        "priceLabel": "Kysy hintaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Kirjoita tähän kurssin tarkemmat tiedot.",
+        "image": "assets/uploads/food-placeholder.svg",
+        "imageAlt": "Uuden kurssin kuva"
+      },
+      {
+        "title": "Uusi kurssi",
+        "format": "Muoto",
+        "text": "Kuvaile kurssi tässä.",
+        "priceLabel": "Kysy hintaa",
+        "buyLabel": "Tiedustele sähköpostilla",
+        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
+        "infoLabel": "Tarkemmat tiedot",
+        "infoText": "Kirjoita tähän kurssin tarkemmat tiedot.",
+        "image": "assets/uploads/food-placeholder.svg",
+        "imageAlt": "Uuden kurssin kuva"
+      }
+    ]
+  },
+  "kirjat": {
+    "title": "Kirjat",
+    "lead": "Japani-aiheisia keittokirjoja, satukirjoja lapsille",
+    "image": "assets/uploads/books-placeholder.svg",
+    "imageAlt": "Kirjoja",
+    "books": [
+      {
+        "title": "Makumatkoja Japaniin",
+        "status": "Myynnissä",
+        "text": "Omiin kokemuksiin perustuva tarinallinen japanilaista ruokakulttuuria laajasti käsittelevä kirja, joka sisältää myös 50 herkullista kotiruokareseptiä.\nHinta: 30€ + postikulut",
+        "image": "assets/uploads/books-placeholder.svg",
+        "imageAlt": "Kirjan kansi"
+      },
+      {
+        "title": "OKAZU japanilaisia kasvisruokia.",
+        "status": "Myynnissä",
+        "text": "Buddhalaismunkkien temppeleissä valmistamia vegaanisia kasvisruokareseptejä.\nHinta 25€ + postikulut.",
+        "image": "assets/uploads/books-placeholder.svg",
+        "imageAlt": "Maukkaita, yksinkertaisia kasvisruokia Suomessa saatavilla raaka-aineilla."
+      },
+      {
+        "title": "Pörri ja sukkelat sushit",
+        "status": "Myynnissä",
+        "text": "Sushisatukirja lapsille ja lapsenmielisille.\nHinta 15€ + postikulut",
+        "image": "assets/uploads/books-placeholder.svg",
+        "imageAlt": "Uuden kirjan kansi"
+      },
+      {
+        "title": "Salaisuuksien sienimetsä",
+        "status": "Myynnissä",
+        "text": "Sienisatukirja lapsille. \nHinta 12€ + postikulut.",
+        "image": "assets/uploads/books-placeholder.svg",
+        "imageAlt": "Uuden kirjan kansi"
+      }
+    ],
+    "order": {
+      "title": "Tilaa kirja!",
+      "instructions": "Maksu MobilePaylla numeroon 041 44 22 798. Postituskulut lisätään tilaukseen. Toimitamme tällä hetkellä vain Suomeen.",
+      "successMessage": "Kiitos tilauksesta! Vahvistus ja maksuohjeet lähetetään sinulle pian."
+    }
+  },
+  "yhteystiedot": {
+    "title": "Yhteystiedot",
+    "lead": "Ota yhteyttä kursseja, tapahtumia tai muita kysymyksiä varten.",
+    "image": "assets/uploads/books-placeholder.svg",
+    "imageAlt": "Yhteystiedot",
+    "contactItems": [
+      {
+        "label": "Sähköposti",
+        "value": "marjoseki@hotmail.com"
+      },
+      {
+        "label": "Facebook",
+        "value": "facebook.com/marjo.seki"
+      },
+      {
+        "label": "Instagram",
+        "value": "instagram.com/marjo_seki"
+      }
+    ],
+    "inquiry": {
+      "title": "Kysely tilaisuudesta",
+      "intro": "Suunnitteletko tilaisuutta tai kurssia? Täytä lomake, niin palaan asiaan pian.",
+      "successMessage": "Kiitos kyselystä! Vastaan sinulle mahdollisimman pian."
+    }
+  },
+  "tapahtumia": {
+    "title": "Tapahtumia",
+    "lead": "Popup-tapahtumia, sakemaisteluja, ruokakursseja, luentoja, kirjastoesiintymisiä",
+    "image": "assets/uploads/event-placeholder.svg",
+    "imageAlt": "Tapahtumakuva",
+    "upcoming": [
+      {
+        "title": "Japanilainen kotiruokailta",
+        "date": "18.6.2026",
+        "location": "Kouvola",
+        "text": "Lämmin pienryhmäkurssi japanilaisesta kotiruoasta, raaka-aineista ja ruokakulttuurista.",
+        "buttonLabel": "Varaa paikka",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Japanilainen%20kotiruokailta"
+      },
+      {
+        "title": "Japani Popup Kouvolan torilla Kontissa",
+        "date": "10-15.08.2026",
+        "location": "Kontti, Kouvolan torilla",
+        "text": "Japani Popup -ravintola Kouvolan torilla Kontissa elokuun 10.-15. päivä. Tarjolla japanilaisia ruoka-annoksia mukaan tai paikan päällä nautittaviksi. Myynnissä myös Japani-aiheisia kirjoja ja muuta Japani-tavaraa.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Sieniruokia ja sienitietoutta",
+        "date": "17.-19. syyskuuta",
+        "location": "Kontti, Kouvolan torilla",
+        "text": "Tarjolla mm. japanilaisia sieniruokia ja neuvontaa sienten monipuoliseen käyttöön.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Gluteeniton elämä -messut Tampere-talossa",
+        "date": "24.-25. lokakuuta",
+        "location": "Tampere-talo",
+        "text": "Opastan japanilaisten gluteenittomien ruokien valmistusta sunnuntaina 25.10.\nEsiintymisaikani on klo 12:30.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      }
+    ],
+    "past": [
+      {
+        "title": "Sakemaisteluilta",
+        "date": "8.5. 2026",
+        "location": "Kouvola",
+        "text": "Eri sakelaatujen maistelua sekä niihin sopivia otsumami-ruokia.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      },
+      {
+        "title": "Kirjastoesiintyminen",
+        "date": "11.5.2026",
+        "location": "Porvoon kirjasto",
+        "text": "Japanilaisen ruokakulttuurin esittelyä sekä tarinoita omista kokemuksista Japani-vuosilta.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      },
+      {
+        "title": "Kirjastoesiintyminen",
+        "date": "12.5.2026",
+        "location": "Lahden pääkirjasto",
+        "text": "Omiin kokemuksiin perustuvia tarinoita Japani-vuosilta ja japanilaisen ruokakulttuurin esittelyä.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      },
+      {
+        "title": "Uusi mennyt tapahtuma",
+        "date": "",
+        "location": "",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      },
+      {
+        "title": "Uusi mennyt tapahtuma",
+        "date": "",
+        "location": "",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "",
+        "buttonUrl": ""
+      }
+    ],
+    "social": {
+      "title": "Seuraa sosiaalisessa mediassa",
+      "note": "Tuoreimmat kuulumiset ja kuvat näkyvät täällä suoraan, kun haluat lisätä sosiaalisen median upotukset.",
+      "facebookUrl": "https://www.facebook.com/marjo.seki",
+      "instagramUrl": "https://www.instagram.com/marjo_seki"
+    }
+  }
+}

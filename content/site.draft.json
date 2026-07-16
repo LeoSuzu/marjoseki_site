@@ -218,9 +218,10 @@
       },
       {
         "title": "Japani Popup Kouvolan torilla Kontissa",
-        "date": "10-15.08.2026",
+        "date": "2026-08-10",
+        "dateEnd": "2026-08-15",
         "location": "Kontti, Kouvolan torilla",
-        "text": "Japani Popup -ravintola Kouvolan torilla Kontissa elokuun 10.-15. päivä. Tarjolla japanilaisia ruoka-annoksia mukaan tai paikan päällä nautittaviksi. Myynnissä myös Japani-aiheisia kirjoja ja muuta Japani-tavaraa.",
+        "text": "Japani Popup -ravintola Kouvolan torilla Kontissa elokuun 10.-15. päivä. Tarjolla japanilaisia ruoka-annoksia mukaan tai paikan päällä nautittaviksi. Myynnissä myös japaniaiheisia kirjoja ja muuta japanilaista tavaraa.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       },

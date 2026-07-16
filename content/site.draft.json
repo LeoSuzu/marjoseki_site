@@ -123,16 +123,16 @@
         "imageAlt": "Vegaanine chirashi sushi"
       },
       {
-        "title": "Uusi kurssi",
-        "format": "Muoto",
-        "text": "Kuvaile kurssi tässä.",
+        "title": "Sakekurssi",
+        "format": "Yksityistilaisuus",
+        "text": "Eri sakelaatujen ja niihin sopivien otsumami-ruokien maistelua.\n\nIllan aikana maistellaan eri sakelaatuja, kuullaan saken historiasta, valmistuksesta ja tarjoiluetiketistä sekä maistellaan eri sakelaatuihin sopivia otsumami-pikkupurtavia.\nKurssi voidaan toteuttaa joko siten, että ruoat valmistetaan yhdessä tai tuon valmiit ruoat mukanani.",
         "priceLabel": "Kysy hintaa",
         "buyLabel": "Tiedustele sähköpostilla",
         "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
-        "infoLabel": "Tarkemmat tiedot",
-        "infoText": "Kirjoita tähän kurssin tarkemmat tiedot.",
-        "image": "assets/uploads/food-placeholder.svg",
-        "imageAlt": "Uuden kurssin kuva"
+        "infoLabel": "",
+        "infoText": "",
+        "image": "assets/uploads/1784199886974-cli9u5.jpg",
+        "imageAlt": "Erilaisia sakelaatuja"
       }
     ]
   },

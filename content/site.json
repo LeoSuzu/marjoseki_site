@@ -218,15 +218,17 @@
       },
       {
         "title": "Japani Popup Kouvolan torilla Kontissa",
-        "date": "10-15.08.2026",
+        "date": "2026-08-10",
+        "dateEnd": "2026-08-15",
         "location": "Kontti, Kouvolan torilla",
-        "text": "Japani Popup -ravintola Kouvolan torilla Kontissa elokuun 10.-15. päivä. Tarjolla japanilaisia ruoka-annoksia mukaan tai paikan päällä nautittaviksi. Myynnissä myös Japani-aiheisia kirjoja ja muuta Japani-tavaraa.",
+        "text": "Japani Popup -ravintola Kouvolan torilla Kontissa elokuun 10.-15. päivä. Tarjolla japanilaisia ruoka-annoksia mukaan tai paikan päällä nautittaviksi. Myynnissä myös japaniaiheisia kirjoja ja muuta japanilaista tavaraa.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       },
       {
         "title": "Sieniruokia ja sienitietoutta",
-        "date": "17.-19. syyskuuta",
+        "date": "2026-09-17",
+        "dateEnd": "2026-09-20",
         "location": "Kontti, Kouvolan torilla",
         "text": "Tarjolla mm. japanilaisia sieniruokia ja neuvontaa sienten monipuoliseen käyttöön.",
         "buttonLabel": "Kysy lisää",
@@ -234,7 +236,8 @@
       },
       {
         "title": "Gluteeniton elämä -messut Tampere-talossa",
-        "date": "24.-25. lokakuuta",
+        "date": "2026-10-24",
+        "dateEnd": "2026-10-25",
         "location": "Tampere-talo",
         "text": "Opastan japanilaisten gluteenittomien ruokien valmistusta sunnuntaina 25.10.\nEsiintymisaikani on klo 12:30.",
         "buttonLabel": "Kysy lisää",

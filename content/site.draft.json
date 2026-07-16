@@ -114,25 +114,13 @@
         "title": "Temppeliruoka",
         "format": "Muoto",
         "text": "Temppeliruoka, Shojin ryori, tarkoittaa buddhalaismunkkien valmistamaa vegaanista yksinkertaista kasvisruokaa.",
-        "priceLabel": "Kysy hintaa",
-        "buyLabel": "Tiedustele sähköpostilla",
+        "priceLabel": "Hinta alkaen 50€/hlö.",
+        "buyLabel": "Tiedustele sähköpostilla. Minimi kuusi osallistujaa.",
         "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
         "infoLabel": "Tarkemmat tiedot",
-        "infoText": "Kurssilla valmistetaan kiireettömästi helppoja mutta maukkaita ja terveellisiä ruokia temppeliruokafilosofian mukaisin opein.\nHinta alkaen 50€/hlö. Minimi kuusi osallistujaa.",
+        "infoText": "Kurssilla valmistetaan kiireettömästi helppoja mutta maukkaita ja terveellisiä ruokia temppeliruokafilosofian mukaisin opein.",
         "image": "assets/uploads/food-placeholder.svg",
-        "imageAlt": "Uuden kurssin kuva"
-      },
-      {
-        "title": "Temppeliruokakurssi",
-        "format": "Yksityinen ryhmäkurssi",
-        "text": "Temppeliruoka, Shojin ryori, tarkoittaa buddhalaismunkkien valmistamaa vegaanista yksinkertaista kasvisruokaa.\nKurssilla valmistetaan kiireettömästi helppoja, mutta maukkaita ja terveellisiä ruokia temppeliruokafilosofian mukaisin opein. Minimi kuusi osallistujaa.",
-        "priceLabel": "Alkaen 50€/hlö",
-        "buyLabel": "Tiedustele sähköpostilla",
-        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
-        "infoLabel": "Tarkemmat tiedot",
-        "infoText": "Kirjoita tähän kurssin tarkemmat tiedot.",
-        "image": "assets/uploads/1784194459057-6pk5lu.jpg",
-        "imageAlt": "Vegaaninen chirashi sushi"
+        "imageAlt": "Vegaaninen chirashi"
       }
     ]
   },

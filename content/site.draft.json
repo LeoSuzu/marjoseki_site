@@ -187,7 +187,7 @@
   "yhteystiedot": {
     "title": "Yhteystiedot",
     "lead": "Ota yhteyttä kursseja, tapahtumia tai muita kysymyksiä varten.",
-    "image": "assets/uploads/books-placeholder.svg",
+    "image": "assets/uploads/1784204138707-ub31ig.jpg",
     "imageAlt": "Yhteystiedot",
     "contactItems": [
       {
@@ -212,7 +212,7 @@
   "tapahtumia": {
     "title": "Tapahtumia",
     "lead": "Popup-tapahtumia, sakemaisteluja, ruokakursseja, luentoja, kirjastoesiintymisiä",
-    "image": "assets/uploads/event-placeholder.svg",
+    "image": "assets/uploads/1784204091815-jnhlnh.jpg",
     "imageAlt": "Tapahtumakuva",
     "upcoming": [
       {

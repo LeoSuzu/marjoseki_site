@@ -113,12 +113,12 @@
       {
         "title": "Temppeliruoka",
         "format": "Muoto",
-        "text": "Temppeliruoka, Shojin ryori, tarkoittaa buddhalaismunkkien valmistamaa vegaanista yksinkertaista kasvisruokaa.",
-        "priceLabel": "Kysy hintaa",
+        "text": "Temppeliruoka, Shojin ryori, tarkoittaa buddhalaismunkkien valmistamaa vegaanista yksinkertaista kasvisruokaa.\n\nKurssilla valmistetaan kiireettömästi helppoja mutta maukkaita ja terveellisiä ruokia temppeliruokafilosofian mukaisin opein.",
+        "priceLabel": "Hinta alkaen 50€/hlö. Minimi kuusi osallistujaa.",
         "buyLabel": "Tiedustele sähköpostilla",
         "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
         "infoLabel": "Tarkemmat tiedot",
-        "infoText": "Kurssilla valmistetaan kiireettömästi helppoja mutta maukkaita ja terveellisiä ruokia temppeliruokafilosofian mukaisin opein.\nHinta alkaen 50€/hlö. Minimi kuusi osallistujaa.",
+        "infoText": "",
         "image": "assets/uploads/food-placeholder.svg",
         "imageAlt": "Uuden kurssin kuva"
       }

@@ -171,11 +171,11 @@
         "imageAlt": "Uuden kirjan kansi"
       },
       {
-        "title": "Uusi kirja",
-        "status": "Tulossa",
-        "text": "Kuvaile kirja tässä.",
-        "image": "assets/uploads/books-placeholder.svg",
-        "imageAlt": "Uuden kirjan kansi"
+        "title": "Kurkistus viuhkan taakse",
+        "status": "Loppuunmyyty",
+        "text": "Omaelämäkerrallinen tarina 20 vuodesta Japanissa.",
+        "image": "assets/uploads/1784203016295-t60bbv.jpg",
+        "imageAlt": "Kurkistus viuhkan taakse"
       }
     ],
     "order": {

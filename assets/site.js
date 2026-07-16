@@ -345,8 +345,10 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
     dangerButton.className = "button button--danger";
     dangerButton.textContent = dangerAction.label;
     dangerButton.addEventListener("click", () => {
-      dangerAction.onClick();
-      closeModal();
+      const proceeded = dangerAction.onClick();
+      if (proceeded !== false) {
+        closeModal();
+      }
     });
     actions.append(dangerButton);
   }
@@ -492,6 +494,9 @@ const openObjectEditor = (meta, schema) => {
         ? {
             label: "Poista kohde",
             onClick: () => {
+              if (!confirm("Poistetaanko tämä kortti pysyvästi? Muutos näkyy kaikille vasta kun painat \"Julkaise sivulle\".")) {
+                return false;
+              }
               removeFromList(state.data, meta.listPath, meta.index);
               saveToBrowser();
               renderPage();
@@ -1679,6 +1684,12 @@ const createAdminChrome = () => {
 };
 
 const addListItem = (path, item) => {
+  const confirmed = confirm(
+    "Lisätäänkö UUSI, tyhjä kortti listan loppuun?\n\nJos tarkoitit muokata jo olemassa olevaa korttia, paina Peruuta ja klikkaa sen sijaan suoraan sitä korttia sivulla.",
+  );
+  if (!confirmed) {
+    return;
+  }
   const list = getByPath(state.data, path);
   list.push(item);
   saveToBrowser();

@@ -169,6 +169,13 @@
         "text": "Sienisatukirja lapsille. \nHinta 12€ + postikulut.",
         "image": "assets/uploads/books-placeholder.svg",
         "imageAlt": "Uuden kirjan kansi"
+      },
+      {
+        "title": "Uusi kirja",
+        "status": "Tulossa",
+        "text": "Kuvaile kirja tässä.",
+        "image": "assets/uploads/books-placeholder.svg",
+        "imageAlt": "Uuden kirjan kansi"
       }
     ],
     "order": {

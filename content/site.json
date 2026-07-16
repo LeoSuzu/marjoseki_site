@@ -71,7 +71,7 @@
   "palvelut": {
     "title": "Japanilaisen ruoan kurssit ja palvelut.",
     "lead": "Ruokakursseja, Popup-tapahtumia, luentoja japanilaisesta ruokakulttuurista, sakemaisteluja ja paljon muuta yli 40 vuoden Japani-kokemuksella.",
-    "image": "assets/uploads/food-placeholder.svg",
+    "image": "assets/uploads/1784200820503-v4dk3b.jpg",
     "imageAlt": "Japanilaista ruokaa",
     "courses": [
       {
@@ -95,7 +95,7 @@
         "buyUrl": "mailto:marjoseki@hotmail.com?subject=Japanilainen%20kotiruoka",
         "infoLabel": "Tarkemmat tiedot",
         "infoText": "Opettelemme arkisia ja maukkaita japanilaisia kotiruokia. Sopii kaikentasoisille osallistujille, aiempaa kokemusta ei tarvita. Kurssi kestää noin 3 tuntia ja siinä ajassa oppii monta helposti valmistuvaa kotiruokaa, joita voi toteuttaa omassa kotikeittiössä.",
-        "image": "assets/uploads/1784200476475-0k1uu9.jpg",
+        "image": "assets/uploads/1784200796872-1xp2sy.jpg",
         "imageAlt": "Kotiruokakurssi"
       },
       {
@@ -107,7 +107,7 @@
         "buyUrl": "mailto:marjoseki@hotmail.com?subject=Yksityinen%20kurssi",
         "infoLabel": "Tarkemmat tiedot",
         "infoText": "Räätälöity tilaisuus yritykselle, yhteisölle tai ystäväporukalle toivotun teeman mukaan. Kerro ryhmän koko ja toiveet, niin saat tarjouksen nopeasti.",
-        "image": "assets/uploads/1784200399150-pv8xb0.jpg",
+        "image": "assets/uploads/1784200897887-8dfpen.jpg",
         "imageAlt": "Yksityinen kurssi"
       },
       {

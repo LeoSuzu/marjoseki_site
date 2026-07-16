@@ -28,7 +28,7 @@
       "text": "Marjo Seki on kirjailija ja japanilaisen ruoan opettaja Kouvolasta. Tällä sivulla voit tutustua hänen taustaansa, palveluihinsa ja tuleviin tapahtumiin.",
       "primaryCtaLabel": "Tutustu palveluihin",
       "secondaryCtaLabel": "",
-      "image": "assets/uploads/portrait-placeholder.svg",
+      "image": "assets/uploads/1784202857550-ehg96i.jpg",
       "imageAlt": "Marjo Seki -muotokuva",
       "badge": "Uusia ruokakursseja syksylle:\n\nLahden Wellamo-opistolla 26.9. Sushikurssi klo 9:30-12:30 sekä Temppeliruokakurssi klo 13:15-17:00. Japanilaisen kotiruoan kurssi 10.10. klo 10-13:45.\n\nItä-Hämeen opistolla aikuinen-lapsi \"Sushia ja eväslaatikoita\" viikonloppukurssi.\n17.-18. lokakuuta. \nTemppeliruokaa ja japanilaista kotiruokaa -viikonloppukurssi 31.10-1.11.\n\nHelsingin työväenopistolla 7.11. Temppeliruokakurssi A sekä 29.11. Temppeliruokakurssi B.\n\nIlmoittautuminen opistolle suoraan."
     },
@@ -146,29 +146,36 @@
         "title": "Makumatkoja Japaniin",
         "status": "Myynnissä",
         "text": "Omiin kokemuksiin perustuva tarinallinen japanilaista ruokakulttuuria laajasti käsittelevä kirja, joka sisältää myös 50 herkullista kotiruokareseptiä.\nHinta: 30€ + postikulut",
-        "image": "assets/uploads/books-placeholder.svg",
-        "imageAlt": "Kirjan kansi"
+        "image": "assets/uploads/1784203058369-0g73ob.jpg",
+        "imageAlt": "Makumatkoja Japaniin"
       },
       {
         "title": "OKAZU japanilaisia kasvisruokia.",
         "status": "Myynnissä",
         "text": "Buddhalaismunkkien temppeleissä valmistamia vegaanisia kasvisruokareseptejä.\nHinta 25€ + postikulut.",
-        "image": "assets/uploads/books-placeholder.svg",
+        "image": "assets/uploads/1784203127150-cjydqy.jpg",
         "imageAlt": "Maukkaita, yksinkertaisia kasvisruokia Suomessa saatavilla raaka-aineilla."
       },
       {
         "title": "Pörri ja sukkelat sushit",
         "status": "Myynnissä",
         "text": "Sushisatukirja lapsille ja lapsenmielisille.\nHinta 15€ + postikulut",
-        "image": "assets/uploads/books-placeholder.svg",
-        "imageAlt": "Uuden kirjan kansi"
+        "image": "assets/uploads/1784203098957-batwlo.jpg",
+        "imageAlt": "Pörri ja sukkelat sushit"
       },
       {
         "title": "Salaisuuksien sienimetsä",
         "status": "Myynnissä",
         "text": "Sienisatukirja lapsille. \nHinta 12€ + postikulut.",
-        "image": "assets/uploads/books-placeholder.svg",
-        "imageAlt": "Uuden kirjan kansi"
+        "image": "assets/uploads/1784203164080-0bdukv.jpg",
+        "imageAlt": "Salaisuuksien sienimetsä"
+      },
+      {
+        "title": "Kurkistus viuhkan taakse",
+        "status": "Loppuunmyyty",
+        "text": "Omaelämäkerrallinen tarina 20 vuodesta Japanissa.",
+        "image": "assets/uploads/1784203016295-t60bbv.jpg",
+        "imageAlt": "Kurkistus viuhkan taakse"
       }
     ],
     "order": {

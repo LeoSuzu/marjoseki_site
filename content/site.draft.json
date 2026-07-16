@@ -217,18 +217,6 @@
         "infoText": "Kirjoita tähän kurssin tarkemmat tiedot.",
         "image": "assets/uploads/food-placeholder.svg",
         "imageAlt": "Uuden kurssin kuva"
-      },
-      {
-        "title": "Uusi kurssi",
-        "format": "Muoto",
-        "text": "Kuvaile kurssi tässä.",
-        "priceLabel": "Kysy hintaa",
-        "buyLabel": "Tiedustele sähköpostilla",
-        "buyUrl": "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
-        "infoLabel": "Tarkemmat tiedot",
-        "infoText": "Kirjoita tähän kurssin tarkemmat tiedot.",
-        "image": "assets/uploads/food-placeholder.svg",
-        "imageAlt": "Uuden kurssin kuva"
       }
     ]
   },

@@ -251,10 +251,10 @@
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       },
       {
-        "title": "Uusi tuleva tapahtuma",
-        "date": "",
+        "title": "Sushikurssi klo 9:30-12:30 sekä Temppeliruokakurssi klo 13:15-17:00.",
+        "date": "2026-09-26",
         "dateEnd": "",
-        "location": "",
+        "location": "Lahden Wellamo-opisto, Lahti",
         "text": "Kuvaile tapahtuma tässä.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"

@@ -287,10 +287,10 @@
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       },
       {
-        "title": "Uusi tuleva tapahtuma",
-        "date": "",
+        "title": "Temppeliruokakurssi A",
+        "date": "2026-11-07",
         "dateEnd": "",
-        "location": "",
+        "location": "Helsingin työväenopisto.",
         "text": "Kuvaile tapahtuma tässä.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"

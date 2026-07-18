@@ -269,10 +269,10 @@
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       },
       {
-        "title": "Uusi tuleva tapahtuma",
-        "date": "",
-        "dateEnd": "",
-        "location": "",
+        "title": "Aikuinen-lapsi \"Sushia ja eväslaatikoita\" viikonloppukurssi.",
+        "date": "2026-10-17",
+        "dateEnd": "2026-10-18",
+        "location": "Itä-Hämeen opisto, Hartola",
         "text": "Kuvaile tapahtuma tässä.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"

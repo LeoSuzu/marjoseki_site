@@ -278,11 +278,11 @@
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       },
       {
-        "title": "Uusi tuleva tapahtuma",
-        "date": "",
-        "dateEnd": "",
-        "location": "",
-        "text": "Kuvaile tapahtuma tässä.",
+        "title": "Temppeliruokaa ja japanilaista kotiruokaa -viikonloppukurssi.",
+        "date": "2026-10-31",
+        "dateEnd": "2026-11-01",
+        "location": "Itä-Hämeen opisto",
+        "text": "https://ihop.fi/lyhytkurssit/kadentaidot/temppeliruokaa-ja-japanilaista-kotiruokaa/",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }

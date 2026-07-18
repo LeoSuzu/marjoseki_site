@@ -249,6 +249,15 @@
         "text": "Opastan japanilaisten gluteenittomien ruokien valmistusta sunnuntaina 25.10.\nEsiintymisaikani on klo 12:30.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Uusi tuleva tapahtuma",
+        "date": "",
+        "dateEnd": "",
+        "location": "",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }
     ],
     "past": [

@@ -30,7 +30,7 @@
       "secondaryCtaLabel": "",
       "image": "assets/uploads/1784202857550-ehg96i.jpg",
       "imageAlt": "Marjo Seki -muotokuva",
-      "badge": "Uusia ruokakursseja syksylle:\n\nLahden Wellamo-opistolla 26.9. Sushikurssi klo 9:30-12:30 sekä Temppeliruokakurssi klo 13:15-17:00. Japanilaisen kotiruoan kurssi 10.10. klo 10-13:45.\n\nItä-Hämeen opistolla aikuinen-lapsi \"Sushia ja eväslaatikoita\" viikonloppukurssi.\n17.-18. lokakuuta. \nTemppeliruokaa ja japanilaista kotiruokaa -viikonloppukurssi 31.10-1.11.\n\nHelsingin työväenopistolla 7.11. Temppeliruokakurssi A sekä 29.11. Temppeliruokakurssi B.\n\nIlmoittautuminen opistolle suoraan."
+      "badge": "Uusia ruokakursseja syksylle:\n\nIlmoittautuminen opistolle suoraan."
     },
     "intro": {
       "title": "Tervehdys",
@@ -243,10 +243,64 @@
       },
       {
         "title": "Gluteeniton elämä -messut Tampere-talossa",
-        "date": "2026-10-24",
-        "dateEnd": "2026-10-25",
+        "date": "2026-10-25",
+        "dateEnd": "",
         "location": "Tampere-talo",
         "text": "Opastan japanilaisten gluteenittomien ruokien valmistusta sunnuntaina 25.10.\nEsiintymisaikani on klo 12:30.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Sushikurssi klo 9:30-12:30 sekä Temppeliruokakurssi klo 13:15-17:00.",
+        "date": "2026-09-26",
+        "dateEnd": "",
+        "location": "Lahden Wellamo-opisto, Lahti",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Japanilaisen kotiruoan kurssi klo 10-13:45.",
+        "date": "2026-10-10",
+        "dateEnd": "",
+        "location": "Wellamo-opisto, Lahti",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Aikuinen-lapsi \"Sushia ja eväslaatikoita\" viikonloppukurssi.",
+        "date": "2026-10-17",
+        "dateEnd": "2026-10-18",
+        "location": "Itä-Hämeen opisto, Hartola",
+        "text": "https://ihop.fi/lyhytkurssit/kadentaidot/sushia-ja-evaslaatikoita-perheille/",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Temppeliruokaa ja japanilaista kotiruokaa -viikonloppukurssi.",
+        "date": "2026-10-31",
+        "dateEnd": "2026-11-01",
+        "location": "Itä-Hämeen opisto",
+        "text": "https://ihop.fi/lyhytkurssit/kadentaidot/temppeliruokaa-ja-japanilaista-kotiruokaa/",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Temppeliruokakurssi A",
+        "date": "2026-11-07",
+        "dateEnd": "",
+        "location": "Helsingin työväenopisto.",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Temppeliruokakurssi B",
+        "date": "2026-11-29",
+        "dateEnd": "",
+        "location": "Helsingin työväenopisto",
+        "text": "",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }

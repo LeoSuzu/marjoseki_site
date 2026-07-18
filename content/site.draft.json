@@ -283,8 +283,8 @@
         "dateEnd": "2026-11-01",
         "location": "Itä-Hämeen opisto",
         "text": "https://ihop.fi/lyhytkurssit/kadentaidot/temppeliruokaa-ja-japanilaista-kotiruokaa/",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+        "buttonLabel": "Ilmoittaudu kurssille",
+        "buttonUrl": "https://ihop.fi/lyhytkurssit/kadentaidot/temppeliruokaa-ja-japanilaista-kotiruokaa/"
       },
       {
         "title": "Temppeliruokakurssi A",

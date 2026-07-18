@@ -255,9 +255,9 @@
         "date": "2026-09-26",
         "dateEnd": "",
         "location": "Lahden Wellamo-opisto, Lahti",
-        "text": "Kuvaile tapahtuma tässä.",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+        "text": "Ilmoittaudu kurssille Wellamo-opiston sivuilta. https://www.wellamo-opisto.fi/",
+        "buttonLabel": "Ilmoittaudu kurssille",
+        "buttonUrl": "https://www.wellamo-opisto.fi/"
       },
       {
         "title": "Japanilaisen kotiruoan kurssi klo 10-13:45.",

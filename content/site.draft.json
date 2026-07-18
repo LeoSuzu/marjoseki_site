@@ -301,8 +301,8 @@
         "dateEnd": "",
         "location": "Helsingin työväenopisto",
         "text": "",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+        "buttonLabel": "Ilmoittaudu kurssille",
+        "buttonUrl": "https://ilmonet.fi/course/H264393"
       }
     ],
     "past": [

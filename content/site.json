@@ -255,18 +255,18 @@
         "date": "2026-09-26",
         "dateEnd": "",
         "location": "Lahden Wellamo-opisto, Lahti",
-        "text": "Kuvaile tapahtuma tässä.",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+        "text": "Ilmoittaudu kurssille Wellamo-opiston sivuilta. https://www.wellamo-opisto.fi/",
+        "buttonLabel": "Ilmoittaudu kurssille",
+        "buttonUrl": "https://www.wellamo-opisto.fi/"
       },
       {
         "title": "Japanilaisen kotiruoan kurssi klo 10-13:45.",
         "date": "2026-10-10",
         "dateEnd": "",
         "location": "Wellamo-opisto, Lahti",
-        "text": "Kuvaile tapahtuma tässä.",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+        "text": "Ilmoittaudu kurssille Wellamo-opiston sivuilta. https://www.wellamo-opisto.fi/",
+        "buttonLabel": "Ilmoittaudu kurssille",
+        "buttonUrl": "https://www.wellamo-opisto.fi/"
       },
       {
         "title": "Aikuinen-lapsi \"Sushia ja eväslaatikoita\" viikonloppukurssi.",
@@ -274,8 +274,8 @@
         "dateEnd": "2026-10-18",
         "location": "Itä-Hämeen opisto, Hartola",
         "text": "https://ihop.fi/lyhytkurssit/kadentaidot/sushia-ja-evaslaatikoita-perheille/",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+        "buttonLabel": "Ilmoittaudu kurssille",
+        "buttonUrl": "https://ihop.fi/lyhytkurssit/kadentaidot/sushia-ja-evaslaatikoita-perheille/"
       },
       {
         "title": "Temppeliruokaa ja japanilaista kotiruokaa -viikonloppukurssi.",
@@ -283,8 +283,8 @@
         "dateEnd": "2026-11-01",
         "location": "Itä-Hämeen opisto",
         "text": "https://ihop.fi/lyhytkurssit/kadentaidot/temppeliruokaa-ja-japanilaista-kotiruokaa/",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+        "buttonLabel": "Ilmoittaudu kurssille",
+        "buttonUrl": "https://ihop.fi/lyhytkurssit/kadentaidot/temppeliruokaa-ja-japanilaista-kotiruokaa/"
       },
       {
         "title": "Temppeliruokakurssi A",
@@ -292,8 +292,8 @@
         "dateEnd": "",
         "location": "Helsingin työväenopisto.",
         "text": "Kuvaile tapahtuma tässä.",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+        "buttonLabel": "Ilmoittaudu kurssille",
+        "buttonUrl": "https://ilmonet.fi/course/H264392"
       },
       {
         "title": "Temppeliruokakurssi B",
@@ -301,8 +301,8 @@
         "dateEnd": "",
         "location": "Helsingin työväenopisto",
         "text": "",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+        "buttonLabel": "Ilmoittaudu kurssille",
+        "buttonUrl": "https://ilmonet.fi/course/H264393"
       }
     ],
     "past": [

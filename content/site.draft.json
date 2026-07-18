@@ -30,7 +30,7 @@
       "secondaryCtaLabel": "",
       "image": "assets/uploads/1784202857550-ehg96i.jpg",
       "imageAlt": "Marjo Seki -muotokuva",
-      "badge": "Uusia ruokakursseja syksylle:\n\nHelsingin työväenopistolla 7.11. Temppeliruokakurssi A sekä 29.11. Temppeliruokakurssi B.\n\nIlmoittautuminen opistolle suoraan."
+      "badge": "Uusia ruokakursseja syksylle:\n\nIlmoittautuminen opistolle suoraan."
     },
     "intro": {
       "title": "Tervehdys",
@@ -291,6 +291,15 @@
         "date": "2026-11-07",
         "dateEnd": "",
         "location": "Helsingin työväenopisto.",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Uusi tuleva tapahtuma",
+        "date": "",
+        "dateEnd": "",
+        "location": "",
         "text": "Kuvaile tapahtuma tässä.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"

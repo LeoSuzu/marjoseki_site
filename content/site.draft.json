@@ -274,8 +274,8 @@
         "dateEnd": "2026-10-18",
         "location": "Itä-Hämeen opisto, Hartola",
         "text": "https://ihop.fi/lyhytkurssit/kadentaidot/sushia-ja-evaslaatikoita-perheille/",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+        "buttonLabel": "Ilmoittaudu kurssille",
+        "buttonUrl": "https://ihop.fi/lyhytkurssit/kadentaidot/sushia-ja-evaslaatikoita-perheille/"
       },
       {
         "title": "Temppeliruokaa ja japanilaista kotiruokaa -viikonloppukurssi.",

@@ -76,7 +76,7 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: -1;
-  background: url("decor/gradient-balls.svg") repeat 0 0 / 600px 600px;
+  background: url("decor/gradient-balls.svg") repeat 0 0 / 480px 480px;
   opacity: 0.55;
   mix-blend-mode: multiply;
 }

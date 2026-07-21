@@ -1,23 +1,45 @@
 :root {
-  --bg: #d5f8cb;
-  --bg-mid: #c3e8bb;
-  --bg-strong: #dce8d8;
-  --panel: rgba(245, 252, 244, 0.96);
-  --panel-soft: rgba(206, 247, 201, 0.5);
-  --panel-solid: #b7e8b0;
-  --text: #3d3229;
-  --text-rgb: 61, 50, 41;
-  --muted: #7a6b5d;
-  --line: rgba(61, 50, 41, 0.12);
-  --accent-rgb: 123, 163, 122;
-  --accent: #7ba37a;
-  --accent-deep-rgb: 74, 110, 72;
-  --accent-deep: #4a6e48;
-  --accent-soft: #9db89c;
+  /* Etupuoli — main theme, from the business card front: soft mint green
+     with floating pink and peach gradient balls. */
+  --bg: #e7f7e0;
+  --bg-mid: #d7eeca;
+  --bg-strong: #f5eeda;
+  --panel: rgba(253, 251, 245, 0.96);
+  --panel-soft: rgba(222, 244, 211, 0.5);
+  --panel-solid: #cdeac0;
+  --text: #383d2d;
+  --text-rgb: 56, 61, 45;
+  --muted: #756a55;
+  --line: rgba(56, 61, 45, 0.12);
+  --accent-rgb: 121, 163, 111;
+  --accent: #79a36f;
+  --accent-deep-rgb: 69, 102, 63;
+  --accent-deep: #45663f;
+  --accent-soft: #aad69c;
   --warm: #c9b396;
   --warm-deep: #8a7256;
-  --gold-rgb: 154, 132, 104;
-  --gold: #9a8468;
+  --gold-rgb: 214, 154, 69;
+  --gold: #d69a45;
+
+  /* Sakura pink and peach — the two gradient-ball hues that recur on both
+     sides of the business card. */
+  --pink-rgb: 230, 175, 190;
+  --pink: #e6afbe;
+  --pink-deep: #c37f95;
+  --pink-soft: #f6dbe3;
+  --peach-rgb: 240, 196, 120;
+  --peach: #f0c478;
+  --peach-deep: #d69a45;
+  --peach-soft: #f8e3b8;
+
+  /* Takapuoli — the card's back-side palette (warm peach-to-pink ground,
+     green gradient balls). Used as an accent, not the base theme. */
+  --tb-bg: #fbefe0;
+  --tb-pink: #f6d9e6;
+  --tb-green: #c9deb3;
+  --tb-green-deep: #6f8f56;
+  --tb-gradient: linear-gradient(135deg, var(--peach) 0%, var(--tb-pink) 55%, var(--tb-green) 100%);
+
   --danger-rgb: 179, 63, 79;
   --danger: #b33f4f;
   --danger-deep: #8f2f1d;
@@ -54,8 +76,8 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: -1;
-  background: url("decor/pattern_II.svg") repeat 0 0 / 640px 640px;
-  opacity: 0.65;
+  background: url("decor/gradient-balls.svg") repeat 0 0 / 600px 600px;
+  opacity: 0.55;
   mix-blend-mode: multiply;
 }
 
@@ -91,7 +113,7 @@ button {
   content: "";
   display: block;
   height: 3px;
-  background: linear-gradient(90deg, #8fa88d 0%, #c9b396 50%, #d4a5a7 100%);
+  background: linear-gradient(90deg, var(--accent-soft) 0%, var(--peach) 50%, var(--pink) 100%);
   opacity: 0;
 }
 
@@ -189,7 +211,8 @@ button {
 .button:focus-visible {
   transform: translateY(-2px);
   box-shadow: 0 20px 44px rgba(var(--accent-deep-rgb), 0.3);
-  background: linear-gradient(135deg, var(--accent-deep) 0%, var(--accent) 100%);
+  background: var(--tb-gradient);
+  color: var(--text);
 }
 
 .button--secondary,
@@ -406,8 +429,8 @@ button {
   padding: 0.9rem 1rem;
   max-width: 14rem;
   border-radius: var(--radius-sm);
-  background: rgba(95, 122, 88, 0.88);
-  color: #f0f7ee;
+  background: linear-gradient(135deg, rgba(var(--peach-rgb), 0.92) 0%, rgba(var(--pink-rgb), 0.92) 100%);
+  color: var(--text);
   box-shadow: var(--shadow);
 }
 

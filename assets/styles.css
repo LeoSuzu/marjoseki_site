@@ -85,13 +85,13 @@ body {
 
 .bg-parallax--far {
   background-image: url("bg/balls-large.svg");
-  background-size: 480px 480px;
+  background-size: 640px 640px;
   opacity: 0.3;
 }
 
 .bg-parallax--mid {
   background-image: url("bg/balls-medium.svg");
-  background-size: 480px 480px;
+  background-size: 560px 560px;
   opacity: 0.45;
 }
 

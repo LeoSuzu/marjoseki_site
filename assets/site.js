@@ -868,9 +868,9 @@ const markActiveNav = () => {
 // with no seam or edge gap; a transformed fixed div would need overscan to
 // avoid exposing blank space at the viewport edge as it moves.
 const PARALLAX_LAYERS = [
-  { cls: "bg-parallax--far", speed: 0.05 },
-  { cls: "bg-parallax--mid", speed: 0.12 },
-  { cls: "bg-parallax--near", speed: 0.22 },
+  { cls: "bg-parallax--far", speed: 0.08 },
+  { cls: "bg-parallax--mid", speed: 0.32 },
+  { cls: "bg-parallax--near", speed: 0.65 },
 ];
 
 const setupParallaxBackground = () => {

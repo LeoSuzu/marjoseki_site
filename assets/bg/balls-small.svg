@@ -17,38 +17,21 @@
     </radialGradient>
   </defs>
 
-  <circle cx="40" cy="35" r="12" fill="url(#ballPink)" />
-  <circle cx="110" cy="60" r="16" fill="url(#ballGreen)" />
-  <circle cx="185" cy="30" r="10" fill="url(#ballPeach)" />
-  <circle cx="255" cy="70" r="14" fill="url(#ballPink)" />
-  <circle cx="325" cy="35" r="11" fill="url(#ballGreen)" />
-  <circle cx="400" cy="65" r="17" fill="url(#ballPeach)" />
-  <circle cx="455" cy="25" r="10" fill="url(#ballPink)" />
+  <circle cx="60" cy="55" r="26" fill="url(#ballPink)" />
+  <circle cx="170" cy="40" r="30" fill="url(#ballGreen)" />
+  <circle cx="280" cy="60" r="24" fill="url(#ballPeach)" />
+  <circle cx="390" cy="45" r="28" fill="url(#ballPink)" />
 
-  <circle cx="65" cy="150" r="15" fill="url(#ballPeach)" />
-  <circle cx="150" cy="125" r="11" fill="url(#ballPink)" />
-  <circle cx="220" cy="165" r="17" fill="url(#ballGreen)" />
-  <circle cx="300" cy="135" r="12" fill="url(#ballPeach)" />
-  <circle cx="380" cy="170" r="14" fill="url(#ballGreen)" />
-  <circle cx="445" cy="130" r="10" fill="url(#ballPink)" />
+  <circle cx="50" cy="190" r="32" fill="url(#ballPeach)" />
+  <circle cx="160" cy="170" r="26" fill="url(#ballPink)" />
+  <circle cx="270" cy="200" r="34" fill="url(#ballGreen)" />
+  <circle cx="380" cy="180" r="28" fill="url(#ballPeach)" />
 
-  <circle cx="30" cy="255" r="14" fill="url(#ballGreen)" />
-  <circle cx="105" cy="235" r="10" fill="url(#ballPeach)" />
-  <circle cx="175" cy="270" r="17" fill="url(#ballPink)" />
-  <circle cx="250" cy="240" r="11" fill="url(#ballGreen)" />
-  <circle cx="330" cy="260" r="15" fill="url(#ballPink)" />
-  <circle cx="410" cy="230" r="12" fill="url(#ballPeach)" />
+  <circle cx="60" cy="320" r="28" fill="url(#ballGreen)" />
+  <circle cx="180" cy="330" r="32" fill="url(#ballPink)" />
+  <circle cx="300" cy="310" r="26" fill="url(#ballPeach)" />
+  <circle cx="410" cy="330" r="30" fill="url(#ballGreen)" />
 
-  <circle cx="55" cy="355" r="16" fill="url(#ballPeach)" />
-  <circle cx="135" cy="335" r="12" fill="url(#ballGreen)" />
-  <circle cx="215" cy="365" r="10" fill="url(#ballPink)" />
-  <circle cx="290" cy="340" r="14" fill="url(#ballPeach)" />
-  <circle cx="365" cy="370" r="11" fill="url(#ballGreen)" />
-  <circle cx="440" cy="330" r="17" fill="url(#ballPink)" />
-
-  <circle cx="80" cy="450" r="11" fill="url(#ballPink)" />
-  <circle cx="160" cy="430" r="15" fill="url(#ballPeach)" />
-  <circle cx="240" cy="460" r="10" fill="url(#ballGreen)" />
-  <circle cx="315" cy="435" r="16" fill="url(#ballPink)" />
-  <circle cx="395" cy="455" r="12" fill="url(#ballGreen)" />
+  <circle cx="120" cy="440" r="30" fill="url(#ballPink)" />
+  <circle cx="330" cy="450" r="28" fill="url(#ballPeach)" />
 </svg>

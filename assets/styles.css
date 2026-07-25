@@ -644,6 +644,20 @@ button {
   position: relative;
 }
 
+/* Book covers are portrait and a fixed 4/3 crop cuts off the artwork, so
+   they get their own rule: full width, height follows the cover's own
+   proportions, capped so an unusually tall scan can't blow out the card or
+   the mobile layout. object-fit: contain (rather than cover, the default
+   for .store-card img) keeps the whole cover visible instead of cropping it. */
+.book-card__image img {
+  width: 100%;
+  aspect-ratio: auto;
+  height: auto;
+  max-height: 420px;
+  object-fit: contain;
+  background: var(--panel-soft);
+}
+
 .book-status {
   position: absolute;
   top: 0.7rem;

@@ -70,15 +70,35 @@ body {
 
 }
 
-body::before {
-  content: "";
+/* 3D-ish parallax background: three gradient-ball layers at different sizes,
+   injected as fixed divs by site.js. Each is scrolled at its own speed via
+   background-position (not transform) so the infinite tile never shows a
+   seam or gap at the viewport edge while scrolling. */
+.bg-parallax {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: -1;
-  background: url("decor/gradient-balls.svg") repeat 0 0 / 480px 480px;
-  opacity: 0.55;
+  background-repeat: repeat;
   mix-blend-mode: multiply;
+}
+
+.bg-parallax--far {
+  background-image: url("bg/balls-large.svg");
+  background-size: 480px 480px;
+  opacity: 0.3;
+}
+
+.bg-parallax--mid {
+  background-image: url("bg/balls-medium.svg");
+  background-size: 480px 480px;
+  opacity: 0.45;
+}
+
+.bg-parallax--near {
+  background-image: url("bg/balls-small.svg");
+  background-size: 480px 480px;
+  opacity: 0.4;
 }
 
 img {

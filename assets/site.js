@@ -862,6 +862,59 @@ const markActiveNav = () => {
   });
 };
 
+// Three gradient-ball layers (far/mid/near, largest to smallest) that scroll
+// at different speeds to read as depth. background-position is animated
+// rather than transform, since a repeating background can shift infinitely
+// with no seam or edge gap; a transformed fixed div would need overscan to
+// avoid exposing blank space at the viewport edge as it moves.
+const PARALLAX_LAYERS = [
+  { cls: "bg-parallax--far", speed: 0.05 },
+  { cls: "bg-parallax--mid", speed: 0.12 },
+  { cls: "bg-parallax--near", speed: 0.22 },
+];
+
+const setupParallaxBackground = () => {
+  if (document.querySelector(".bg-parallax")) {
+    return;
+  }
+
+  // Prepend in reverse so the DOM (and paint order) ends up far, mid, near —
+  // each prepend lands before the previous one, so near objects paint on top.
+  const layers = [...PARALLAX_LAYERS]
+    .reverse()
+    .map(({ cls, speed }) => {
+      const layer = document.createElement("div");
+      layer.className = `bg-parallax ${cls}`;
+      document.body.prepend(layer);
+      return { layer, speed };
+    })
+    .reverse();
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  let ticking = false;
+  const applyScrollOffset = () => {
+    const scrollY = window.scrollY;
+    layers.forEach(({ layer, speed }) => {
+      layer.style.backgroundPositionY = `${scrollY * speed}px`;
+    });
+    ticking = false;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(applyScrollOffset);
+      }
+    },
+    { passive: true },
+  );
+};
+
 const setupMenu = () => {
   const toggle = document.querySelector(".menu-toggle");
   const nav = document.getElementById("site-nav");
@@ -1929,6 +1982,7 @@ const setupEditorEvents = () => {
 };
 
 const boot = async () => {
+  setupParallaxBackground();
   setupMenu();
   markActiveNav();
   setupEditorEvents();

@@ -18,6 +18,16 @@ A small pencil icon (✎) in the header opens a login for a lightweight in-brows
 
 The two order/inquiry forms (`Kirjat`, `Yhteystiedot`) submit through `api/submit-form.js`, which sends email via [Resend](https://resend.com).
 
+## Keeping your local copy in sync
+
+Since Marjo can publish content changes straight to `main` at any time via the edit mode, run `bin/watch-content.sh` in a spare terminal tab while you work locally:
+
+```bash
+bin/watch-content.sh
+```
+
+It polls `origin/main` every 20s and runs a safe `git pull --ff-only` whenever there's a new commit and your working tree is clean — so any content Marjo publishes shows up in your local checkout (and IDE) automatically, without you needing to remember to `git pull`. It never pulls over uncommitted local changes or diverged history; it just logs a warning and waits for the tree to be clean again. Stop it with Ctrl+C. Still `git pull` manually before starting your own edits regardless, in case the watcher wasn't running.
+
 ## Stack
 
 - Static HTML/CSS/JS, no build step, no framework

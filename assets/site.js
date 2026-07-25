@@ -1017,6 +1017,8 @@ const renderHome = (home) => {
       const image = document.createElement("img");
       image.src = item.image;
       image.alt = item.imageAlt || "";
+      image.loading = "lazy";
+      image.decoding = "async";
       figure.append(image);
       gallery.append(figure);
     });
@@ -1059,6 +1061,8 @@ const renderPalvelut = (palvelut, site) => {
       const image = document.createElement("img");
       image.src = course.image;
       image.alt = course.imageAlt || course.title;
+      image.loading = "lazy";
+      image.decoding = "async";
 
       const meta = document.createElement("div");
       meta.className = "store-card__meta";
@@ -1143,6 +1147,8 @@ const createBookCard = (book, meta) => {
   const image = document.createElement("img");
   image.src = book.image;
   image.alt = book.imageAlt || book.title;
+  image.loading = "lazy";
+  image.decoding = "async";
   imageWrap.append(image);
 
   if (book.status) {

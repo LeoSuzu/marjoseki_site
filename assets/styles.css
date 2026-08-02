@@ -17,7 +17,7 @@
   --accent-deep: #45663f;
   --accent-soft: #aad69c;
   --warm: #c9b396;
-  --warm-deep: #8a7256;
+  --warm-deep: #aad69c;
   --gold-rgb: 214, 154, 69;
   --gold: #d69a45;
 
@@ -64,7 +64,7 @@ body {
   margin: 0;
   min-height: 100vh;
   color: var(--text);
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: "Oleo Script", cursive;
   line-height: 1.75;
   position: relative;
 
@@ -109,6 +109,7 @@ img {
 a {
   color: inherit;
   text-decoration: none;
+  font-family: "Oleo Script", cursive;
 }
 
 button {
@@ -157,6 +158,7 @@ button {
   font-size: 0.78rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  font-family: "Oleo Script", cursive;
 }
 
 .brand__eyebrow {
@@ -168,7 +170,6 @@ button {
 }
 
 .brand__name {
-  font-family: "Shippori Mincho", serif;
   font-size: clamp(1.6rem, 2.8vw, 2.1rem);
   font-weight: 600;
 }
@@ -388,7 +389,7 @@ button {
 .hero__copy h1,
 .page-hero h1 {
   margin: 0;
-  font-family: "Shippori Mincho", serif;
+  font-family: "Oleo Script", cursive;
   font-size: clamp(2.4rem, 4.2vw, 4.2rem);
   line-height: 1.08;
   letter-spacing: -0.01em;
@@ -399,7 +400,7 @@ button {
 .panel h2,
 .social-wall h2 {
   margin: 0;
-  font-family: "Shippori Mincho", serif;
+  font-family: "Oleo Script", cursive;
   font-size: clamp(2.2rem, 3.8vw, 3.8rem);
   line-height: 1.08;
   letter-spacing: -0.01em;
@@ -436,7 +437,7 @@ button {
 
 .hero__visual img,
 .page-hero__image img {
-  width: 100%;
+  width: 70%;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   border: 1px solid rgba(255, 255, 255, 0.65);
@@ -590,10 +591,11 @@ button {
 }
 
 .store-card img {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
   border-radius: calc(var(--radius-md) - 6px);
   margin-bottom: 1rem;
+  max-width: 60%;
 }
 
 .store-card__actions {
@@ -813,7 +815,7 @@ body.admin-mode .editable-target:hover {
 .editor-modal__card h2 {
   margin-top: 0;
   margin-bottom: 0.4rem;
-  font-family: "Shippori Mincho", serif;
+  font-family: "Oleo Script", cursive;
   font-size: 2rem;
 }
 

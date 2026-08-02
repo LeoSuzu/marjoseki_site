@@ -320,3 +320,35 @@ content:
                     label: Instagram URL
                     type: string
                     required: false
+                  - name: facebookEmbedUrl
+                    label: Facebook Post URL (embedded)
+                    type: string
+                    required: false
+                  - name: instagramEmbedUrl
+                    label: Instagram Post URL (embedded)
+                    type: string
+                    required: false
+                  - name: reelsTitle
+                    label: Reels Section Title
+                    type: string
+                    required: false
+                  - name: reelsNote
+                    label: Reels Section Note
+                    type: text
+                    required: false
+                  - name: feedUrl
+                    label: Public Feed URL
+                    type: string
+                    required: false
+                  - name: reels
+                    label: Reels & Posts
+                    type: object
+                    list: true
+                    fields:
+                      - name: label
+                        label: Label
+                        type: string
+                        required: false
+                      - name: url
+                        label: Post or Reel URL
+                        type: string

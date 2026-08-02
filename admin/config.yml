@@ -122,6 +122,8 @@ collections:
                   - { label: "Title", name: "title", widget: "string" }
                   - { label: "Payment & Shipping Instructions", name: "instructions", widget: "text" }
                   - { label: "Success Message", name: "successMessage", widget: "string" }
+                  - { label: "Order Section Photo", name: "image", widget: "image", required: false, hint: "Tilauslomakkeen vieressä näkyvä iso kuva." }
+                  - { label: "Order Section Photo Alt", name: "imageAlt", widget: "string", required: false }
           - label: "Yhteystiedot Page"
             name: "yhteystiedot"
             widget: "object"
@@ -183,3 +185,13 @@ collections:
                   - { label: "Instagram URL", name: "instagramUrl", widget: "string", required: false, hint: "Instagram-profiilin osoite. Näkyy 'Avaa Instagram' -painikkeena." }
                   - { label: "Facebook Embed URL", name: "facebookEmbedUrl", widget: "string", required: false, hint: "Liitä tähän linkki yksittäiseen julkiseen Facebook-julkaisuun (esim. https://www.facebook.com/marjo.seki/posts/123...), niin se näkyy upotettuna sivulla. Päivitä linkki uusimpaan julkaisuun aina kun haluat vaihtaa näkyvän postauksen. Julkaisun täytyy olla julkinen, jotta upotus toimii." }
                   - { label: "Instagram Embed URL", name: "instagramEmbedUrl", widget: "string", required: false, hint: "Liitä tähän linkki yksittäiseen Instagram-julkaisuun tai -reeliin (esim. https://www.instagram.com/p/ABC123/), niin se näkyy upotettuna sivulla. Päivitä linkki uusimpaan julkaisuun aina kun haluat vaihtaa näkyvän postauksen." }
+                  - { label: "Reels Section Title", name: "reelsTitle", widget: "string", required: false }
+                  - { label: "Reels Section Note", name: "reelsNote", widget: "text", required: false }
+                  - { label: "Public Feed URL", name: "feedUrl", widget: "string", required: false, hint: "Liitä julkisen Facebook-sivun osoite (esim. https://www.facebook.com/marjo.seki), niin sivun julkaisut näkyvät sivulla automaattisesti ilman erillistä päivitystä. Instagram ei salli koko profiilin upotusta — lisää sieltä yksittäisiä reelejä alle." }
+                  - label: "Reels & Posts"
+                    name: "reels"
+                    widget: "list"
+                    required: false
+                    fields:
+                      - { label: "Label", name: "label", widget: "string", required: false }
+                      - { label: "Post or Reel URL", name: "url", widget: "string", hint: "Kopioi linkki selaimen osoiteriviltä, esim. https://www.instagram.com/reel/ABC123/ tai https://www.facebook.com/marjo.seki/videos/123456/" }

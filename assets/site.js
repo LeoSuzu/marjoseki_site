@@ -23,6 +23,11 @@ const setByPath = (object, path, value) => {
   const last = parts.pop();
   const target = parts.reduce((current, segment) => {
     const key = /^\d+$/.test(segment) ? Number(segment) : segment;
+    // Content keys added after a site.json was published won't have their
+    // parent object yet; create it rather than throwing.
+    if (current[key] == null) {
+      current[key] = {};
+    }
     return current[key];
   }, object);
 
@@ -43,7 +48,12 @@ const text = (id, value, meta) => {
     return;
   }
 
-  node.textContent = value || "";
+  // An absent key (older published site.json, before this field existed) keeps
+  // whatever the markup ships as a default. An empty string is different: the
+  // owner cleared it on purpose, so it really does blank out.
+  if (value !== undefined) {
+    node.textContent = value || "";
+  }
   if (meta) {
     registerEditable(node, meta);
   }
@@ -55,8 +65,12 @@ const setImage = (id, src, alt, meta) => {
     return;
   }
 
-  node.src = src || "";
-  node.alt = alt || "";
+  if (src !== undefined) {
+    node.src = src || "";
+  }
+  if (alt !== undefined) {
+    node.alt = alt || "";
+  }
   if (meta) {
     registerEditable(node, meta);
   }
@@ -215,6 +229,8 @@ const uploadImageBlob = async (blob) => {
 
 // Handles a freshly picked file and legacy data-URL values (e.g. an older
 // localStorage draft) the same way, so both end up as a real uploaded file.
+// Used as the fallback when the fit-and-crop tool can't render the source
+// (a broken URL, or a cross-origin image that would taint the canvas).
 const resolveImageFieldValue = async (file, currentUrlValue) => {
   let sourceBlob = file || null;
   if (!sourceBlob && currentUrlValue && currentUrlValue.startsWith("data:")) {
@@ -225,6 +241,250 @@ const resolveImageFieldValue = async (file, currentUrlValue) => {
   }
   const resized = await resizeImageBlob(sourceBlob);
   return uploadImageBlob(resized);
+};
+
+// The shape each image slot occupies on the page. The fit-and-crop stage uses
+// the same numbers as the CSS aspect-ratio rules, so the frame the owner sees
+// while cropping is exactly the frame the visitor sees.
+const IMAGE_ASPECTS = {
+  hero: 4 / 5,
+  gallery: 4 / 3,
+  course: 4 / 3,
+  bookCover: 3 / 4,
+  formPhoto: 4 / 3,
+};
+
+const clampNumber = (value, min, max) => Math.min(max, Math.max(min, value));
+
+const loadImageElement = (src) =>
+  new Promise((resolve, reject) => {
+    const image = new Image();
+    image.decoding = "async";
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Kuvaa ei voitu ladata."));
+    image.src = src;
+  });
+
+const canvasToBlob = (canvas) =>
+  new Promise((resolve, reject) => {
+    try {
+      // Throws synchronously (SecurityError) if the canvas was tainted by a
+      // cross-origin source, so the try has to wrap the call itself.
+      canvas.toBlob(
+        (blob) => (blob ? resolve(blob) : reject(new Error("Kuvan käsittely epäonnistui."))),
+        "image/jpeg",
+        0.82,
+      );
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+// Fit-and-crop control: shows the picture inside a box shaped like its slot on
+// the page, lets the owner drag and zoom to choose what stays visible, then
+// renders exactly that framing to a canvas before upload. Nothing is uploaded
+// until the owner accepts the modal, and an untouched image is never
+// re-uploaded — the stored path is left alone.
+const createImageFitControl = ({ aspect }) => {
+  const element = document.createElement("div");
+  element.className = "image-fit";
+  element.hidden = true;
+
+  const stage = document.createElement("div");
+  stage.className = "image-fit__stage";
+  stage.style.aspectRatio = String(aspect);
+
+  const preview = document.createElement("img");
+  preview.className = "image-fit__image";
+  preview.alt = "Rajauksen esikatselu";
+  stage.append(preview);
+
+  const controls = document.createElement("div");
+  controls.className = "image-fit__controls";
+
+  const zoom = document.createElement("input");
+  zoom.type = "range";
+  zoom.min = "100";
+  zoom.max = "300";
+  zoom.step = "1";
+  zoom.value = "100";
+  zoom.setAttribute("aria-label", "Lähennä kuvaa");
+
+  const recenter = document.createElement("button");
+  recenter.type = "button";
+  recenter.className = "button button--ghost";
+  recenter.textContent = "Keskitä";
+
+  controls.append(zoom, recenter);
+
+  const hint = document.createElement("p");
+  hint.className = "image-fit__hint";
+  hint.textContent =
+    "Raahaa kuvaa ja säädä zoomia. Laatikon rajaus on tasan se alue, joka näkyy sivulla — kuva pienennetään ja rajataan vasta kun tallennat.";
+
+  element.append(stage, controls, hint);
+
+  const state = {
+    image: null,
+    offsetX: 0,
+    offsetY: 0,
+    scale: 1,
+    stageWidth: 0,
+    stageHeight: 0,
+    adjusted: false,
+  };
+
+  const layout = () => {
+    if (!state.image) {
+      return;
+    }
+    const stageWidth = stage.clientWidth;
+    const stageHeight = stageWidth / aspect;
+    const naturalWidth = state.image.naturalWidth;
+    const naturalHeight = state.image.naturalHeight;
+    if (!stageWidth || !naturalWidth || !naturalHeight) {
+      return;
+    }
+
+    // Start from a "cover" fit so the frame is always filled, then apply zoom.
+    const cover = Math.max(stageWidth / naturalWidth, stageHeight / naturalHeight);
+    const scale = cover * (Number(zoom.value) / 100);
+    const width = naturalWidth * scale;
+    const height = naturalHeight * scale;
+
+    // Clamp panning so the picture can never be dragged away from an edge and
+    // leave the frame empty.
+    const maxX = Math.max(0, (width - stageWidth) / 2);
+    const maxY = Math.max(0, (height - stageHeight) / 2);
+    state.offsetX = clampNumber(state.offsetX, -maxX, maxX);
+    state.offsetY = clampNumber(state.offsetY, -maxY, maxY);
+    state.scale = scale;
+    state.stageWidth = stageWidth;
+    state.stageHeight = stageHeight;
+
+    preview.style.width = `${width}px`;
+    preview.style.height = `${height}px`;
+    preview.style.transform = `translate(-50%, -50%) translate(${state.offsetX}px, ${state.offsetY}px)`;
+  };
+
+  zoom.addEventListener("input", () => {
+    state.adjusted = true;
+    layout();
+  });
+
+  recenter.addEventListener("click", () => {
+    state.adjusted = true;
+    zoom.value = "100";
+    state.offsetX = 0;
+    state.offsetY = 0;
+    layout();
+  });
+
+  let pointerId = null;
+  let dragStart = null;
+
+  stage.addEventListener("pointerdown", (event) => {
+    if (!state.image) {
+      return;
+    }
+    pointerId = event.pointerId;
+    dragStart = { x: event.clientX, y: event.clientY, offsetX: state.offsetX, offsetY: state.offsetY };
+    stage.setPointerCapture(pointerId);
+    stage.classList.add("is-dragging");
+  });
+
+  stage.addEventListener("pointermove", (event) => {
+    if (pointerId !== event.pointerId || !dragStart) {
+      return;
+    }
+    state.adjusted = true;
+    state.offsetX = dragStart.offsetX + (event.clientX - dragStart.x);
+    state.offsetY = dragStart.offsetY + (event.clientY - dragStart.y);
+    layout();
+  });
+
+  const endDrag = (event) => {
+    if (pointerId !== event.pointerId) {
+      return;
+    }
+    stage.releasePointerCapture?.(pointerId);
+    stage.classList.remove("is-dragging");
+    pointerId = null;
+    dragStart = null;
+  };
+
+  stage.addEventListener("pointerup", endDrag);
+  stage.addEventListener("pointercancel", endDrag);
+
+  window.addEventListener("resize", layout);
+
+  const setSource = async (src, { markAdjusted = false } = {}) => {
+    if (!src) {
+      state.image = null;
+      element.hidden = true;
+      return false;
+    }
+    try {
+      const image = await loadImageElement(src);
+      state.image = image;
+      state.offsetX = 0;
+      state.offsetY = 0;
+      state.adjusted = markAdjusted;
+      zoom.value = "100";
+      preview.src = src;
+      element.hidden = false;
+      layout();
+      return true;
+    } catch {
+      state.image = null;
+      element.hidden = true;
+      return false;
+    }
+  };
+
+  const exportBlob = async () => {
+    if (!state.image) {
+      return null;
+    }
+    layout();
+    const { image, scale, stageWidth, stageHeight, offsetX, offsetY } = state;
+    if (!scale || !stageWidth) {
+      return null;
+    }
+
+    // The visible window, expressed back in the source image's own pixels.
+    const cropWidth = stageWidth / scale;
+    const cropHeight = stageHeight / scale;
+    const sourceX = image.naturalWidth / 2 - offsetX / scale - cropWidth / 2;
+    const sourceY = image.naturalHeight / 2 - offsetY / scale - cropHeight / 2;
+
+    const outputScale = Math.min(1, 1600 / Math.max(cropWidth, cropHeight));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(cropWidth * outputScale));
+    canvas.height = Math.max(1, Math.round(cropHeight * outputScale));
+
+    const context = canvas.getContext("2d");
+    // JPEG has no alpha, so a transparent PNG or SVG would come out black
+    // without this.
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, sourceX, sourceY, cropWidth, cropHeight, 0, 0, canvas.width, canvas.height);
+
+    try {
+      return await canvasToBlob(canvas);
+    } catch {
+      return null;
+    }
+  };
+
+  return {
+    element,
+    setSource,
+    exportBlob,
+    hasImage: () => Boolean(state.image),
+    isAdjusted: () => state.adjusted,
+    relayout: layout,
+  };
 };
 
 const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAction }) => {
@@ -304,15 +564,68 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
       upload.accept = "image/*";
       wrap.append(upload);
 
-      if (field.value) {
-        const preview = document.createElement("img");
-        preview.className = "editor-field__preview";
-        preview.src = field.value;
-        preview.alt = "Esikatselu";
-        wrap.append(preview);
-      }
+      const fit = createImageFitControl({ aspect: field.aspect || IMAGE_ASPECTS.gallery });
+      wrap.append(fit.element);
 
-      refs[field.name] = { urlInput, upload };
+      let pickedFile = null;
+      let objectUrl = null;
+
+      const showFile = (file) => {
+        if (objectUrl) {
+          URL.revokeObjectURL(objectUrl);
+        }
+        objectUrl = URL.createObjectURL(file);
+        // A newly picked file always counts as adjusted: it must be rendered
+        // through the crop stage rather than uploaded raw.
+        fit.setSource(objectUrl, { markAdjusted: true });
+      };
+
+      upload.addEventListener("change", () => {
+        pickedFile = upload.files[0] || null;
+        if (pickedFile) {
+          showFile(pickedFile);
+        } else {
+          fit.setSource(urlInput.value.trim());
+        }
+      });
+
+      urlInput.addEventListener("change", () => {
+        if (!pickedFile) {
+          fit.setSource(urlInput.value.trim(), { markAdjusted: true });
+        }
+      });
+
+      refs[field.name] = {
+        mount: () => {
+          if (field.value) {
+            fit.setSource(field.value);
+          }
+        },
+        cleanup: () => {
+          if (objectUrl) {
+            URL.revokeObjectURL(objectUrl);
+            objectUrl = null;
+          }
+        },
+        resolve: async (onUploadStart) => {
+          const url = urlInput.value.trim();
+          const needsWork = Boolean(pickedFile) || url.startsWith("data:") || fit.isAdjusted();
+          if (!needsWork) {
+            // Untouched: keep the stored path so saving a card doesn't churn a
+            // fresh copy of every image already on the site.
+            return url;
+          }
+
+          onUploadStart();
+          const blob = await fit.exportBlob();
+          if (blob) {
+            return uploadImageBlob(blob);
+          }
+          // The crop stage couldn't render it (broken or cross-origin source);
+          // fall back to the plain resize-and-upload path.
+          return resolveImageFieldValue(pickedFile, url);
+        },
+      };
     } else {
       const input = document.createElement("input");
       input.type = field.type === "password" ? "password" : "text";
@@ -371,6 +684,14 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
   overlay.append(card);
   document.body.append(overlay);
 
+  // The fit-and-crop stage measures itself, so it can only lay out once the
+  // modal is actually in the document.
+  Object.values(refs).forEach((ref) => ref?.mount?.());
+
+  overlay.addEventListener("editor-modal-cleanup", () => {
+    Object.values(refs).forEach((ref) => ref?.cleanup?.());
+  });
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     errorNode.hidden = true;
@@ -383,11 +704,9 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
         if (field.type === "checkbox") {
           values[field.name] = refs[field.name].checked;
         } else if (field.type === "image") {
-          const { urlInput, upload } = refs[field.name];
-          if (upload.files[0] || urlInput.value.trim().startsWith("data:")) {
-            submitButton.textContent = "Ladataan kuvaa…";
-          }
-          values[field.name] = await resolveImageFieldValue(upload.files[0], urlInput.value.trim());
+          values[field.name] = await refs[field.name].resolve(() => {
+            submitButton.textContent = "Rajataan ja ladataan kuvaa…";
+          });
         } else {
           values[field.name] = refs[field.name].value.trim();
         }
@@ -419,7 +738,14 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
 };
 
 const closeModal = () => {
-  document.querySelector(".editor-modal")?.remove();
+  const modal = document.querySelector(".editor-modal");
+  if (!modal) {
+    return;
+  }
+  // Lets a field release anything it holds (object URLs from picked files)
+  // before the node goes away.
+  modal.dispatchEvent(new CustomEvent("editor-modal-cleanup"));
+  modal.remove();
 };
 
 const updateAdminMessage = (message) => {
@@ -461,6 +787,7 @@ const openImageEditor = (meta) => {
         name: "image",
         label: "Kuva",
         type: "image",
+        aspect: meta.aspect || IMAGE_ASPECTS.hero,
         value: getByPath(state.data, meta.path) || "",
       },
       {
@@ -510,7 +837,13 @@ const openObjectEditor = (meta, schema) => {
           return { error };
         }
       }
-      setByPath(state.data, meta.path, values);
+      // Merge rather than replace: two editors can target the same object with
+      // different schemas (the social links card and the feed card both edit
+      // site.tapahtumia.social), and a plain overwrite would drop whatever the
+      // other one owns.
+      const existing = getByPath(state.data, meta.path);
+      const isPlainObject = existing && typeof existing === "object" && !Array.isArray(existing);
+      setByPath(state.data, meta.path, isPlainObject ? { ...existing, ...values } : values);
       saveToBrowser();
       renderPage();
     },
@@ -551,7 +884,7 @@ const openEditor = (meta) => {
 
   if (meta.kind === "gallery-image") {
     openObjectEditor(meta, [
-      { name: "image", label: "Kuva", type: "image" },
+      { name: "image", label: "Kuva", type: "image", aspect: IMAGE_ASPECTS.gallery },
       { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
     ]);
     return;
@@ -614,7 +947,60 @@ const openEditor = (meta) => {
       { name: "note", label: "Teksti", type: "textarea" },
       { name: "facebookUrl", label: "Facebook-osoite", type: "text" },
       { name: "instagramUrl", label: "Instagram-osoite", type: "text" },
+      {
+        name: "facebookEmbedUrl",
+        label: "Facebook-julkaisun linkki (näkyy upotettuna)",
+        type: "text",
+        help: "Liitä linkki yksittäiseen julkiseen julkaisuun tai reeliin.",
+      },
+      {
+        name: "instagramEmbedUrl",
+        label: "Instagram-julkaisun linkki (näkyy upotettuna)",
+        type: "text",
+        help: "Liitä linkki yksittäiseen julkaisuun tai reeliin, esim. https://www.instagram.com/reel/ABC123/",
+      },
     ]);
+    return;
+  }
+
+  if (meta.kind === "social-feed") {
+    openObjectEditor(meta, [
+      { name: "reelsTitle", label: "Osion otsikko", type: "text" },
+      { name: "reelsNote", label: "Osion teksti", type: "textarea" },
+      {
+        name: "feedUrl",
+        label: "Julkisen tilin osoite (koko syöte)",
+        type: "text",
+        help: "Liitä Facebook-sivun osoite, esim. https://www.facebook.com/marjo.seki — sivun julkaisut päivittyvät tähän automaattisesti. Instagram ei salli koko profiilin upotusta, joten lisää sieltä yksittäisiä reelejä alle.",
+      },
+    ]);
+    return;
+  }
+
+  if (meta.kind === "reel") {
+    openObjectEditor(
+      {
+        ...meta,
+        validate: (values) => {
+          if (!values.url) {
+            return "Julkaisun linkki on pakollinen.";
+          }
+          if (!resolveSocialEmbed(values.url)) {
+            return "Linkin pitää olla https-osoite Facebookiin tai Instagramiin.";
+          }
+          return null;
+        },
+      },
+      [
+        { name: "label", label: "Otsikko", type: "text" },
+        {
+          name: "url",
+          label: "Julkaisun tai reelin linkki",
+          type: "text",
+          help: "Kopioi linkki selaimen osoiteriviltä, esim. https://www.instagram.com/reel/ABC123/ tai https://www.facebook.com/marjo.seki/videos/123456/",
+        },
+      ],
+    );
     return;
   }
 
@@ -623,7 +1009,7 @@ const openEditor = (meta) => {
       { name: "title", label: "Kirjan nimi", type: "text" },
       { name: "status", label: "Tila", type: "select", options: ["Myynnissä", "Loppuunmyyty", "Tulossa"] },
       { name: "text", label: "Kuvaus", type: "textarea" },
-      { name: "image", label: "Kansikuva", type: "image" },
+      { name: "image", label: "Kansikuva", type: "image", aspect: IMAGE_ASPECTS.bookCover },
       { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
     ]);
     return;
@@ -639,7 +1025,7 @@ const openEditor = (meta) => {
       { name: "buyUrl", label: "Painikkeen linkki", type: "text" },
       { name: "infoLabel", label: "Tarkemmat tiedot -painikkeen teksti", type: "text" },
       { name: "infoText", label: "Tarkemmat tiedot -ikkunan teksti", type: "textarea", rows: 6 },
-      { name: "image", label: "Kurssin kuva", type: "image" },
+      { name: "image", label: "Kurssin kuva", type: "image", aspect: IMAGE_ASPECTS.course },
       { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
     ]);
   }
@@ -862,16 +1248,28 @@ const markActiveNav = () => {
   });
 };
 
-// Three gradient-ball layers (far/mid/near, largest to smallest) that scroll
-// at different speeds to read as depth. background-position is animated
-// rather than transform, since a repeating background can shift infinitely
-// with no seam or edge gap; a transformed fixed div would need overscan to
-// avoid exposing blank space at the viewport edge as it moves.
+// Three gradient-ball layers (far/mid/near, largest to smallest). Each one
+// drifts constantly to the upper right at its own slow speed, and additionally
+// shifts with scroll, so the layers separate into depth.
+//
+// background-position is animated rather than transform, since a repeating
+// background can shift infinitely with no seam or edge gap; a transformed fixed
+// div would need overscan to avoid exposing blank space at the viewport edge.
+// `tile` is that repeat period (it must equal the layer's background-size in
+// CSS) — wrapping the offset modulo the tile makes the loop mathematically
+// endless: the pattern is identical at 0 and at `tile`, so there is no point at
+// which a viewer could see the drift restart.
+//
+// drift is px per second; +x moves the balls right, -y moves them up.
 const PARALLAX_LAYERS = [
-  { cls: "bg-parallax--far", speed: 0.08 },
-  { cls: "bg-parallax--mid", speed: 0.32 },
-  { cls: "bg-parallax--near", speed: 0.65 },
+  { cls: "bg-parallax--far", tile: 640, scroll: 0.08, driftX: 3.2, driftY: -2 },
+  { cls: "bg-parallax--mid", tile: 560, scroll: 0.32, driftX: 5.4, driftY: -3.4 },
+  { cls: "bg-parallax--near", tile: 480, scroll: 0.65, driftX: 8.2, driftY: -5.2 },
 ];
+
+// Keeps the offset inside [0, tile) for negative values too, so the wrap is
+// invisible in both directions.
+const wrapOffset = (value, tile) => ((value % tile) + tile) % tile;
 
 const setupParallaxBackground = () => {
   if (document.querySelector(".bg-parallax")) {
@@ -882,37 +1280,95 @@ const setupParallaxBackground = () => {
   // each prepend lands before the previous one, so near objects paint on top.
   const layers = [...PARALLAX_LAYERS]
     .reverse()
-    .map(({ cls, speed }) => {
+    .map((config) => {
       const layer = document.createElement("div");
-      layer.className = `bg-parallax ${cls}`;
+      layer.className = `bg-parallax ${config.cls}`;
       document.body.prepend(layer);
-      return { layer, speed };
+      return { ...config, layer };
     })
     .reverse();
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    return;
-  }
+  // Seconds of drift accumulated so far. Kept as our own accumulator rather
+  // than reading the raw clock so that pausing (hidden tab) freezes the
+  // animation instead of letting it jump ahead.
+  let driftSeconds = 0;
 
-  let ticking = false;
-  const applyScrollOffset = () => {
+  const paint = () => {
     const scrollY = window.scrollY;
-    layers.forEach(({ layer, speed }) => {
-      layer.style.backgroundPositionY = `${scrollY * speed}px`;
+    layers.forEach(({ layer, tile, scroll, driftX, driftY }) => {
+      const x = wrapOffset(driftSeconds * driftX, tile);
+      const y = wrapOffset(driftSeconds * driftY + scrollY * scroll, tile);
+      layer.style.backgroundPosition = `${x}px ${y}px`;
     });
-    ticking = false;
   };
 
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let frameId = null;
+  let lastFrame = null;
+
+  const step = (now) => {
+    if (lastFrame !== null) {
+      // Clamp so a long pause (tab in the background, laptop asleep) resumes
+      // from where it stopped rather than teleporting the pattern.
+      driftSeconds += Math.min((now - lastFrame) / 1000, 0.1);
+    }
+    lastFrame = now;
+    paint();
+    frameId = requestAnimationFrame(step);
+  };
+
+  const stopDrift = () => {
+    if (frameId !== null) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    }
+    lastFrame = null;
+  };
+
+  const startDrift = () => {
+    if (frameId === null && !reduceMotion.matches && !document.hidden) {
+      frameId = requestAnimationFrame(step);
+    }
+  };
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      stopDrift();
+    } else {
+      startDrift();
+    }
+  });
+
+  reduceMotion.addEventListener("change", () => {
+    if (reduceMotion.matches) {
+      stopDrift();
+      paint();
+    } else {
+      startDrift();
+    }
+  });
+
+  // Scroll repaints through the same painter. This runs even while the drift
+  // loop is active: it costs three style writes, and it keeps the parallax
+  // correct if the browser throttles animation frames during a scroll or when
+  // motion is reduced and the loop is not running at all.
+  let ticking = false;
   window.addEventListener(
     "scroll",
     () => {
       if (!ticking) {
         ticking = true;
-        requestAnimationFrame(applyScrollOffset);
+        requestAnimationFrame(() => {
+          paint();
+          ticking = false;
+        });
       }
     },
     { passive: true },
   );
+
+  paint();
+  startDrift();
 };
 
 const setupMenu = () => {
@@ -959,6 +1415,7 @@ const renderHome = (home) => {
     kind: "image",
     path: "site.home.hero.image",
     altPath: "site.home.hero.imageAlt",
+    aspect: IMAGE_ASPECTS.hero,
     title: "Muokkaa pääkuvaa",
   });
   text("home-hero-badge", home.hero.badge, {
@@ -1039,6 +1496,7 @@ const renderPalvelut = (palvelut, site) => {
     kind: "image",
     path: "site.palvelut.image",
     altPath: "site.palvelut.imageAlt",
+    aspect: IMAGE_ASPECTS.hero,
     title: "Muokkaa Palvelut-sivun kuvaa",
   });
 
@@ -1196,6 +1654,7 @@ const renderKirjat = (kirjat, site) => {
     kind: "image",
     path: "site.kirjat.image",
     altPath: "site.kirjat.imageAlt",
+    aspect: IMAGE_ASPECTS.hero,
     title: "Muokkaa Kirjat-sivun kuvaa",
   });
 
@@ -1225,6 +1684,13 @@ const renderKirjat = (kirjat, site) => {
     path: "site.kirjat.order.instructions",
     title: "Muokkaa maksu- ja toimitusohjeita",
     rows: 6,
+  });
+  setImage("kirjat-order-image", kirjat.order.image, kirjat.order.imageAlt, {
+    kind: "image",
+    path: "site.kirjat.order.image",
+    altPath: "site.kirjat.order.imageAlt",
+    aspect: IMAGE_ASPECTS.formPhoto,
+    title: "Muokkaa tilausosion kuvaa",
   });
 
   const select = document.getElementById("book-order-select");
@@ -1272,6 +1738,7 @@ const renderYhteystiedot = (yhteystiedot, site) => {
     kind: "image",
     path: "site.yhteystiedot.image",
     altPath: "site.yhteystiedot.imageAlt",
+    aspect: IMAGE_ASPECTS.hero,
     title: "Muokkaa Yhteystiedot-sivun kuvaa",
   });
 
@@ -1312,6 +1779,7 @@ const renderYhteystiedot = (yhteystiedot, site) => {
     kind: "image",
     path: "site.yhteystiedot.inquiry.image",
     altPath: "site.yhteystiedot.inquiry.imageAlt",
+    aspect: IMAGE_ASPECTS.formPhoto,
     title: "Muokkaa tilaisuuskyselyn kuvaa",
   });
 
@@ -1451,31 +1919,161 @@ const createEventCard = (event, meta, isPast = false) => {
   return article;
 };
 
-const buildFacebookEmbedUrl = (postUrl) => {
-  if (!postUrl) {
+// Turns any pasted Facebook or Instagram address into the right official embed,
+// so the owner only ever has to copy a link from the address bar:
+//
+//   reel / video  -> the vertical player          (kind: "reel")
+//   single post   -> the post card                (kind: "post")
+//   page address  -> that page's public timeline  (kind: "feed")
+//
+// Instagram has no public embed for a whole profile — only single posts and
+// reels — so a bare Instagram profile address resolves to kind "profile" with
+// no embed, and the card says so plainly instead of rendering a dead frame.
+const resolveSocialEmbed = (rawUrl) => {
+  if (!rawUrl || typeof rawUrl !== "string") {
     return null;
   }
-  const trimmed = postUrl.trim();
-  if (!/^https:\/\/(www\.)?(facebook\.com|fb\.watch)\//i.test(trimmed)) {
+  const trimmed = rawUrl.trim();
+
+  let parsed;
+  try {
+    parsed = new URL(trimmed);
+  } catch {
     return null;
   }
-  const params = new URLSearchParams({
-    href: trimmed,
-    show_text: "true",
-    width: "500",
-  });
-  return `https://www.facebook.com/plugins/post.php?${params.toString()}`;
+  if (parsed.protocol !== "https:") {
+    return null;
+  }
+
+  const host = parsed.hostname.replace(/^www\./i, "").toLowerCase();
+  const path = parsed.pathname;
+
+  if (host === "instagram.com") {
+    const match = path.match(/^\/(p|reel|reels|tv)\/([^/?#]+)/i);
+    if (match) {
+      const type = match[1].toLowerCase() === "reels" ? "reel" : match[1].toLowerCase();
+      return {
+        source: "instagram",
+        kind: type === "p" ? "post" : "reel",
+        url: trimmed,
+        embedUrl: `https://www.instagram.com/${type}/${match[2]}/embed`,
+      };
+    }
+    return { source: "instagram", kind: "profile", url: trimmed, embedUrl: null };
+  }
+
+  if (host === "facebook.com" || host === "m.facebook.com" || host === "fb.watch") {
+    const isVideo =
+      host === "fb.watch" ||
+      /^\/(reel|reels|videos|watch)(\/|$)/i.test(path) ||
+      /\/(reel|reels|videos)\//i.test(path) ||
+      parsed.searchParams.has("v");
+
+    if (isVideo) {
+      const params = new URLSearchParams({ href: trimmed, show_text: "false" });
+      return {
+        source: "facebook",
+        kind: "reel",
+        url: trimmed,
+        embedUrl: `https://www.facebook.com/plugins/video.php?${params.toString()}`,
+      };
+    }
+
+    if (/\/(posts|photos|permalink\.php|story\.php)/i.test(path)) {
+      const params = new URLSearchParams({ href: trimmed, show_text: "true", width: "500" });
+      return {
+        source: "facebook",
+        kind: "post",
+        url: trimmed,
+        embedUrl: `https://www.facebook.com/plugins/post.php?${params.toString()}`,
+      };
+    }
+
+    // Anything else on facebook.com is treated as a page or profile address,
+    // which the page plugin renders as a live public timeline.
+    const params = new URLSearchParams({
+      href: trimmed,
+      tabs: "timeline",
+      width: "500",
+      height: "700",
+      small_header: "false",
+      adapt_container_width: "true",
+      hide_cover: "false",
+      show_facepile: "true",
+    });
+    return {
+      source: "facebook",
+      kind: "feed",
+      url: trimmed,
+      embedUrl: `https://www.facebook.com/plugins/page.php?${params.toString()}`,
+    };
+  }
+
+  return null;
 };
 
-const buildInstagramEmbedUrl = (postUrl) => {
-  if (!postUrl) {
-    return null;
+const SOCIAL_SOURCE_LABELS = {
+  facebook: "Facebook",
+  instagram: "Instagram",
+};
+
+const createReelCard = (entry, meta) => {
+  const embed = resolveSocialEmbed(entry.url);
+  const article = document.createElement("article");
+  article.className = `reel-card ${embed ? `reel-card--${embed.source}` : ""}`.trim();
+  if (embed) {
+    article.dataset.embedKind = embed.kind;
   }
-  const trimmed = postUrl.trim();
-  if (!/^https:\/\/(www\.)?instagram\.com\/(p|reel|tv)\//i.test(trimmed)) {
-    return null;
+  if (meta) {
+    registerEditable(article, meta);
   }
-  return `${trimmed.replace(/\/?(\?.*)?$/, "")}/embed`;
+
+  const label = document.createElement("p");
+  label.className = "reel-card__label";
+
+  const name = document.createElement("span");
+  name.textContent = entry.label || (embed ? SOCIAL_SOURCE_LABELS[embed.source] : "Julkaisu");
+  label.append(name);
+
+  if (embed) {
+    const source = document.createElement("span");
+    source.className = "reel-card__source";
+    source.textContent = SOCIAL_SOURCE_LABELS[embed.source];
+    label.append(source);
+  }
+
+  article.append(label);
+
+  if (embed && embed.embedUrl) {
+    const frame = document.createElement("iframe");
+    frame.className = "reel-card__frame";
+    frame.src = embed.embedUrl;
+    frame.title = `${name.textContent} — upotus`;
+    frame.loading = "lazy";
+    frame.referrerPolicy = "strict-origin-when-cross-origin";
+    frame.allow = "fullscreen; encrypted-media; picture-in-picture; clipboard-write";
+    frame.allowFullscreen = true;
+    article.append(frame);
+  } else {
+    const fallback = document.createElement("p");
+    fallback.className = "reel-card__fallback";
+    fallback.textContent = embed
+      ? "Instagram näyttää vain yksittäisiä julkaisuja ja reelejä. Liitä linkki yksittäiseen reeliin tai julkaisuun (esim. https://www.instagram.com/reel/ABC123/)."
+      : "Liitä julkinen Facebook- tai Instagram-linkki, niin julkaisu näkyy tässä. Kopioi linkki suoraan selaimen osoiteriviltä.";
+    article.append(fallback);
+  }
+
+  if (entry.url) {
+    const link = document.createElement("a");
+    link.className = "button button--secondary";
+    link.href = entry.url;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = "Avaa julkaisu";
+    article.append(link);
+  }
+
+  return article;
 };
 
 const createSocialEmbedCard = ({ label, url, embedUrl, themeClass }) => {
@@ -1534,14 +2132,17 @@ const renderTapahtumia = (tapahtumia, site) => {
     kind: "image",
     path: "site.tapahtumia.image",
     altPath: "site.tapahtumia.imageAlt",
+    aspect: IMAGE_ASPECTS.hero,
     title: "Muokkaa Tapahtumia-sivun kuvaa",
   });
-  text("social-title", tapahtumia.social.title, {
+  const social = tapahtumia.social || {};
+
+  text("social-title", social.title, {
     kind: "text",
     path: "site.tapahtumia.social.title",
     title: "Muokkaa sosiaalisen median otsikkoa",
   });
-  text("social-note", tapahtumia.social.note, {
+  text("social-note", social.note, {
     kind: "text",
     path: "site.tapahtumia.social.note",
     title: "Muokkaa sosiaalisen median tekstiä",
@@ -1615,28 +2216,94 @@ const renderTapahtumia = (tapahtumia, site) => {
       title: "Muokkaa sosiaalisen median linkkejä",
     });
 
-    if (tapahtumia.social.facebookUrl || tapahtumia.social.facebookEmbedUrl) {
+    if (social.facebookUrl || social.facebookEmbedUrl) {
       embeds.append(
         createSocialEmbedCard({
           label: "Facebook",
-          url: tapahtumia.social.facebookUrl,
-          embedUrl: buildFacebookEmbedUrl(tapahtumia.social.facebookEmbedUrl),
+          url: social.facebookUrl,
+          embedUrl: resolveSocialEmbed(social.facebookEmbedUrl)?.embedUrl || null,
           themeClass: "social-embed-card--facebook",
         }),
       );
     }
 
-    if (tapahtumia.social.instagramUrl || tapahtumia.social.instagramEmbedUrl) {
+    if (social.instagramUrl || social.instagramEmbedUrl) {
       embeds.append(
         createSocialEmbedCard({
           label: "Instagram",
-          url: tapahtumia.social.instagramUrl,
-          embedUrl:
-            buildInstagramEmbedUrl(tapahtumia.social.instagramEmbedUrl) ||
-            tapahtumia.social.instagramEmbedUrl,
+          url: social.instagramUrl,
+          embedUrl: resolveSocialEmbed(social.instagramEmbedUrl)?.embedUrl || null,
           themeClass: "social-embed-card--instagram",
         }),
       );
+    }
+  }
+
+  text("reels-title", social.reelsTitle, {
+    kind: "text",
+    path: "site.tapahtumia.social.reelsTitle",
+    title: "Muokkaa reel-osion otsikkoa",
+  });
+  text("reels-note", social.reelsNote, {
+    kind: "text",
+    path: "site.tapahtumia.social.reelsNote",
+    title: "Muokkaa reel-osion tekstiä",
+    rows: 4,
+  });
+
+  // A pasted public page address renders that page's whole timeline, so the
+  // section stays current without anyone touching the site again.
+  const feed = document.getElementById("social-feed");
+  if (feed) {
+    feed.innerHTML = "";
+    registerEditable(feed, {
+      kind: "social-feed",
+      path: "site.tapahtumia.social",
+      title: "Muokkaa julkaisusyötettä",
+    });
+
+    const feedEmbed = resolveSocialEmbed(social.feedUrl);
+    if (feedEmbed && feedEmbed.embedUrl) {
+      const frame = document.createElement("iframe");
+      frame.className = "social-feed__frame";
+      frame.src = feedEmbed.embedUrl;
+      frame.title = `${SOCIAL_SOURCE_LABELS[feedEmbed.source]} -syöte`;
+      frame.loading = "lazy";
+      frame.referrerPolicy = "strict-origin-when-cross-origin";
+      frame.allow = "fullscreen; encrypted-media; picture-in-picture";
+      frame.allowFullscreen = true;
+      feed.append(frame);
+    } else if (social.feedUrl) {
+      const note = document.createElement("p");
+      note.className = "reel-card__fallback";
+      note.textContent =
+        "Tästä osoitteesta ei saa julkista syötettä. Facebook-sivun osoite (esim. https://www.facebook.com/marjo.seki) toimii; Instagram näyttää vain yksittäisiä julkaisuja ja reelejä.";
+      feed.append(note);
+    }
+  }
+
+  const reelGrid = document.getElementById("reel-grid");
+  if (reelGrid) {
+    reelGrid.innerHTML = "";
+    const reels = social.reels || [];
+
+    if (reels.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "empty-state";
+      empty.textContent = "Ei vielä lisättyjä reelejä tai julkaisuja.";
+      reelGrid.append(empty);
+    } else {
+      reels.forEach((entry, index) => {
+        reelGrid.append(
+          createReelCard(entry, {
+            kind: "reel",
+            path: `site.tapahtumia.social.reels.${index}`,
+            listPath: "site.tapahtumia.social.reels",
+            index,
+            title: `Muokkaa julkaisua ${index + 1}`,
+          }),
+        );
+      });
     }
   }
 
@@ -1743,7 +2410,13 @@ const addListItem = (path, item) => {
   if (!confirmed) {
     return;
   }
-  const list = getByPath(state.data, path);
+  // Lists added after a site.json was already published may not exist yet, so
+  // create one rather than failing on the first "add" click.
+  let list = getByPath(state.data, path);
+  if (!Array.isArray(list)) {
+    list = [];
+    setByPath(state.data, path, list);
+  }
   list.push(item);
   saveToBrowser();
   renderPage();
@@ -1807,6 +2480,14 @@ const createPageActionButtons = () => {
           text: "Kuvaile tapahtuma tässä.",
           buttonLabel: "",
           buttonUrl: "",
+        }),
+    });
+    actions.push({
+      label: "Lisää reel tai julkaisu",
+      onClick: () =>
+        addListItem("site.tapahtumia.social.reels", {
+          label: "Uusi julkaisu",
+          url: "",
         }),
     });
   }

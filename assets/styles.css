@@ -67,7 +67,11 @@ body {
   font-family: "Noto Sans JP", sans-serif;
   line-height: 1.75;
   position: relative;
-
+  /* Long Finnish compounds and pasted event links (a bare URL is a single
+     unbreakable word) would otherwise push the page wider than a phone screen
+     and give the whole site a horizontal scrollbar. break-word only splits a
+     word that cannot fit on a line of its own, so normal text is untouched. */
+  overflow-wrap: break-word;
 }
 
 /* 3D-ish parallax background: three gradient-ball layers at different sizes,
@@ -287,7 +291,7 @@ button {
 .social-embeds {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   margin-top: 1.6rem;
 }
 
@@ -334,6 +338,88 @@ button {
 
 .social-embed-card--instagram .social-embed-card__frame {
   min-height: 480px;
+}
+
+/* Reels and single posts pasted as plain URLs. Reels are shot vertically, so
+   the frame is 9:16; a normal post gets a squarer 4:5 box instead. */
+.reel-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  margin-top: 1.6rem;
+}
+
+.reel-card {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.9rem;
+  border-radius: var(--radius-md);
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: var(--shadow-card);
+}
+
+.reel-card--facebook {
+  border-color: rgba(var(--accent-deep-rgb), 0.24);
+}
+
+.reel-card--instagram {
+  border-color: rgba(var(--gold-rgb), 0.24);
+}
+
+.reel-card__frame {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: #000;
+}
+
+.reel-card[data-embed-kind="post"] .reel-card__frame {
+  aspect-ratio: 4 / 5;
+  background: #fff;
+}
+
+.reel-card__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.reel-card__source {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+}
+
+.reel-card__fallback {
+  margin: 0;
+  padding: 0.9rem;
+  border-radius: var(--radius-sm);
+  background: rgba(var(--gold-rgb), 0.12);
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+/* A whole public page timeline, pasted as an account URL. */
+.social-feed {
+  margin-top: 1.6rem;
+}
+
+.social-feed__frame {
+  width: 100%;
+  min-height: 520px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: #fff;
+  box-shadow: var(--shadow-card);
 }
 
 .empty-state {
@@ -430,16 +516,31 @@ button {
   position: relative;
 }
 
-.inquiry-image {
-  margin-top: 1.8rem;
-}
-
 .hero__visual img,
 .page-hero__image img {
-  width: 70%;
+  width: 60%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   border: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+/* The photo beside a form is the page's largest image on purpose — it carries
+   the section while the form stays plain. Deliberately wider than the hero
+   portraits and the card thumbnails. */
+.form-photo {
+  margin-top: 1.8rem;
+}
+
+.form-photo img {
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.7);
 }
 
 .hero__badge {
@@ -478,21 +579,24 @@ button {
   gap: 1rem;
 }
 
+/* auto-fit + min() lets every grid reflow down to a single column on its own,
+   without a breakpoint per grid: the min() clamp keeps the track from ever
+   being wider than the viewport on a narrow phone. */
 .feature-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
 }
 
 .store-grid,
 .book-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
 }
 
 .event-list {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
 }
 
 .photo-gallery {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
 }
 
 .gallery-item {
@@ -545,6 +649,19 @@ button {
   grid-template-columns: 1.15fr 0.85fr;
 }
 
+/* Form on the left, copy and photo on the right. The DOM keeps copy first so
+   the stacked mobile order still reads intro → form; only the wide layout
+   reverses it. */
+.two-column--form-first {
+  grid-template-columns: 0.9fr 1.1fr;
+}
+
+@media (min-width: 901px) {
+  .two-column--form-first > form {
+    order: -1;
+  }
+}
+
 .contact-list {
   display: grid;
   gap: 1rem;
@@ -589,12 +706,15 @@ button {
   align-items: start;
 }
 
+/* Course cards (Palvelut) show landscape photos of dishes and classes, so they
+   get a 4:3 frame. Book covers are portrait and are handled separately below —
+   a book card carries both classes, so this rule must not set the ratio for it. */
 .store-card img {
-  aspect-ratio: 3 / 4;
+  width: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: calc(var(--radius-md) - 6px);
   margin-bottom: 1rem;
-  max-width: 60%;
 }
 
 .store-card__actions {
@@ -641,8 +761,23 @@ button {
   gap: 0.8rem;
 }
 
+/* Book covers are portrait — almost every printed book sits near 3:4 — and the
+   cover art must never be cropped, so it is fitted inside the frame rather than
+   filling it. The tinted frame reads as a shelf behind odd-sized covers. */
 .book-card__image {
   position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 1rem;
+}
+
+.book-card__image img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
+  margin-bottom: 0;
+  background: rgba(var(--accent-rgb), 0.07);
+  border-radius: calc(var(--radius-md) - 6px);
 }
 
 .book-status {
@@ -878,6 +1013,68 @@ body.admin-mode .editable-target:hover {
   border: 1px solid var(--line);
 }
 
+/* Fit-and-crop tool. The stage is the exact shape the picture will occupy on
+   the page, so what the owner frames here is what the site renders — the
+   canvas export at submit time uses the same scale and offset. */
+.image-fit {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.3rem;
+}
+
+.image-fit__stage {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: repeating-conic-gradient(rgba(var(--text-rgb), 0.06) 0% 25%, transparent 0% 50%) 50% / 20px 20px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.image-fit__stage.is-dragging {
+  cursor: grabbing;
+}
+
+.image-fit__image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+  max-width: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.image-fit__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.image-fit__controls input[type="range"] {
+  flex: 1 1 160px;
+  min-width: 140px;
+  accent-color: var(--accent-deep);
+}
+
+.image-fit__controls .button {
+  padding: 0.55rem 0.9rem;
+  font-size: 0.9rem;
+}
+
+.image-fit__hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
 .editor-actions {
   display: flex;
   flex-wrap: wrap;
@@ -887,21 +1084,30 @@ body.admin-mode .editable-target:hover {
 }
 
 @media (max-width: 900px) {
+  /* The card grids reflow on their own via auto-fit; only the fixed two-part
+     layouts need collapsing here. */
   .hero__grid,
   .page-hero__grid,
   .two-column,
-  .spotlight,
-  .feature-grid,
-  .store-grid,
-  .book-grid,
-  .event-list,
-  .photo-gallery {
+  .two-column--form-first,
+  .spotlight {
     grid-template-columns: 1fr;
   }
 
   .hero__badge {
     position: static;
     margin-top: 1rem;
+  }
+
+  .hero__visual img,
+  .page-hero__image img {
+    width: 100%;
+    max-width: 360px;
+    margin-inline: auto;
+  }
+
+  .form-photo img {
+    margin-inline: auto;
   }
 
   .site-footer__inner {
@@ -914,7 +1120,10 @@ body.admin-mode .editable-target:hover {
   }
 }
 
-@media (max-width: 760px) {
+/* The five nav links plus the brand stop fitting on one line somewhere below
+   ~880px, where they used to wrap and double the header height on tablets.
+   Collapse to the Valikko menu from there down instead. */
+@media (max-width: 880px) {
   .menu-toggle {
     display: inline-flex;
   }
@@ -941,9 +1150,75 @@ body.admin-mode .editable-target:hover {
   .site-nav a {
     text-align: center;
   }
+}
 
+@media (max-width: 760px) {
+  /* Keep the hero from eating the whole first screen on a phone: less padding,
+     a smaller headline, a shorter portrait and a decor bloom that no longer
+     dominates the corner. */
   .hero,
   .page-hero {
-    padding-top: 2.3rem;
+    padding: 1.9rem 0 1.4rem;
+  }
+
+  .hero::before,
+  .page-hero::before {
+    width: 130px;
+    height: 130px;
+    top: -1rem;
+    right: -1.6rem;
+    opacity: 0.35;
+  }
+
+  .hero__copy h1,
+  .page-hero h1 {
+    font-size: clamp(1.95rem, 8vw, 2.6rem);
+  }
+
+  .section-heading h2,
+  .spotlight h2,
+  .panel h2,
+  .social-wall h2 {
+    font-size: clamp(1.8rem, 7vw, 2.4rem);
+  }
+
+  .hero__lead,
+  .page-hero p {
+    font-size: 0.98rem;
+  }
+
+  .hero__visual img,
+  .page-hero__image img {
+    max-width: 300px;
+  }
+
+  .hero__actions {
+    margin-top: 1.2rem;
+  }
+
+  .section {
+    padding-bottom: 2.6rem;
+  }
+
+  .feature-card,
+  .panel,
+  .event-card,
+  .store-card,
+  .spotlight {
+    padding: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__actions {
+    gap: 0.6rem;
+  }
+
+  .hero__actions .button {
+    flex: 1 1 100%;
+  }
+
+  .store-card__actions .button {
+    flex: 1 1 100%;
   }
 }

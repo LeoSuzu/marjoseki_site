@@ -181,7 +181,9 @@
     "order": {
       "title": "Tilaa kirja!",
       "instructions": "Maksu MobilePaylla numeroon 041 44 22 798. Postituskulut lisätään tilaukseen. Toimitamme tällä hetkellä vain Suomeen.",
-      "successMessage": "Kiitos tilauksesta! Vahvistus ja maksuohjeet lähetetään sinulle pian."
+      "successMessage": "Kiitos tilauksesta! Vahvistus ja maksuohjeet lähetetään sinulle pian.",
+      "image": "assets/uploads/1784204264401-hg7uyx.jpg",
+      "imageAlt": "Kirjapino tilausta varten"
     }
   },
   "yhteystiedot": {
@@ -351,7 +353,11 @@
       "title": "Seuraa sosiaalisessa mediassa",
       "note": "Tuoreimmat kuulumiset ja kuvat näkyvät täällä suoraan, kun haluat lisätä sosiaalisen median upotukset.",
       "facebookUrl": "https://www.facebook.com/marjo.seki",
-      "instagramUrl": "https://www.instagram.com/marjo_seki"
+      "instagramUrl": "https://www.instagram.com/marjo_seki",
+      "reelsTitle": "Uusimmat reelit ja julkaisut",
+      "reelsNote": "Liitä julkisen Facebook-sivun osoite, niin sen julkaisut näkyvät tässä automaattisesti. Yksittäiset Instagram- ja Facebook-reelit voit lisätä alle linkkeinä.",
+      "feedUrl": "",
+      "reels": []
     }
   }
 }

@@ -3,19 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Marjo Seki | Kirjat</title>
+    <title>Japani-aiheiset keittokirjat ja satukirjat | Marjo Seki</title>
     <meta
       name="description"
-      content="Marjo Sekin julkaistut kirjat ja mahdollisuus tilata kappale suoraan."
+      content="Marjo Sekin kirjat: japani-aiheisia keittokirjoja ja satukirjoja lapsille. Tilaa oma kappaleesi suoraan sivulta, maksu MobilePaylla."
     />
+    <link rel="canonical" href="https://marjoseki.fi/kirjat.html" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="author" content="Marjo Seki" />
+    <meta name="theme-color" content="#e7f7e0" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fi_FI" />
+    <meta property="og:site_name" content="Marjo Seki" />
+    <meta property="og:url" content="https://marjoseki.fi/kirjat.html" />
+    <meta property="og:title" content="Japani-aiheiset keittokirjat ja satukirjat | Marjo Seki" />
+    <meta
+      property="og:description"
+      content="Japani-aiheisia keittokirjoja ja satukirjoja lapsille. Tilaa oma kappaleesi suoraan sivulta."
+    />
+    <meta property="og:image" content="https://marjoseki.fi/assets/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Marjo Seki — kirjailija ja japanilaisen ruoan opettaja" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Japani-aiheiset keittokirjat ja satukirjat | Marjo Seki" />
+    <meta
+      name="twitter:description"
+      content="Japani-aiheisia keittokirjoja ja satukirjoja lapsille. Tilaa oma kappaleesi suoraan sivulta."
+    />
+    <meta name="twitter:image" content="https://marjoseki.fi/assets/og-image.jpg" />
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&display=swap" rel="stylesheet" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Etusivu", "item": "https://marjoseki.fi/" },
+          { "@type": "ListItem", "position": 2, "name": "Kirjat", "item": "https://marjoseki.fi/kirjat.html" }
+        ]
+      }
+    </script>
   </head>
   <body data-page="kirjat">
     <header class="site-header">
@@ -74,6 +114,11 @@
             <p id="kirjat-order-instructions">
               Maksu MobilePaylla, postituskulut lisätään tilaukseen. Toimitamme tällä hetkellä vain Suomeen.
             </p>
+
+            <figure class="photo-frame">
+              <img id="kirjat-order-image" src="assets/uploads/books-placeholder.svg" alt="Kirjoja" />
+              <figcaption>Kirjat matkaavat postissa suoraan sinulle.</figcaption>
+            </figure>
           </div>
 
           <form class="panel simple-form" id="book-order-form" novalidate>
@@ -102,6 +147,11 @@
             <label class="form-field">
               <span>Puhelinnumero</span>
               <input type="tel" name="phone" required autocomplete="tel" />
+            </label>
+
+            <label class="form-field">
+              <span>Sähköposti <span class="form-field__optional">(vapaaehtoinen)</span></span>
+              <input type="email" name="email" autocomplete="email" />
             </label>
 
             <label class="form-field">

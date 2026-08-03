@@ -181,7 +181,9 @@
     "order": {
       "title": "Tilaa kirja!",
       "instructions": "Maksu MobilePaylla numeroon 041 44 22 798. Postituskulut lisätään tilaukseen. Toimitamme tällä hetkellä vain Suomeen.",
-      "successMessage": "Kiitos tilauksesta! Vahvistus ja maksuohjeet lähetetään sinulle pian."
+      "successMessage": "Kiitos tilauksesta! Vahvistus ja maksuohjeet lähetetään sinulle pian.",
+      "image": "assets/uploads/1784202857550-ehg96i.jpg",
+      "imageAlt": "Marjo Seki ja Makumatkoja Japaniin -kirja"
     }
   },
   "yhteystiedot": {
@@ -206,7 +208,9 @@
     "inquiry": {
       "title": "Kysely tilaisuudesta",
       "intro": "Suunnitteletko tilaisuutta tai kurssia? Täytä lomake, niin palaan asiaan pian.",
-      "successMessage": "Kiitos kyselystä! Vastaan sinulle mahdollisimman pian."
+      "successMessage": "Kiitos kyselystä! Vastaan sinulle mahdollisimman pian.",
+      "image": "assets/uploads/1784200399150-pv8xb0.jpg",
+      "imageAlt": "Marjo Seki opettamassa japanilaisen ruoan kurssilla"
     }
   },
   "tapahtumia": {
@@ -351,7 +355,47 @@
       "title": "Seuraa sosiaalisessa mediassa",
       "note": "Tuoreimmat kuulumiset ja kuvat näkyvät täällä suoraan, kun haluat lisätä sosiaalisen median upotukset.",
       "facebookUrl": "https://www.facebook.com/marjo.seki",
-      "instagramUrl": "https://www.instagram.com/marjo_seki"
+      "instagramUrl": "https://www.instagram.com/marjo_seki",
+      "facebookEmbedUrl": "",
+      "instagramEmbedUrl": ""
+    },
+    "media": {
+      "title": "Kuvia ja videoita",
+      "note": "Lisää tähän kuvia ja lyhyitä videoita tapahtumista. Videot ovat äänettömiä eivätkä käynnisty itsestään — ne lähtevät soimaan, kun viet hiiren kuvan päälle.",
+      "items": [
+        {
+          "type": "image",
+          "image": "assets/uploads/1784199886974-cli9u5.jpg",
+          "videoUrl": "",
+          "alt": "Sakea kaadetaan pieniin kuppeihin",
+          "caption": "Sakemaistelu",
+          "link": ""
+        },
+        {
+          "type": "image",
+          "image": "assets/uploads/1784199978882-1s0h8o.jpg",
+          "videoUrl": "",
+          "alt": "Sushilautanen tarjolla",
+          "caption": "Kurssilla tehtyä sushia",
+          "link": ""
+        },
+        {
+          "type": "image",
+          "image": "assets/uploads/1784202101397-47guek.jpg",
+          "videoUrl": "",
+          "alt": "Ryhmä kimonoihin pukeutuneita ihmisiä",
+          "caption": "Japanissa ystävien kanssa",
+          "link": ""
+        },
+        {
+          "type": "image",
+          "image": "assets/uploads/1784202132968-fxwcfv.jpg",
+          "videoUrl": "",
+          "alt": "Marjo Seki palkintotilaisuudessa",
+          "caption": "Palkintotilaisuudessa",
+          "link": ""
+        }
+      ]
     }
   }
 }

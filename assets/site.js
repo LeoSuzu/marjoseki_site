@@ -65,6 +65,64 @@ const setImage = (id, src, alt, meta) => {
 const registerEditable = (node, meta) => {
   node.classList.add("editable-target");
   node.__editMeta = meta;
+  // Editing is keyboard-reachable, not click-only. The tab stop is added
+  // eagerly (admin-mode CSS hides the affordance for visitors) and removed
+  // again on sign-out by refreshEditableAffordances().
+  node.dataset.editLabel = meta.title || "Muokkaa";
+};
+
+const SITE_ORIGIN = "https://marjoseki.fi";
+
+const absoluteUrl = (path) => {
+  if (!path) {
+    return undefined;
+  }
+  return /^https?:\/\//i.test(path) ? path : `${SITE_ORIGIN}/${String(path).replace(/^\/+/, "")}`;
+};
+
+// Structured data is generated from site.json at render time rather than
+// hardcoded in the HTML, so event dates, book titles and course listings stay
+// correct in search results whenever Marjo publishes a content change.
+const setStructuredData = (id, data) => {
+  const existing = document.getElementById(id);
+  if (!data) {
+    existing?.remove();
+    return;
+  }
+
+  const node = existing || document.createElement("script");
+  node.type = "application/ld+json";
+  node.id = id;
+  node.textContent = JSON.stringify(data);
+  if (!existing) {
+    document.head.append(node);
+  }
+};
+
+const toIsoDate = (value) => {
+  const parsed = parseEventDate(value);
+  if (!parsed) {
+    return null;
+  }
+  const month = String(parsed.getMonth() + 1).padStart(2, "0");
+  const day = String(parsed.getDate()).padStart(2, "0");
+  return `${parsed.getFullYear()}-${month}-${day}`;
+};
+
+// Images below the fold are deferred; the hero image is the LCP element on
+// every page, so it stays eager and gets fetch priority instead.
+const markLazyImage = (image) => {
+  image.loading = "lazy";
+  image.decoding = "async";
+};
+
+const markEagerImage = (image) => {
+  if (!image) {
+    return;
+  }
+  image.loading = "eager";
+  image.decoding = "async";
+  image.setAttribute("fetchpriority", "high");
 };
 
 const saveToBrowser = () => {
@@ -612,8 +670,46 @@ const openEditor = (meta) => {
     openObjectEditor(meta, [
       { name: "title", label: "Otsikko", type: "text" },
       { name: "note", label: "Teksti", type: "textarea" },
-      { name: "facebookUrl", label: "Facebook-osoite", type: "text" },
-      { name: "instagramUrl", label: "Instagram-osoite", type: "text" },
+      { name: "facebookUrl", label: "Facebook-sivun osoite", type: "text" },
+      { name: "instagramUrl", label: "Instagram-tilin osoite", type: "text" },
+      {
+        name: "facebookEmbedUrl",
+        label: "Facebook-julkaisun linkki (näytetään sivulla)",
+        type: "text",
+        help: "Liitä yksittäisen julkaisun osoite, niin se näkyy suoraan sivulla.",
+      },
+      {
+        name: "instagramEmbedUrl",
+        label: "Instagram-julkaisun linkki (näytetään sivulla)",
+        type: "text",
+        help: "Liitä yksittäisen julkaisun tai reelin osoite, niin se näkyy suoraan sivulla.",
+      },
+    ]);
+    return;
+  }
+
+  if (meta.kind === "media") {
+    openObjectEditor(meta, [
+      { name: "type", label: "Tyyppi", type: "select", options: ["image", "video"] },
+      {
+        name: "image",
+        label: "Kuva (tai videon esikatselukuva)",
+        type: "image",
+      },
+      {
+        name: "videoUrl",
+        label: "Videon osoite",
+        type: "text",
+        help: "Suora videotiedoston osoite (esim. .mp4). Facebook- tai Instagram-linkki ei toistu tässä — liitä se alla olevaan linkkikenttään.",
+      },
+      { name: "alt", label: "Kuvan kuvaus", type: "text" },
+      { name: "caption", label: "Kuvateksti", type: "text" },
+      {
+        name: "link",
+        label: "Linkki julkaisuun (vapaaehtoinen)",
+        type: "text",
+        help: "Esimerkiksi Facebook- tai Instagram-julkaisun osoite.",
+      },
     ]);
     return;
   }
@@ -915,6 +1011,176 @@ const setupParallaxBackground = () => {
   );
 };
 
+// Fades in the header's accent rule and shadow once the page has moved, so the
+// sticky bar reads as a distinct layer over content scrolling beneath it.
+const setupHeaderScrollState = () => {
+  const header = document.querySelector(".site-header");
+  if (!header) {
+    return;
+  }
+
+  let ticking = false;
+  const apply = () => {
+    header.classList.toggle("is-scrolled", window.scrollY > 12);
+    ticking = false;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(apply);
+      }
+    },
+    { passive: true },
+  );
+  apply();
+};
+
+// Clips are muted and never autoplay. On a mouse they start on hover and reset
+// on leave; touch devices have no hover, so there a tap toggles playback.
+const attachHoverPlayback = (article, video) => {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const start = () => {
+    const attempt = video.play();
+    if (attempt && typeof attempt.then === "function") {
+      attempt.then(() => article.classList.add("is-playing")).catch(() => {});
+    } else {
+      article.classList.add("is-playing");
+    }
+  };
+
+  const stop = () => {
+    video.pause();
+    video.currentTime = 0;
+    article.classList.remove("is-playing");
+  };
+
+  article.addEventListener("pointerenter", (event) => {
+    if (event.pointerType === "mouse" && !prefersReducedMotion) {
+      start();
+    }
+  });
+
+  article.addEventListener("pointerleave", (event) => {
+    if (event.pointerType === "mouse") {
+      stop();
+    }
+  });
+
+  article.addEventListener("click", (event) => {
+    // In edit mode a click belongs to the editor, not to playback.
+    if (state.isAdmin || event.target.closest("a")) {
+      return;
+    }
+    if (video.paused) {
+      start();
+    } else {
+      stop();
+    }
+  });
+};
+
+const createMediaItem = (item, meta) => {
+  const figure = document.createElement("figure");
+  figure.className = "media-item";
+  registerEditable(figure, meta);
+
+  const isVideo = item.type === "video" && item.videoUrl;
+
+  if (isVideo) {
+    const video = document.createElement("video");
+    video.src = item.videoUrl;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.controls = false;
+    // metadata only: nothing downloads the whole clip until it is played.
+    video.preload = "metadata";
+    if (item.image) {
+      video.poster = item.image;
+    }
+    figure.append(video);
+
+    const play = document.createElement("span");
+    play.className = "media-item__play";
+    play.textContent = "▶ Video";
+    figure.append(play);
+
+    attachHoverPlayback(figure, video);
+  } else if (item.image) {
+    const image = document.createElement("img");
+    image.src = item.image;
+    image.alt = item.alt || "";
+    markLazyImage(image);
+    figure.append(image);
+  }
+
+  if (item.link) {
+    const link = document.createElement("a");
+    link.className = "media-item__link";
+    link.href = item.link;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = "Avaa";
+    figure.append(link);
+  }
+
+  if (item.caption) {
+    const caption = document.createElement("figcaption");
+    caption.className = "media-item__caption";
+    caption.textContent = item.caption;
+    figure.append(caption);
+  }
+
+  return figure;
+};
+
+const renderMediaWall = (media) => {
+  const wall = document.getElementById("media-wall");
+  if (!wall) {
+    return;
+  }
+
+  text("media-title", media?.title, {
+    kind: "text",
+    path: "site.tapahtumia.media.title",
+    title: "Muokkaa kuva- ja video-osion otsikkoa",
+  });
+  text("media-note", media?.note, {
+    kind: "text",
+    path: "site.tapahtumia.media.note",
+    title: "Muokkaa kuva- ja video-osion tekstiä",
+    rows: 4,
+  });
+
+  wall.innerHTML = "";
+  const items = media?.items || [];
+
+  if (items.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "empty-state";
+    empty.textContent = "Ei vielä kuvia tai videoita.";
+    wall.append(empty);
+    return;
+  }
+
+  items.forEach((item, index) => {
+    wall.append(
+      createMediaItem(item, {
+        kind: "media",
+        path: `site.tapahtumia.media.items.${index}`,
+        listPath: "site.tapahtumia.media.items",
+        index,
+        title: `Muokkaa kuvaa tai videota ${index + 1}`,
+      }),
+    );
+  });
+};
+
 const setupMenu = () => {
   const toggle = document.querySelector(".menu-toggle");
   const nav = document.getElementById("site-nav");
@@ -1017,6 +1283,7 @@ const renderHome = (home) => {
       const image = document.createElement("img");
       image.src = item.image;
       image.alt = item.imageAlt || "";
+      markLazyImage(image);
       figure.append(image);
       gallery.append(figure);
     });
@@ -1059,6 +1326,7 @@ const renderPalvelut = (palvelut, site) => {
       const image = document.createElement("img");
       image.src = course.image;
       image.alt = course.imageAlt || course.title;
+      markLazyImage(image);
 
       const meta = document.createElement("div");
       meta.className = "store-card__meta";
@@ -1115,7 +1383,47 @@ const renderPalvelut = (palvelut, site) => {
     });
   }
 
-  document.title = `${site.siteName} | Palvelut`;
+  // Modelled as Service rather than Course on purpose: Google's Course rich
+  // result requires hasCourseInstance (concrete dates), which these listings
+  // don't carry, and emitting it without would only raise Search Console
+  // warnings. Dated happenings are published as Event on the Tapahtumia page.
+  const courseItems = (palvelut.courses || [])
+    .filter((course) => course.title)
+    .map((course) => {
+      const entry = {
+        "@type": "Service",
+        name: course.title,
+        provider: { "@type": "Person", name: site.siteName, url: `${SITE_ORIGIN}/` },
+        areaServed: { "@type": "Country", name: "Suomi" },
+        url: absoluteUrl("palvelut.html"),
+      };
+      if (course.text) {
+        entry.description = course.text;
+      }
+      if (course.format) {
+        entry.serviceType = course.format;
+      }
+      if (course.image) {
+        entry.image = absoluteUrl(course.image);
+      }
+      return entry;
+    });
+
+  setStructuredData(
+    "ld-services",
+    courseItems.length
+      ? {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: palvelut.title || "Palvelut",
+          itemListElement: courseItems.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item,
+          })),
+        }
+      : null,
+  );
 };
 
 const BOOK_STATUS_CLASSES = {
@@ -1143,6 +1451,7 @@ const createBookCard = (book, meta) => {
   const image = document.createElement("img");
   image.src = book.image;
   image.alt = book.imageAlt || book.title;
+  markLazyImage(image);
   imageWrap.append(image);
 
   if (book.status) {
@@ -1215,6 +1524,48 @@ const renderKirjat = (kirjat, site) => {
     });
   }
 
+  const bookItems = (kirjat.books || [])
+    .filter((book) => book.title)
+    .map((book) => {
+      const entry = {
+        "@type": "Book",
+        name: book.title,
+        author: { "@type": "Person", name: site.siteName, url: `${SITE_ORIGIN}/` },
+        inLanguage: "fi",
+        url: absoluteUrl("kirjat.html"),
+      };
+      if (book.text) {
+        entry.description = book.text;
+      }
+      if (book.image) {
+        entry.image = absoluteUrl(book.image);
+      }
+      return entry;
+    });
+
+  setStructuredData(
+    "ld-books",
+    bookItems.length
+      ? {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: kirjat.title || "Kirjat",
+          itemListElement: bookItems.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item,
+          })),
+        }
+      : null,
+  );
+
+  setImage("kirjat-order-image", kirjat.order.image, kirjat.order.imageAlt, {
+    kind: "image",
+    path: "site.kirjat.order.image",
+    altPath: "site.kirjat.order.imageAlt",
+    title: "Muokkaa tilauslomakkeen kuvaa",
+  });
+
   text("kirjat-order-title", kirjat.order.title, {
     kind: "text",
     path: "site.kirjat.order.title",
@@ -1252,8 +1603,6 @@ const renderKirjat = (kirjat, site) => {
       }
     }
   }
-
-  document.title = `${site.siteName} | Kirjat`;
 };
 
 const renderYhteystiedot = (yhteystiedot, site) => {
@@ -1314,8 +1663,6 @@ const renderYhteystiedot = (yhteystiedot, site) => {
     altPath: "site.yhteystiedot.inquiry.imageAlt",
     title: "Muokkaa tilaisuuskyselyn kuvaa",
   });
-
-  document.title = `${site.siteName} | Yhteystiedot`;
 };
 
 const parseEventDate = (value) => {
@@ -1548,6 +1895,8 @@ const renderTapahtumia = (tapahtumia, site) => {
     rows: 5,
   });
 
+  renderMediaWall(tapahtumia.media);
+
   const upcomingEntries = (tapahtumia.upcoming || []).map((event, index) => ({
     event,
     meta: {
@@ -1606,6 +1955,56 @@ const renderTapahtumia = (tapahtumia, site) => {
     }
   }
 
+  // Google's event rich results need a machine-readable startDate, so only
+  // events whose date actually parses are published as structured data.
+  const eventItems = upcomingEvents
+    .map(({ event }) => {
+      const startDate = toIsoDate(event.date);
+      if (!startDate || !event.title) {
+        return null;
+      }
+
+      const entry = {
+        "@type": "Event",
+        name: event.title,
+        startDate,
+        eventStatus: "https://schema.org/EventScheduled",
+        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+        url: absoluteUrl("tapahtumia.html"),
+        organizer: { "@type": "Person", name: site.siteName, url: `${SITE_ORIGIN}/` },
+        performer: { "@type": "Person", name: site.siteName },
+      };
+
+      const endDate = toIsoDate(event.dateEnd);
+      if (endDate && endDate !== startDate) {
+        entry.endDate = endDate;
+      }
+      if (event.location) {
+        entry.location = { "@type": "Place", name: event.location };
+      }
+      if (event.text) {
+        entry.description = event.text;
+      }
+      return entry;
+    })
+    .filter(Boolean);
+
+  setStructuredData(
+    "ld-events",
+    eventItems.length
+      ? {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: tapahtumia.title || "Tapahtumia",
+          itemListElement: eventItems.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item,
+          })),
+        }
+      : null,
+  );
+
   const embeds = document.getElementById("social-embeds");
   if (embeds) {
     embeds.innerHTML = "";
@@ -1639,8 +2038,6 @@ const renderTapahtumia = (tapahtumia, site) => {
       );
     }
   }
-
-  document.title = `${site.siteName} | Tapahtumia`;
 };
 
 const renderGlobal = (data) => {
@@ -1797,6 +2194,18 @@ const createPageActionButtons = () => {
         }),
     });
     actions.push({
+      label: "Lisää kuva tai video",
+      onClick: () =>
+        addListItem("site.tapahtumia.media.items", {
+          type: "image",
+          image: "assets/uploads/event-placeholder.svg",
+          videoUrl: "",
+          alt: "Uusi kuva",
+          caption: "",
+          link: "",
+        }),
+    });
+    actions.push({
       label: "Lisää mennyt tapahtuma",
       onClick: () =>
         addListItem("site.tapahtumia.past", {
@@ -1847,7 +2256,33 @@ const createPageActionButtons = () => {
   return actions;
 };
 
+// Edit mode has to be operable without a mouse. While signed in, every
+// editable region becomes a real control (tab stop + accessible name + visible
+// affordance); on sign-out the attributes are handed back so visitors get
+// clean, unannotated markup.
+const refreshEditableAffordances = () => {
+  document.querySelectorAll(".editable-target").forEach((node) => {
+    if (!state.isAdmin) {
+      node.removeAttribute("tabindex");
+      node.removeAttribute("role");
+      node.removeAttribute("aria-label");
+      node.removeAttribute("title");
+      return;
+    }
+
+    const label = node.dataset.editLabel || "Muokkaa";
+    node.tabIndex = 0;
+    node.setAttribute("role", "button");
+    node.setAttribute("aria-label", label);
+    node.setAttribute("title", label);
+  });
+};
+
 const updateAdminChrome = () => {
+  // Runs on every render and on sign-in/sign-out, so it is the single place
+  // that keeps the editable affordances in step with the session.
+  refreshEditableAffordances();
+
   if (!state.isAdmin) {
     document.body.classList.remove("admin-mode");
     document.querySelector(".admin-bar")?.remove();
@@ -1897,6 +2332,14 @@ const renderPage = () => {
 
   if (currentPage === "tapahtumia") {
     renderTapahtumia(state.data.site.tapahtumia, state.data.site.global);
+  }
+
+  // The page hero is the LCP element; the inquiry illustration further down
+  // the Yhteystiedot page is not, so it loads lazily like the card images.
+  markEagerImage(document.querySelector(".hero__visual img, .page-hero__image img"));
+  const inquiryImage = document.getElementById("inquiry-image");
+  if (inquiryImage) {
+    markLazyImage(inquiryImage);
   }
 
   updateAdminChrome();
@@ -1960,6 +2403,28 @@ const setupEditorEvents = () => {
     }
   });
 
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeModal();
+      return;
+    }
+
+    if (!state.isAdmin || (event.key !== "Enter" && event.key !== " ")) {
+      return;
+    }
+
+    // Don't hijack typing inside the editor's own inputs.
+    if (event.target.closest("input, textarea, select, .editor-modal")) {
+      return;
+    }
+
+    const editable = event.target.closest?.(".editable-target");
+    if (editable && editable.__editMeta) {
+      event.preventDefault();
+      openEditor(editable.__editMeta);
+    }
+  });
+
   document.addEventListener("change", async (event) => {
     const input = event.target.closest("[data-upload-input]");
     if (!input || !input.files[0]) {
@@ -1983,6 +2448,7 @@ const setupEditorEvents = () => {
 
 const boot = async () => {
   setupParallaxBackground();
+  setupHeaderScrollState();
   setupMenu();
   markActiveNav();
   setupEditorEvents();

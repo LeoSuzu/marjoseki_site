@@ -49,7 +49,15 @@
   --radius-lg: 28px;
   --radius-md: 22px;
   --radius-sm: 14px;
-  --shell: min(1120px, calc(100vw - 2rem));
+  /* 100% rather than 100vw: 100vw ignores the scrollbar, so on desktop the
+     shell was a scrollbar's width wider than the content area and nudged the
+     page into horizontal overflow. */
+  --shell: min(1120px, calc(100% - 2rem));
+
+  /* Semantic layering, so a new overlay never has to guess a z-index. */
+  --z-sticky: 20;
+  --z-admin-bar: 50;
+  --z-modal: 60;
 }
 
 * {
@@ -123,7 +131,7 @@ button {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: var(--z-sticky);
   backdrop-filter: blur(15px);
   background: var(--panel-soft);
   border-bottom: 1px solid var(--line);
@@ -287,7 +295,9 @@ button {
 .social-embeds {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Was a hard 2-column track at every width, which put two 480px-tall
+     iframes side by side on a phone. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   margin-top: 1.6rem;
 }
 
@@ -434,9 +444,16 @@ button {
   margin-top: 1.8rem;
 }
 
+/* Capped rather than a percentage of the column: a hero photo that grows with
+   the viewport dominates the page on a large screen and shrinks to a stamp on
+   a narrow one. Fixed ceiling, centred in whatever space it gets. */
 .hero__visual img,
 .page-hero__image img {
-  width: 70%;
+  width: 100%;
+  max-width: 340px;
+  max-height: 420px;
+  object-fit: cover;
+  margin-inline: auto;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   border: 1px solid rgba(255, 255, 255, 0.65);
@@ -478,21 +495,24 @@ button {
   gap: 1rem;
 }
 
+/* Fluid tracks rather than fixed column counts: the grids reflow at every
+   width, so tablets get a genuine two-column layout instead of falling off
+   the old single 900px cliff straight to one column. */
 .feature-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
 }
 
 .store-grid,
 .book-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
 }
 
 .event-list {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
 }
 
 .photo-gallery {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
 }
 
 .gallery-item {
@@ -589,12 +609,14 @@ button {
   align-items: start;
 }
 
-.store-card img {
-  aspect-ratio: 3 / 4;
+/* Direct child only: book covers live inside .book-card__image and are sized
+   separately below, because they must not be cropped. */
+.store-card > img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: calc(var(--radius-md) - 6px);
   margin-bottom: 1rem;
-  max-width: 60%;
 }
 
 .store-card__actions {
@@ -641,8 +663,29 @@ button {
   gap: 0.8rem;
 }
 
+/* Book covers are mostly tall portrait formats and vary between titles, so the
+   frame is a fixed-height stage and the cover is contained inside it rather
+   than cropped to a shared box. Nothing gets its spine or title cut off, and
+   the row of cards still lines up because the stage height is constant. */
 .book-card__image {
   position: relative;
+  display: grid;
+  place-items: center;
+  padding: 0.85rem;
+  margin-bottom: 1rem;
+  border-radius: calc(var(--radius-md) - 6px);
+  background: linear-gradient(160deg, rgba(var(--pink-rgb), 0.22), rgba(var(--accent-rgb), 0.14));
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.book-card__image img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 340px;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 14px 30px rgba(58, 40, 30, 0.22);
 }
 
 .book-status {
@@ -736,7 +779,7 @@ button {
   position: fixed;
   inset: 0 auto auto 0;
   width: 100%;
-  z-index: 50;
+  z-index: var(--z-admin-bar);
   background: rgba(42, 36, 32, 0.95);
   color: #fff8f0;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
@@ -794,7 +837,7 @@ body.admin-mode .editable-target:hover {
 .editor-modal {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: var(--z-modal);
   display: grid;
   place-items: center;
   padding: 1rem;
@@ -802,8 +845,8 @@ body.admin-mode .editable-target:hover {
 }
 
 .editor-modal__card {
-  width: min(720px, calc(100vw - 2rem));
-  max-height: calc(100vh - 2rem);
+  width: min(720px, calc(100% - 2rem));
+  max-height: calc(100dvh - 2rem);
   overflow: auto;
   padding: 1.4rem;
   border-radius: var(--radius-md);
@@ -887,34 +930,32 @@ body.admin-mode .editable-target:hover {
 }
 
 @media (max-width: 900px) {
+  /* Only the asymmetric two-up layouts collapse here. The card grids are
+     auto-fit and reflow on their own, so forcing them to one column would
+     throw away the tablet layout they can manage themselves. */
   .hero__grid,
   .page-hero__grid,
   .two-column,
-  .spotlight,
-  .feature-grid,
-  .store-grid,
-  .book-grid,
-  .event-list,
-  .photo-gallery {
+  .spotlight {
     grid-template-columns: 1fr;
   }
 
   .hero__badge {
     position: static;
     margin-top: 1rem;
+    max-width: none;
   }
 
   .site-footer__inner {
     flex-direction: column;
     align-items: flex-start;
   }
-
-  body.admin-mode {
-    padding-top: 13rem;
-  }
 }
 
-@media (max-width: 760px) {
+/* Collapses to the menu button at 900px, matching the width where the layout
+   goes single-column. Between 760 and 900 the full nav used to wrap onto a
+   second line and sit awkwardly beside the wordmark. */
+@media (max-width: 900px) {
   .menu-toggle {
     display: inline-flex;
   }
@@ -946,4 +987,363 @@ body.admin-mode .editable-target:hover {
   .page-hero {
     padding-top: 2.3rem;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Photo frames beside the forms
+   A framed, captioned photo that sits next to an order/inquiry form so the
+   form column isn't a wall of inputs. Sized so it never out-shouts the form.
+--------------------------------------------------------------------------- */
+.photo-frame {
+  margin: 1.6rem 0 0;
+  padding: 0.8rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, rgba(var(--peach-rgb), 0.28), rgba(var(--pink-rgb), 0.22));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: var(--shadow-card);
+}
+
+/* Matted rather than cropped. Marjo swaps these photos herself, so a fixed
+   crop box would cut heads off whenever a portrait shot replaces a landscape
+   one. The gradient frame acts as the mount around whatever shape arrives. */
+.photo-frame img {
+  width: 100%;
+  height: auto;
+  max-height: 360px;
+  object-fit: contain;
+  border-radius: calc(var(--radius-md) - 8px);
+}
+
+.photo-frame figcaption {
+  margin-top: 0.7rem;
+  padding: 0 0.2rem;
+  color: var(--accent-deep);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------------
+   Media wall (Tapahtumia)
+   Photos and short clips Marjo drops in. Video is muted and never autoplays;
+   it starts on hover (pointer devices) or on tap (touch), per the brief.
+--------------------------------------------------------------------------- */
+.media-wall {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  margin-top: 1.6rem;
+}
+
+.media-item {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--panel-solid);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: var(--shadow-card);
+}
+
+.media-item img,
+.media-item video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.media-item:hover img,
+.media-item:hover video {
+  transform: scale(1.04);
+}
+
+/* Play affordance. Hidden once the clip is actually running so it doesn't
+   sit on top of the video the whole time. */
+.media-item__play {
+  position: absolute;
+  inset: auto auto 0.7rem 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(26, 20, 16, 0.62);
+  color: #fdfbf5;
+  font-size: 0.82rem;
+  font-weight: 700;
+  backdrop-filter: blur(6px);
+  transition: opacity 220ms ease;
+}
+
+.media-item.is-playing .media-item__play {
+  opacity: 0;
+}
+
+.media-item__caption {
+  padding: 0.7rem 0.9rem 0.9rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.media-item__link {
+  position: absolute;
+  inset: 0.7rem 0.7rem auto auto;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(253, 251, 245, 0.92);
+  color: var(--accent-deep);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------------
+   Visual effects
+--------------------------------------------------------------------------- */
+
+/* The sticky header's accent rule was already in the markup at opacity 0 but
+   nothing ever revealed it. It now fades in once the page is scrolled, which
+   gives the header a definite edge against content passing underneath. */
+.site-header::after {
+  transition: opacity 260ms ease;
+}
+
+.site-header.is-scrolled::after {
+  opacity: 1;
+}
+
+.site-header.is-scrolled {
+  box-shadow: 0 10px 30px rgba(58, 40, 30, 0.08);
+}
+
+/* Cards lift toward the pointer. Shadow and translate only -- no layout
+   properties are animated. */
+.feature-card,
+.event-card,
+.store-card,
+.gallery-item,
+.social-embed-card {
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 320ms ease;
+}
+
+.feature-card:hover,
+.event-card:hover,
+.store-card:hover,
+.social-embed-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 26px 50px rgba(40, 58, 38, 0.14);
+}
+
+.gallery-item img {
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+.gallery-item:hover {
+  box-shadow: 0 26px 50px rgba(40, 58, 38, 0.16);
+}
+
+/* Keyboard focus was invisible everywhere before this. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--accent-deep);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.form-field__optional {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.form-field__help {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------------
+   Edit mode affordances
+--------------------------------------------------------------------------- */
+
+/* Editable regions are real controls in edit mode: focusable, labelled, and
+   marked with a pencil so it's obvious what can be clicked. */
+body.admin-mode .editable-target {
+  position: relative;
+  border-radius: 8px;
+}
+
+body.admin-mode .editable-target:focus-visible {
+  outline: 3px solid var(--accent-deep);
+  outline-offset: 4px;
+}
+
+body.admin-mode .editable-target::after {
+  content: "✎";
+  position: absolute;
+  top: -0.55rem;
+  right: -0.55rem;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: var(--accent-deep);
+  color: #fdfbf5;
+  font-size: 0.78rem;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 180ms ease, transform 180ms ease;
+  pointer-events: none;
+}
+
+body.admin-mode .editable-target:hover::after,
+body.admin-mode .editable-target:focus-visible::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* An <img> can't paint ::after, so images get a ring instead of a badge. */
+body.admin-mode img.editable-target:hover,
+body.admin-mode img.editable-target:focus-visible {
+  outline: 3px solid var(--accent-deep);
+  outline-offset: 4px;
+}
+
+/* The admin bar's action row could grow several lines tall on a phone and
+   push the whole page down. It scrolls sideways instead. */
+@media (max-width: 760px) {
+  .admin-bar__actions,
+  .admin-bar__page-actions {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.3rem;
+    scrollbar-width: thin;
+  }
+
+  .admin-bar__actions .button,
+  .admin-bar__page-actions .button {
+    flex: 0 0 auto;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Small-screen refinements
+--------------------------------------------------------------------------- */
+@media (max-width: 760px) {
+  .hero__visual img,
+  .page-hero__image img {
+    max-width: 280px;
+    max-height: 340px;
+  }
+
+  .book-card__image img {
+    max-height: 300px;
+  }
+
+  /* Comfortable thumb targets on the mobile nav. */
+  .site-nav a {
+    padding: 0.95rem 1rem;
+  }
+
+  .social-embed-card--facebook .social-embed-card__frame,
+  .social-embed-card--instagram .social-embed-card__frame {
+    min-height: 420px;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero__copy h1,
+  .page-hero h1 {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+  }
+
+  .section {
+    padding-bottom: 2.6rem;
+  }
+}
+
+/* Long Finnish compounds ("kirjastoesiintymisiä", "sakemaisteluja") are the
+   words most likely to overflow a narrow card. */
+h1,
+h2,
+h3 {
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+.hero__lead,
+.page-hero p,
+.section-heading p {
+  text-wrap: pretty;
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .feature-card:hover,
+  .event-card:hover,
+  .store-card:hover,
+  .social-embed-card:hover,
+  .button:hover,
+  .button:focus-visible {
+    transform: none;
+  }
+
+  .gallery-item:hover img,
+  .media-item:hover img,
+  .media-item:hover video {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Overflow containment
+   Grid and flex children default to min-width:auto, so a single long word
+   (Finnish compounds like "kirjastoesiintymisiä", or a pasted URL) can force a
+   card wider than its track and push the whole document into horizontal
+   scroll. Measured at 768px and 1024px before this was added.
+--------------------------------------------------------------------------- */
+.feature-grid > *,
+.store-grid > *,
+.book-grid > *,
+.event-list > *,
+.photo-gallery > *,
+.media-wall > *,
+.social-embeds > *,
+.hero__grid > *,
+.page-hero__grid > *,
+.two-column > *,
+.spotlight > * {
+  min-width: 0;
+}
+
+p,
+li,
+figcaption,
+.pill,
+.contact-list strong {
+  overflow-wrap: break-word;
+}
+
+/* Belt and braces: nothing may introduce a horizontal scrollbar on the page. */
+body {
+  overflow-x: hidden;
 }

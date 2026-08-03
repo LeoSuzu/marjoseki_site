@@ -1,0 +1,14 @@
+{
+  "name": "Marjo Seki",
+  "short_name": "Marjo Seki",
+  "description": "Japanilaisen ruoan kursseja, sakemaisteluja, luentoja ja kirjoja.",
+  "lang": "fi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e7f7e0",
+  "theme_color": "#e7f7e0",
+  "icons": [
+    { "src": "/assets/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

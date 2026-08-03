@@ -6,16 +6,6 @@ const MAX_FIELD_LENGTH = 2000;
 const RESEND_TIMEOUT_MS = 10000;
 const rateLimitHits = new Map();
 
-// The published payment/delivery instructions live in the content file Marjo
-// edits, so the order confirmation quotes whatever is currently on the site
-// instead of a copy that silently drifts. Guarded: a missing or malformed
-// content file must never take the form down.
-let siteContent = null;
-try {
-  siteContent = require("../content/site.json");
-} catch (error) {
-  console.warn("site.json not available to submit-form; using fallback copy.");
-}
 
 function isRateLimited(ip) {
   const now = Date.now();
@@ -86,22 +76,6 @@ const FORM_DEFINITIONS = {
       ["Sähköposti", fields.email || "-"],
       ["Omistuskirjoitus / muut toiveet", fields.notes || "-"],
     ],
-    confirmation: (fields) => ({
-      subject: `Kiitos tilauksestasi — ${fields.bookTitle || "kirja"}`,
-      heading: "Kiitos tilauksestasi!",
-      intro: `Hei ${fields.name}, sain tilauksesi ja palaan asiaan pian. Alla vielä tilauksen tiedot.`,
-      rows: [
-        ["Kirja", fields.bookTitle],
-        ["Nimi", fields.name],
-        ["Osoite", fields.address],
-        ["Postinumero ja postitoimipaikka", fields.postalCode],
-        ["Puhelin", fields.phone],
-        ["Omistuskirjoitus / muut toiveet", fields.notes || "-"],
-      ],
-      footer:
-        siteContent?.kirjat?.order?.instructions ||
-        "Maksuohjeet ja postituskulut vahvistetaan sinulle erikseen.",
-    }),
   },
   "event-inquiry": {
     subject: (fields) => `Tilaisuuskysely: ${fields.name || "uusi kysely"}`,
@@ -115,18 +89,6 @@ const FORM_DEFINITIONS = {
       ["Henkilömäärä", fields.guestCount],
       ["Muuta", fields.notes || "-"],
     ],
-    confirmation: (fields) => ({
-      subject: "Kiitos yhteydenotostasi",
-      heading: "Kiitos yhteydenotostasi!",
-      intro: `Hei ${fields.name}, sain kyselysi ja vastaan sinulle mahdollisimman pian. Alla vielä lähettämäsi tiedot.`,
-      rows: [
-        ["Minkälainen tilaisuus", fields.eventType],
-        ["Missä tilaisuus pidetään", fields.eventLocation],
-        ["Henkilömäärä", fields.guestCount],
-        ["Muuta", fields.notes || "-"],
-      ],
-      footer: "Jos tiedoissa on korjattavaa, vastaa suoraan tähän viestiin.",
-    }),
   },
 };
 
@@ -256,34 +218,6 @@ module.exports = async function handler(req, res) {
     return res
       .status(502)
       .json({ ok: false, error: "Lomakkeen lähetys epäonnistui. Yritä myöhemmin uudelleen." });
-  }
-
-  // Best-effort acknowledgement to the sender, from Marjo's own domain. The
-  // submission has already reached her at this point, so a failure here is
-  // logged but must not turn a successful order into an error for the visitor.
-  if (fields.email && definition.confirmation) {
-    const confirmation = definition.confirmation(fields);
-    try {
-      await sendEmail(
-        apiKey,
-        {
-          from,
-          to: fields.email,
-          reply_to: toEmail,
-          subject: confirmation.subject,
-          text: renderTextBody(confirmation.rows, confirmation.footer),
-          html: renderEmailShell({
-            heading: confirmation.heading,
-            intro: confirmation.intro,
-            rows: confirmation.rows,
-            footer: confirmation.footer,
-          }),
-        },
-        `${formType}-confirmation/${submissionId}`,
-      );
-    } catch (error) {
-      console.error("Resend confirmation failed", error);
-    }
   }
 
   return res.status(200).json({ ok: true });

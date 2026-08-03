@@ -3,19 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Marjo Seki | Tapahtumia</title>
+    <title>Tulevat tapahtumat ja ruokakurssit | Marjo Seki</title>
     <meta
       name="description"
-      content="Tulevat ja menneet tapahtumat, sekä linkit Facebookiin ja Instagramiin."
+      content="Marjo Sekin tulevat popup-tapahtumat, sakemaistelut, ruokakurssit, luennot ja kirjastoesiintymiset. Katso päivämäärät ja paikkakunnat."
     />
+    <link rel="canonical" href="https://marjoseki.fi/tapahtumia.html" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="author" content="Marjo Seki" />
+    <meta name="theme-color" content="#e7f7e0" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fi_FI" />
+    <meta property="og:site_name" content="Marjo Seki" />
+    <meta property="og:url" content="https://marjoseki.fi/tapahtumia.html" />
+    <meta property="og:title" content="Tulevat tapahtumat ja ruokakurssit | Marjo Seki" />
+    <meta
+      property="og:description"
+      content="Tulevat popup-tapahtumat, sakemaistelut, ruokakurssit, luennot ja kirjastoesiintymiset."
+    />
+    <meta property="og:image" content="https://marjoseki.fi/assets/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Marjo Seki — kirjailija ja japanilaisen ruoan opettaja" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Tulevat tapahtumat ja ruokakurssit | Marjo Seki" />
+    <meta
+      name="twitter:description"
+      content="Tulevat popup-tapahtumat, sakemaistelut, ruokakurssit, luennot ja kirjastoesiintymiset."
+    />
+    <meta name="twitter:image" content="https://marjoseki.fi/assets/og-image.jpg" />
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&display=swap" rel="stylesheet" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Etusivu", "item": "https://marjoseki.fi/" },
+          { "@type": "ListItem", "position": 2, "name": "Tapahtumia", "item": "https://marjoseki.fi/tapahtumia.html" }
+        ]
+      }
+    </script>
   </head>
   <body data-page="tapahtumia">
     <header class="site-header">
@@ -77,6 +117,16 @@
             <h2>Viimeaikaisia hetkiä</h2>
           </div>
           <div class="event-list" id="past-events-list"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell">
+          <div class="section-heading">
+            <h2 id="media-title">Kuvia ja videoita</h2>
+            <p id="media-note"></p>
+          </div>
+          <div class="media-wall" id="media-wall"></div>
         </div>
       </section>
 

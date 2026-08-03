@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Admin/editing surfaces and serverless endpoints carry no public content.
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://marjoseki.fi/sitemap.xml

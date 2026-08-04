@@ -41,15 +41,15 @@
       "images": [
         {
           "image": "assets/uploads/1784202101397-47guek.jpg",
-          "imageAlt": ""
+          "imageAlt": "Viisi naista kokoontumassa, joista keskellä on nainen perinteisessä japanilaisessa kimonoissa"
         },
         {
           "image": "assets/uploads/1784202330427-iahz2a.jpg",
-          "imageAlt": "Kuva 2"
+          "imageAlt": "Marjo Seki pitää käsissään kirjaansa Salaisuuksien sienimetsä puiston rinnalla"
         },
         {
           "image": "assets/uploads/1784383133589-vw4p26.jpg",
-          "imageAlt": "Kuva 3"
+          "imageAlt": "Marjo Seki kirjastossa perinteisessä japanilaisessa vaatteessa pitää käsissään kirjaansa Makumatkoja Japaniin"
         }
       ]
     },
@@ -140,7 +140,7 @@
     "title": "Kirjat",
     "lead": "Japani-aiheisia keittokirjoja, satukirjoja lapsille",
     "image": "assets/uploads/1784204264401-hg7uyx.jpg",
-    "imageAlt": "Kirjoja",
+    "imageAlt": "Marjo Sekin kolme kirjaa: Okazu, Makumatkoja Japaniin ja Pörri ja sukkelat sushit",
     "books": [
       {
         "title": "Makumatkoja Japaniin",
@@ -190,7 +190,7 @@
     "title": "Yhteystiedot",
     "lead": "Ota yhteyttä kursseja, tapahtumia tai muita kysymyksiä varten.",
     "image": "assets/uploads/1784204138707-ub31ig.jpg",
-    "imageAlt": "Yhteystiedot",
+    "imageAlt": "Marjo Seki istuilee japanilaistyylisen puutarhan edessä, jossa on bambuja ja kivivalaisin",
     "contactItems": [
       {
         "label": "Sähköposti",
@@ -217,7 +217,7 @@
     "title": "Tapahtumia",
     "lead": "Popup-tapahtumia, sakemaisteluja, ruokakursseja, luentoja, kirjastoesiintymisiä",
     "image": "assets/uploads/1784204091815-jnhlnh.jpg",
-    "imageAlt": "Tapahtumakuva",
+    "imageAlt": "Japani-Suomi Pop Up -tapahtuman mainos Kouvolan torilla, näyttäen kaksi naista ja japanilaisia ruoka-annoksia",
     "upcoming": [
       {
         "title": "Japanilainen kotiruokailta",

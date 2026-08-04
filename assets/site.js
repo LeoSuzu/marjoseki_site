@@ -958,15 +958,19 @@ const markActiveNav = () => {
   });
 };
 
-// Three gradient-ball layers (far/mid/near, largest to smallest) that scroll
-// at different speeds to read as depth. background-position is animated
-// rather than transform, since a repeating background can shift infinitely
-// with no seam or edge gap; a transformed fixed div would need overscan to
-// avoid exposing blank space at the viewport edge as it moves.
+// Three gradient-ball layers (far/mid/near) that drift autonomously like
+// bubbles — up and slightly right at different speeds — plus a gentle per-layer
+// horizontal wobble so the three planes feel independent rather than locked
+// together. background-position is used (not transform) so a repeating tile
+// shifts seamlessly forever: CSS wraps the position automatically, no seam or
+// gap is ever exposed. Scroll adds a small additive depth boost on top.
 const PARALLAX_LAYERS = [
-  { cls: "bg-parallax--far", speed: 0.08 },
-  { cls: "bg-parallax--mid", speed: 0.32 },
-  { cls: "bg-parallax--near", speed: 0.65 },
+  // Far plane: slowest drift, lazy wobble, barely reacts to scroll.
+  { cls: "bg-parallax--far",  vx: 2.5, vy: -1.8, wobbleFreq: 0.14, wobbleAmp: 14, phase: 0,   scrollBoost: 0.06 },
+  // Mid plane: medium speed, different wobble phase.
+  { cls: "bg-parallax--mid",  vx: 6,   vy: -4.5, wobbleFreq: 0.22, wobbleAmp: 20, phase: 2.0, scrollBoost: 0.20 },
+  // Near plane: fastest, most visible motion, strongest scroll reaction.
+  { cls: "bg-parallax--near", vx: 11,  vy: -8,   wobbleFreq: 0.31, wobbleAmp: 26, phase: 4.1, scrollBoost: 0.42 },
 ];
 
 const setupParallaxBackground = () => {
@@ -974,15 +978,15 @@ const setupParallaxBackground = () => {
     return;
   }
 
-  // Prepend in reverse so the DOM (and paint order) ends up far, mid, near —
+  // Prepend in reverse so the DOM (and paint order) ends up far → mid → near:
   // each prepend lands before the previous one, so near objects paint on top.
   const layers = [...PARALLAX_LAYERS]
     .reverse()
-    .map(({ cls, speed }) => {
+    .map((config) => {
       const layer = document.createElement("div");
-      layer.className = `bg-parallax ${cls}`;
+      layer.className = `bg-parallax ${config.cls}`;
       document.body.prepend(layer);
-      return { layer, speed };
+      return { layer, ...config };
     })
     .reverse();
 
@@ -990,25 +994,27 @@ const setupParallaxBackground = () => {
     return;
   }
 
-  let ticking = false;
-  const applyScrollOffset = () => {
-    const scrollY = window.scrollY;
-    layers.forEach(({ layer, speed }) => {
-      layer.style.backgroundPositionY = `${scrollY * speed}px`;
+  let scrollY = window.scrollY;
+  window.addEventListener("scroll", () => { scrollY = window.scrollY; }, { passive: true });
+
+  let startTime = null;
+  const tick = (timestamp) => {
+    if (!startTime) startTime = timestamp;
+    const elapsed = (timestamp - startTime) / 1000; // seconds
+
+    layers.forEach(({ layer, vx, vy, wobbleFreq, wobbleAmp, phase, scrollBoost }) => {
+      // Autonomous drift (right + up) with a per-layer sinusoidal horizontal
+      // wobble so each plane sways independently, breaking the grid feel.
+      const x = elapsed * vx + Math.sin(elapsed * wobbleFreq + phase) * wobbleAmp;
+      // vy is negative (upward); scrollBoost shifts layers down on scroll for depth.
+      const y = elapsed * vy + scrollY * scrollBoost;
+      layer.style.backgroundPosition = `${x}px ${y}px`;
     });
-    ticking = false;
+
+    requestAnimationFrame(tick);
   };
 
-  window.addEventListener(
-    "scroll",
-    () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(applyScrollOffset);
-      }
-    },
-    { passive: true },
-  );
+  requestAnimationFrame(tick);
 };
 
 // Fades in the header's accent rule and shadow once the page has moved, so the

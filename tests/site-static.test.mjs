@@ -81,3 +81,15 @@ test("media renderer separates direct video files from social links", () => {
   assert.match(script, /media-item__fallback/);
   assert.match(script, /noopener noreferrer/);
 });
+
+test("image editors expose shared scale and position settings", () => {
+  const script = read("assets/site.js");
+  assert.match(script, /IMAGE_DEFAULTS/);
+  assert.match(script, /normalizeImageSettings/);
+  assert.match(script, /applyImageSettings/);
+  assert.match(script, /type: "range"/);
+  assert.match(script, /imagePositionX/);
+  assert.match(script, /imagePositionY/);
+  assert.match(script, /min: 80/);
+  assert.match(script, /max: 180/);
+});

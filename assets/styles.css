@@ -115,8 +115,14 @@ img {
 }
 
 .site-image {
+  --image-scale: 1;
+  --image-position-x: 50%;
+  --image-position-y: 50%;
   opacity: 1;
   transition: opacity 220ms ease;
+  object-position: var(--image-position-x) var(--image-position-y);
+  transform: scale(var(--image-scale));
+  transform-origin: center;
 }
 
 .site-loading .site-image,
@@ -492,6 +498,32 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.65);
 }
 
+.image-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.hero__visual > .image-frame,
+.page-hero__image > .image-frame {
+  width: min(100%, 340px);
+  max-height: 420px;
+  margin-inline: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+.hero__visual > .image-frame img,
+.page-hero__image > .image-frame img {
+  width: 100%;
+  max-width: none;
+  max-height: 420px;
+  border: 0;
+  border-radius: inherit;
+  box-shadow: none;
+}
+
 .hero__badge {
   position: absolute;
   right: -0.6rem;
@@ -709,6 +741,7 @@ button {
   border-radius: calc(var(--radius-md) - 6px);
   background: linear-gradient(160deg, rgba(var(--pink-rgb), 0.22), rgba(var(--accent-rgb), 0.14));
   border: 1px solid rgba(255, 255, 255, 0.7);
+  overflow: hidden;
 }
 
 .book-card__image img {
@@ -719,6 +752,21 @@ button {
   object-fit: contain;
   border-radius: 10px;
   box-shadow: 0 14px 30px rgba(58, 40, 30, 0.22);
+}
+
+.course-card__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 1rem;
+  border-radius: calc(var(--radius-md) - 6px);
+  background: linear-gradient(160deg, rgba(var(--pink-rgb), 0.22), rgba(var(--accent-rgb), 0.14));
+}
+
+.course-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
 }
 
 .book-status {
@@ -943,6 +991,18 @@ body.admin-mode .editable-target:hover {
   border: 1px solid var(--line);
 }
 
+.editor-field input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent-deep);
+}
+
+.editor-field__value {
+  justify-self: end;
+  color: var(--accent-deep);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .editor-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1025,15 +1085,21 @@ body.admin-mode .editable-target:hover {
   box-shadow: var(--shadow-card);
 }
 
-/* Matted rather than cropped. Marjo swaps these photos herself, so a fixed
-   crop box would cut heads off whenever a portrait shot replaces a landscape
-   one. The gradient frame acts as the mount around whatever shape arrives. */
+.photo-frame > .image-frame {
+  width: 100%;
+  height: min(280px, 42vw);
+  min-height: 180px;
+  border-radius: calc(var(--radius-md) - 8px);
+}
+
+/* Keep the form-side photos in the same rounded, contained visual language as
+   the rest of the site while the edit-mode position controls choose the crop. */
 .photo-frame img {
   width: 100%;
-  height: auto;
-  max-height: 360px;
-  object-fit: contain;
-  border-radius: calc(var(--radius-md) - 8px);
+  height: 100%;
+  max-height: none;
+  object-fit: cover;
+  border-radius: inherit;
 }
 
 .photo-frame figcaption {
@@ -1072,6 +1138,9 @@ body.admin-mode .editable-target:hover {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
+  object-position: var(--image-position-x, 50%) var(--image-position-y, 50%);
+  transform: scale(var(--image-scale, 1));
+  transform-origin: center;
   transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -1088,7 +1157,7 @@ body.admin-mode .editable-target:hover {
 
 .media-item:hover img,
 .media-item:hover video {
-  transform: scale(1.04);
+  transform: scale(calc(var(--image-scale, 1) * 1.04));
 }
 
 /* Play affordance. Hidden once the clip is actually running so it doesn't
@@ -1173,7 +1242,7 @@ body.admin-mode .editable-target:hover {
 }
 
 .gallery-item:hover img {
-  transform: scale(1.05);
+  transform: scale(calc(var(--image-scale, 1) * 1.05));
 }
 
 .gallery-item:hover {
@@ -1270,6 +1339,12 @@ body.admin-mode img.editable-target:focus-visible {
   .hero__visual img,
   .page-hero__image img {
     max-width: 280px;
+    max-height: 340px;
+  }
+
+  .hero__visual > .image-frame,
+  .page-hero__image > .image-frame {
+    width: min(100%, 280px);
     max-height: 340px;
   }
 

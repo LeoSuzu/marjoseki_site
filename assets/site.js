@@ -7,6 +7,64 @@ const state = {
   isAdmin: false,
 };
 
+const IMAGE_DEFAULTS = {
+  imageScale: 100,
+  imagePositionX: 50,
+  imagePositionY: 50,
+};
+
+const IMAGE_SETTING_NAMES = Object.keys(IMAGE_DEFAULTS);
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+const normalizeImageSettings = (value = {}) =>
+  IMAGE_SETTING_NAMES.reduce((settings, name) => {
+    const raw = Number(value[name]);
+    const fallback = IMAGE_DEFAULTS[name];
+    const max = name === "imageScale" ? 180 : 100;
+    const min = name === "imageScale" ? 80 : 0;
+    settings[name] = clamp(Number.isFinite(raw) ? raw : fallback, min, max);
+    return settings;
+  }, {});
+
+const getImageSettings = (value) => normalizeImageSettings(value);
+
+const applyImageSettings = (image, value) => {
+  if (!image) {
+    return;
+  }
+
+  const settings = getImageSettings(value);
+  image.style.setProperty("--image-scale", String(settings.imageScale / 100));
+  image.style.setProperty("--image-position-x", `${settings.imagePositionX}%`);
+  image.style.setProperty("--image-position-y", `${settings.imagePositionY}%`);
+  image.style.objectPosition = `${settings.imagePositionX}% ${settings.imagePositionY}%`;
+};
+
+const imageSettingsPathFromImagePath = (path) => path.replace(/\.image$/, "");
+
+const imageSettingFields = () => [
+  { name: "imageScale", label: "Kuvan koko", type: "range", min: 80, max: 180, step: 1, unit: "%" },
+  {
+    name: "imagePositionX",
+    label: "Kuvan sijainti vaakasuunnassa",
+    type: "range",
+    min: 0,
+    max: 100,
+    step: 1,
+    unit: "%",
+  },
+  {
+    name: "imagePositionY",
+    label: "Kuvan sijainti pystysuunnassa",
+    type: "range",
+    min: 0,
+    max: 100,
+    step: 1,
+    unit: "%",
+  },
+];
+
 const getByPath = (object, path) => {
   return path.split(".").reduce((current, segment) => {
     if (current == null) {
@@ -87,6 +145,7 @@ const setImage = (id, src, alt, meta) => {
   node.alt = alt || "";
   prepareImage(node, src);
   if (meta) {
+    applyImageSettings(node, getByPath(state.data, meta.settingsPath || imageSettingsPathFromImagePath(meta.path)));
     registerEditable(node, meta);
   }
 };
@@ -410,6 +469,23 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
       }
 
       refs[field.name] = { urlInput, upload };
+    } else if (field.type === "range") {
+      const input = document.createElement("input");
+      input.type = "range";
+      input.min = String(field.min);
+      input.max = String(field.max);
+      input.step = String(field.step || 1);
+      input.value = String(field.value ?? field.min);
+
+      const output = document.createElement("output");
+      output.className = "editor-field__value";
+      const updateOutput = () => {
+        output.textContent = `${input.value}${field.unit || ""}`;
+      };
+      input.addEventListener("input", updateOutput);
+      updateOutput();
+      wrap.append(input, output);
+      refs[field.name] = input;
     } else {
       const input = document.createElement("input");
       input.type = field.type === "password" ? "password" : "text";
@@ -485,6 +561,8 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
             submitButton.textContent = "Ladataan kuvaa…";
           }
           values[field.name] = await resolveImageFieldValue(upload.files[0], urlInput.value.trim());
+        } else if (field.type === "range") {
+          values[field.name] = Number(refs[field.name].value);
         } else {
           values[field.name] = refs[field.name].value.trim();
         }
@@ -513,6 +591,7 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
 
   const firstField = form.querySelector("input, textarea, select");
   firstField?.focus();
+  return { overlay, refs };
 };
 
 const closeModal = () => {
@@ -548,8 +627,28 @@ const openTextEditor = (meta) => {
   });
 };
 
+const setupImageEditorPreview = (modal) => {
+  const preview = modal.overlay.querySelector(".editor-field__preview");
+  if (!preview) {
+    return;
+  }
+
+  const syncPreview = () => {
+    applyImageSettings(preview, {
+      imageScale: modal.refs.imageScale?.value,
+      imagePositionX: modal.refs.imagePositionX?.value,
+      imagePositionY: modal.refs.imagePositionY?.value,
+    });
+  };
+
+  IMAGE_SETTING_NAMES.forEach((name) => modal.refs[name]?.addEventListener("input", syncPreview));
+  syncPreview();
+};
+
 const openImageEditor = (meta) => {
-  showModal({
+  const settingsPath = meta.settingsPath || imageSettingsPathFromImagePath(meta.path);
+  const settings = getImageSettings(getByPath(state.data, settingsPath));
+  const modal = showModal({
     title: meta.title || "Muokkaa kuvaa",
     description: "Liitä kuvan osoite tai lataa uusi kuva tältä koneelta.",
     submitLabel: "Tallenna kuva",
@@ -566,25 +665,34 @@ const openImageEditor = (meta) => {
         type: "text",
         value: getByPath(state.data, meta.altPath) || "",
       },
+      ...imageSettingFields().map((field) => ({ ...field, value: settings[field.name] })),
     ],
     onSubmit: async (values) => {
       setByPath(state.data, meta.path, values.image);
       setByPath(state.data, meta.altPath, values.alt);
+      setByPath(state.data, settingsPath, {
+        ...getByPath(state.data, settingsPath),
+        ...normalizeImageSettings(values),
+      });
       saveToBrowser();
       renderPage();
     },
   });
+  setupImageEditorPreview(modal);
 };
 
 const openObjectEditor = (meta, schema) => {
   const current = getByPath(state.data, meta.path);
-  showModal({
+  const hasImageSettings = schema.some((field) => IMAGE_SETTING_NAMES.includes(field.name));
+  const modal = showModal({
     title: meta.title || "Muokkaa osiota",
     description: meta.description || "Päivitä tiedot ja tallenna ne sivulle.",
     submitLabel: "Tallenna muutokset",
     fields: schema.map((field) => ({
       ...field,
-      value: current[field.name],
+      value: IMAGE_SETTING_NAMES.includes(field.name)
+        ? getImageSettings(current)[field.name]
+        : current[field.name],
     })),
     dangerAction:
       typeof meta.index === "number" && meta.listPath
@@ -607,11 +715,17 @@ const openObjectEditor = (meta, schema) => {
           return { error };
         }
       }
-      setByPath(state.data, meta.path, values);
+      const nextValues = hasImageSettings
+        ? { ...values, ...normalizeImageSettings(values) }
+        : values;
+      setByPath(state.data, meta.path, nextValues);
       saveToBrowser();
       renderPage();
     },
   });
+  if (hasImageSettings) {
+    setupImageEditorPreview(modal);
+  }
 };
 
 const openEditor = (meta) => {
@@ -650,6 +764,7 @@ const openEditor = (meta) => {
     openObjectEditor(meta, [
       { name: "image", label: "Kuva", type: "image" },
       { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
+      ...imageSettingFields(),
     ]);
     return;
   }
@@ -727,6 +842,7 @@ const openEditor = (meta) => {
         type: "text",
         help: "Esimerkiksi Facebook- tai Instagram-julkaisun osoite.",
       },
+      ...imageSettingFields(),
     ]);
     return;
   }
@@ -738,6 +854,7 @@ const openEditor = (meta) => {
       { name: "text", label: "Kuvaus", type: "textarea" },
       { name: "image", label: "Kansikuva", type: "image" },
       { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
+      ...imageSettingFields(),
     ]);
     return;
   }
@@ -754,6 +871,7 @@ const openEditor = (meta) => {
       { name: "infoText", label: "Tarkemmat tiedot -ikkunan teksti", type: "textarea", rows: 6 },
       { name: "image", label: "Kurssin kuva", type: "image" },
       { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
+      ...imageSettingFields(),
     ]);
   }
 };
@@ -1143,6 +1261,7 @@ const createMediaItem = (item, meta) => {
     if (item.image) {
       video.poster = item.image;
     }
+    applyImageSettings(video, item);
     figure.append(video);
 
     const play = document.createElement("span");
@@ -1155,6 +1274,7 @@ const createMediaItem = (item, meta) => {
     const image = document.createElement("img");
     image.alt = item.alt || "";
     prepareImage(image, item.image);
+    applyImageSettings(image, item);
     markLazyImage(image);
     figure.append(image);
   } else if (mediaLink) {
@@ -1326,8 +1446,9 @@ const renderHome = (home) => {
       });
 
       const image = document.createElement("img");
-      image.src = item.image;
       image.alt = item.imageAlt || "";
+      prepareImage(image, item.image);
+      applyImageSettings(image, item);
       markLazyImage(image);
       figure.append(image);
       gallery.append(figure);
@@ -1369,9 +1490,14 @@ const renderPalvelut = (palvelut, site) => {
       });
 
       const image = document.createElement("img");
-      image.src = course.image;
       image.alt = course.imageAlt || course.title;
+      prepareImage(image, course.image);
+      applyImageSettings(image, course);
       markLazyImage(image);
+
+      const imageFrame = document.createElement("div");
+      imageFrame.className = "image-frame course-card__image";
+      imageFrame.append(image);
 
       const meta = document.createElement("div");
       meta.className = "store-card__meta";
@@ -1423,7 +1549,7 @@ const renderPalvelut = (palvelut, site) => {
         actions.append(more);
       }
 
-      article.append(image, meta, heading, paragraph, price, actions);
+      article.append(imageFrame, meta, heading, paragraph, price, actions);
       grid.append(article);
     });
   }
@@ -1494,8 +1620,9 @@ const createBookCard = (book, meta) => {
   imageWrap.className = "book-card__image";
 
   const image = document.createElement("img");
-  image.src = book.image;
   image.alt = book.imageAlt || book.title;
+  prepareImage(image, book.image);
+  applyImageSettings(image, book);
   markLazyImage(image);
   imageWrap.append(image);
 

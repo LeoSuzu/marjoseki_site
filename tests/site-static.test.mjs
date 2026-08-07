@@ -26,3 +26,18 @@ test("all referenced local HTML image assets exist", () => {
     }
   }
 });
+
+test("pages opt into the site image loading state", () => {
+  for (const page of pages) {
+    const html = read(page);
+    assert.match(html, /<body class="site-loading"/);
+    assert.match(html, /class="site-image"/);
+  }
+});
+
+test("site script prioritizes the hero and defers other images", () => {
+  const script = read("assets/site.js");
+  assert.match(script, /fetchpriority/);
+  assert.match(script, /image\.loading = "lazy"/);
+  assert.match(script, /clearSiteLoadingState/);
+});

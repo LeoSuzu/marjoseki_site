@@ -49,14 +49,43 @@ const text = (id, value, meta) => {
   }
 };
 
+const revealImage = (image) => {
+  image.classList.remove("is-loading");
+};
+
+const prepareImage = (image, src) => {
+  image.classList.add("site-image", "is-loading");
+  image.addEventListener("load", () => revealImage(image), { once: true });
+  image.addEventListener(
+    "error",
+    () => {
+      image.removeAttribute("src");
+      image.classList.remove("is-loading");
+      image.classList.add("is-broken");
+    },
+    { once: true },
+  );
+
+  if (src) {
+    image.src = src;
+  } else {
+    image.removeAttribute("src");
+    revealImage(image);
+  }
+
+  if (image.complete && image.naturalWidth > 0) {
+    revealImage(image);
+  }
+};
+
 const setImage = (id, src, alt, meta) => {
   const node = document.getElementById(id);
   if (!node) {
     return;
   }
 
-  node.src = src || "";
   node.alt = alt || "";
+  prepareImage(node, src);
   if (meta) {
     registerEditable(node, meta);
   }
@@ -123,6 +152,16 @@ const markEagerImage = (image) => {
   image.loading = "eager";
   image.decoding = "async";
   image.setAttribute("fetchpriority", "high");
+};
+
+let siteLoadingFallbackTimer = null;
+
+const clearSiteLoadingState = () => {
+  if (siteLoadingFallbackTimer) {
+    clearTimeout(siteLoadingFallbackTimer);
+    siteLoadingFallbackTimer = null;
+  }
+  document.body.classList.remove("site-loading");
 };
 
 const saveToBrowser = () => {
@@ -2340,6 +2379,8 @@ const renderPage = () => {
     renderTapahtumia(state.data.site.tapahtumia, state.data.site.global);
   }
 
+  // The page hero is the LCP element; every other image is deferred below it.
+  document.querySelectorAll(".site-image").forEach(markLazyImage);
   // The page hero is the LCP element; the inquiry illustration further down
   // the Yhteystiedot page is not, so it loads lazily like the card images.
   markEagerImage(document.querySelector(".hero__visual img, .page-hero__image img"));
@@ -2349,6 +2390,7 @@ const renderPage = () => {
   }
 
   updateAdminChrome();
+  clearSiteLoadingState();
 };
 
 const setupEditorEvents = () => {
@@ -2459,6 +2501,7 @@ const boot = async () => {
   markActiveNav();
   setupEditorEvents();
   setupPublicForms();
+  siteLoadingFallbackTimer = setTimeout(clearSiteLoadingState, 1500);
 
   try {
     state.data = await loadSite();
@@ -2466,6 +2509,7 @@ const boot = async () => {
     renderPage();
   } catch (error) {
     console.error(error);
+    clearSiteLoadingState();
   }
 };
 

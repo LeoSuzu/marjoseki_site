@@ -65,3 +65,19 @@ test("navigation links opt into the shared button style", () => {
   }
   assert.match(read("assets/site.js"), /className = "button button--nav button--footer"/);
 });
+
+test("Facebook media is represented as a publication link", () => {
+  const site = JSON.parse(read("content/site.json"));
+  const facebookMedia = site.tapahtumia.media.items.find((item) => item.link.includes("facebook.com"));
+  assert.ok(facebookMedia);
+  assert.equal(facebookMedia.videoUrl, "");
+  assert.match(facebookMedia.link, /^https:\/\/www\.facebook\.com\//);
+});
+
+test("media renderer separates direct video files from social links", () => {
+  const script = read("assets/site.js");
+  assert.match(script, /isDirectVideoSource/);
+  assert.match(script, /\.mp4/);
+  assert.match(script, /media-item__fallback/);
+  assert.match(script, /noopener noreferrer/);
+});

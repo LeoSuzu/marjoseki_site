@@ -1075,6 +1075,17 @@ body.admin-mode .editable-target:hover {
   transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.media-item__fallback {
+  display: grid;
+  place-items: center;
+  min-height: 18rem;
+  padding: 1.5rem;
+  background: linear-gradient(160deg, rgba(var(--pink-rgb), 0.28), rgba(var(--accent-rgb), 0.2));
+  color: var(--accent-deep);
+  text-align: center;
+  font-weight: 700;
+}
+
 .media-item:hover img,
 .media-item:hover video {
   transform: scale(1.04);

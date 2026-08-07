@@ -705,28 +705,6 @@ const openEditor = (meta) => {
     return;
   }
 
-  if (meta.kind === "social") {
-    openObjectEditor(meta, [
-      { name: "title", label: "Otsikko", type: "text" },
-      { name: "note", label: "Teksti", type: "textarea" },
-      { name: "facebookUrl", label: "Facebook-sivun osoite", type: "text" },
-      { name: "instagramUrl", label: "Instagram-tilin osoite", type: "text" },
-      {
-        name: "facebookEmbedUrl",
-        label: "Facebook-julkaisun linkki (näytetään sivulla)",
-        type: "text",
-        help: "Liitä yksittäisen julkaisun osoite, niin se näkyy suoraan sivulla.",
-      },
-      {
-        name: "instagramEmbedUrl",
-        label: "Instagram-julkaisun linkki (näytetään sivulla)",
-        type: "text",
-        help: "Liitä yksittäisen julkaisun tai reelin osoite, niin se näkyy suoraan sivulla.",
-      },
-    ]);
-    return;
-  }
-
   if (meta.kind === "media") {
     openObjectEditor(meta, [
       { name: "type", label: "Tyyppi", type: "select", options: ["image", "video"] },
@@ -739,7 +717,7 @@ const openEditor = (meta) => {
         name: "videoUrl",
         label: "Videon osoite",
         type: "text",
-        help: "Suora videotiedoston osoite (esim. .mp4). Facebook- tai Instagram-linkki ei toistu tässä — liitä se alla olevaan linkkikenttään.",
+        help: "Liitä tähän suoran videotiedoston osoite (esim. .mp4). Facebook- tai Instagram-julkaisun osoite kuuluu alla olevaan linkkikenttään.",
       },
       { name: "alt", label: "Kuvan kuvaus", type: "text" },
       { name: "caption", label: "Kuvateksti", type: "text" },
@@ -1130,16 +1108,31 @@ const attachHoverPlayback = (article, video) => {
   });
 };
 
+const isDirectVideoSource = (value) => {
+  if (!value) {
+    return false;
+  }
+
+  try {
+    const url = new URL(value);
+    return /^https?:$/i.test(url.protocol) && /\.(mp4|webm|mov)$/i.test(url.pathname);
+  } catch (error) {
+    return false;
+  }
+};
+
 const createMediaItem = (item, meta) => {
   const figure = document.createElement("figure");
   figure.className = "media-item";
   registerEditable(figure, meta);
 
-  const isVideo = item.type === "video" && item.videoUrl;
+  const videoUrl = isDirectVideoSource(item.videoUrl) ? item.videoUrl : "";
+  const mediaLink = item.link || (!videoUrl && item.videoUrl ? item.videoUrl : "");
+  const isVideo = item.type === "video" && videoUrl;
 
   if (isVideo) {
     const video = document.createElement("video");
-    video.src = item.videoUrl;
+    video.src = videoUrl;
     video.muted = true;
     video.defaultMuted = true;
     video.loop = true;
@@ -1160,19 +1153,24 @@ const createMediaItem = (item, meta) => {
     attachHoverPlayback(figure, video);
   } else if (item.image) {
     const image = document.createElement("img");
-    image.src = item.image;
     image.alt = item.alt || "";
+    prepareImage(image, item.image);
     markLazyImage(image);
     figure.append(image);
+  } else if (mediaLink) {
+    const fallback = document.createElement("div");
+    fallback.className = "media-item__fallback";
+    fallback.textContent = "Video avautuu sosiaalisessa mediassa";
+    figure.append(fallback);
   }
 
-  if (item.link) {
+  if (mediaLink) {
     const link = document.createElement("a");
     link.className = "media-item__link";
-    link.href = item.link;
+    link.href = mediaLink;
     link.target = "_blank";
-    link.rel = "noreferrer";
-    link.textContent = "Avaa";
+    link.rel = "noopener noreferrer";
+    link.textContent = item.type === "video" ? "Avaa video" : "Avaa julkaisu";
     figure.append(link);
   }
 

@@ -114,6 +114,20 @@ img {
   max-width: 100%;
 }
 
+.site-image {
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+.site-loading .site-image,
+.site-image.is-loading {
+  opacity: 0;
+}
+
+.site-image.is-broken {
+  min-height: 5rem;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -162,7 +176,7 @@ button {
 
 .brand__eyebrow,
 .eyebrow {
-  font-size: 0.78rem;
+  font-size: 1.5rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
@@ -264,6 +278,24 @@ button {
   background: var(--danger-deep);
   color: #fafff9;
   border-color: transparent;
+}
+
+.button--nav {
+  padding: 0.58rem 0.82rem;
+  font-size: 0.9rem;
+  box-shadow: none;
+  white-space: nowrap;
+}
+
+.button--nav:hover,
+.button--nav:focus-visible,
+.button--nav.is-active {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+  color: #fff9f9;
+}
+
+.button--footer {
+  font-size: 0.9rem;
 }
 
 .store-card__actions .button {
@@ -399,7 +431,7 @@ button {
 .page-hero h1 {
   margin: 0;
   font-family: "Oleo Script", cursive;
-  font-size: clamp(2.4rem, 4.2vw, 4.2rem);
+  font-size: clamp(1.6rem, 3.2vw, 3.2rem);
   line-height: 1.08;
   letter-spacing: -0.01em;
 }
@@ -410,7 +442,7 @@ button {
 .social-wall h2 {
   margin: 0;
   font-family: "Oleo Script", cursive;
-  font-size: clamp(2.2rem, 3.8vw, 3.8rem);
+  font-size: clamp(1.6rem, 3.2vw, 3.2rem);
   line-height: 1.08;
   letter-spacing: -0.01em;
 }
@@ -438,6 +470,7 @@ button {
 .hero__visual,
 .page-hero__image {
   position: relative;
+  background: linear-gradient(160deg, rgba(var(--pink-rgb), 0.16), rgba(var(--accent-rgb), 0.12));
 }
 
 .inquiry-image {
@@ -762,17 +795,6 @@ button {
 .form-message--error {
   background: rgba(var(--danger-rgb), 0.12);
   color: var(--danger);
-}
-
-.site-footer__links a {
-  padding: 0.55rem 0.85rem;
-  border-radius: 999px;
-  background: rgba(240, 250, 238, 0.55);
-}
-
-.site-footer__links a:hover {
-  background: rgba(var(--accent-rgb), 0.12);
-  color: var(--accent-deep);
 }
 
 .admin-bar {
@@ -1249,6 +1271,10 @@ body.admin-mode img.editable-target:focus-visible {
     padding: 0.95rem 1rem;
   }
 
+  .site-nav a.button--nav {
+    padding: 0.7rem 1rem;
+  }
+
   .social-embed-card--facebook .social-embed-card__frame,
   .social-embed-card--instagram .social-embed-card__frame {
     min-height: 420px;
@@ -1296,6 +1322,10 @@ h3 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .site-image {
+    transition: none;
   }
 
   .feature-card:hover,

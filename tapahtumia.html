@@ -68,11 +68,11 @@
           Valikko
         </button>
         <nav class="site-nav" id="site-nav" aria-label="Päävalikko">
-          <a data-nav="home" href="index.html">Etusivu</a>
-          <a data-nav="palvelut" href="palvelut.html">Palvelut</a>
-          <a data-nav="tapahtumia" href="tapahtumia.html">Tapahtumia</a>
-          <a data-nav="kirjat" href="kirjat.html">Kirjat</a>
-          <a data-nav="yhteystiedot" href="yhteystiedot.html">Yhteystiedot</a>
+          <a class="button button--nav" data-nav="home" href="index.html">Etusivu</a>
+          <a class="button button--nav" data-nav="palvelut" href="palvelut.html">Palvelut</a>
+          <a class="button button--nav" data-nav="tapahtumia" href="tapahtumia.html">Tapahtumia</a>
+          <a class="button button--nav" data-nav="kirjat" href="kirjat.html">Kirjat</a>
+          <a class="button button--nav" data-nav="yhteystiedot" href="yhteystiedot.html">Yhteystiedot</a>
         </nav>
         <button class="owner-access" type="button" aria-label="Omistajan kirjautuminen" title="Omistajan kirjautuminen">
           ✎
@@ -84,7 +84,7 @@
       <section class="page-hero">
         <div class="shell page-hero__grid">
           <div>
-            <p class="eyebrow">Tapahtumia</p>
+            <p class="eyebrow editable-target" id="tapahtumia-hero-kicker" data-edit-label="Muokkaa Tapahtumia-sivun tunnuslausetta">Tapahtumia</p>
             <h1 id="tapahtumia-title">Tapahtumia</h1>
             <p id="tapahtumia-lead">
               Tulevat ja menneet tapahtumat, kurssit ja tilaisuudet.
@@ -104,7 +104,7 @@
       <section class="section">
         <div class="shell">
           <div class="section-heading">
-            <p class="eyebrow">Tulevat tapahtumat</p>
+            <p class="eyebrow editable-target" id="tapahtumia-upcoming-kicker" data-edit-label="Muokkaa tulevien tapahtumien tunnuslausetta">Tulevat tapahtumat</p>
             <h2>Mihin voit liittyä juuri nyt</h2>
           </div>
           <div class="event-list" id="events-list"></div>
@@ -114,7 +114,7 @@
       <section class="section">
         <div class="shell">
           <div class="section-heading">
-            <p class="eyebrow">Menneet tapahtumat</p>
+            <p class="eyebrow editable-target" id="tapahtumia-past-kicker" data-edit-label="Muokkaa menneiden tapahtumien tunnuslausetta">Menneet tapahtumat</p>
             <h2>Viimeaikaisia hetkiä</h2>
           </div>
           <div class="event-list" id="past-events-list"></div>
@@ -131,18 +131,6 @@
         </div>
       </section>
 
-      <section class="section section--accent">
-        <div class="shell social-wall">
-          <div class="social-wall__copy">
-            <p class="eyebrow">Sosiaalinen media</p>
-            <h2 id="social-title">Seuraa sosiaalisessa mediassa</h2>
-            <p id="social-note">
-              Tuoreimmat kuulumiset ja kuvat näkyvät täällä suoraan, kun haluat lisätä sosiaalisen median upotukset.
-            </p>
-            <div class="social-embeds" id="social-embeds"></div>
-          </div>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">

@@ -41,3 +41,27 @@ test("site script prioritizes the hero and defers other images", () => {
   assert.match(script, /image\.loading = "lazy"/);
   assert.match(script, /clearSiteLoadingState/);
 });
+
+test("all page eyebrow headings have editable metadata", () => {
+  for (const page of pages) {
+    const html = read(page);
+    for (const match of html.matchAll(/<p class="eyebrow(?: [^"]*)?"[^>]*>/g)) {
+      assert.match(match[0], /editable-target/);
+      assert.match(match[0], /\bid="[^"]+"/);
+      assert.match(match[0], /data-edit-label="[^"]+"/);
+    }
+  }
+});
+
+test("Tapahtumia has no duplicate social wall", () => {
+  const html = read("tapahtumia.html");
+  assert.doesNotMatch(html, /social-wall|social-embeds/);
+});
+
+test("navigation links opt into the shared button style", () => {
+  for (const page of pages) {
+    const html = read(page);
+    assert.equal((html.match(/class="button button--nav"/g) || []).length, 5);
+  }
+  assert.match(read("assets/site.js"), /className = "button button--nav button--footer"/);
+});

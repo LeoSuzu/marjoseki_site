@@ -976,6 +976,7 @@ const createFooterLinks = (links) => {
   wrapper.innerHTML = "";
   links.forEach((link, index) => {
     const anchor = document.createElement("a");
+    anchor.className = "button button--nav button--footer";
     anchor.href = link.url;
     anchor.target = link.external ? "_blank" : "_self";
     anchor.rel = link.external ? "noreferrer" : "";
@@ -993,6 +994,7 @@ const markActiveNav = () => {
   document.querySelectorAll("[data-nav]").forEach((link) => {
     if (link.dataset.nav === currentPage) {
       link.classList.add("is-active");
+      link.setAttribute("aria-current", "page");
     }
   });
 };
@@ -1843,73 +1845,6 @@ const createEventCard = (event, meta, isPast = false) => {
   return article;
 };
 
-const buildFacebookEmbedUrl = (postUrl) => {
-  if (!postUrl) {
-    return null;
-  }
-  const trimmed = postUrl.trim();
-  if (!/^https:\/\/(www\.)?(facebook\.com|fb\.watch)\//i.test(trimmed)) {
-    return null;
-  }
-  const params = new URLSearchParams({
-    href: trimmed,
-    show_text: "true",
-    width: "500",
-  });
-  return `https://www.facebook.com/plugins/post.php?${params.toString()}`;
-};
-
-const buildInstagramEmbedUrl = (postUrl) => {
-  if (!postUrl) {
-    return null;
-  }
-  const trimmed = postUrl.trim();
-  if (!/^https:\/\/(www\.)?instagram\.com\/(p|reel|tv)\//i.test(trimmed)) {
-    return null;
-  }
-  return `${trimmed.replace(/\/?(\?.*)?$/, "")}/embed`;
-};
-
-const createSocialEmbedCard = ({ label, url, embedUrl, themeClass }) => {
-  const article = document.createElement("article");
-  article.className = `social-embed-card ${themeClass || ""}`.trim();
-
-  const heading = document.createElement("h3");
-  heading.textContent = label;
-
-  const copy = document.createElement("p");
-  copy.textContent = embedUrl
-    ? "Tuoreimmat julkaisut näkyvät suoraan täällä."
-    : url
-      ? "Voit päivittää tämän kortin suoraan sosiaalisen median upotussisällöllä tai pitää nykyisen linkin."
-      : "Lisää upotuskoodi tai URL-osoite, niin sisältö näkyy täällä suoraan.";
-
-  article.append(heading, copy);
-
-  if (embedUrl) {
-    const frame = document.createElement("iframe");
-    frame.className = "social-embed-card__frame";
-    frame.src = embedUrl;
-    frame.title = `${label} -upotus`;
-    frame.loading = "lazy";
-    frame.referrerPolicy = "strict-origin-when-cross-origin";
-    frame.allow = "fullscreen";
-    article.append(frame);
-  }
-
-  if (url) {
-    const link = document.createElement("a");
-    link.className = "button button--secondary";
-    link.href = url;
-    link.target = "_blank";
-    link.rel = "noreferrer";
-    link.textContent = `Avaa ${label}`;
-    article.append(link);
-  }
-
-  return article;
-};
-
 const renderTapahtumia = (tapahtumia, site) => {
   text("tapahtumia-title", tapahtumia.title, {
     kind: "text",
@@ -1928,18 +1863,6 @@ const renderTapahtumia = (tapahtumia, site) => {
     altPath: "site.tapahtumia.imageAlt",
     title: "Muokkaa Tapahtumia-sivun kuvaa",
   });
-  text("social-title", tapahtumia.social.title, {
-    kind: "text",
-    path: "site.tapahtumia.social.title",
-    title: "Muokkaa sosiaalisen median otsikkoa",
-  });
-  text("social-note", tapahtumia.social.note, {
-    kind: "text",
-    path: "site.tapahtumia.social.note",
-    title: "Muokkaa sosiaalisen median tekstiä",
-    rows: 5,
-  });
-
   renderMediaWall(tapahtumia.media);
 
   const upcomingEntries = (tapahtumia.upcoming || []).map((event, index) => ({
@@ -2050,39 +1973,6 @@ const renderTapahtumia = (tapahtumia, site) => {
       : null,
   );
 
-  const embeds = document.getElementById("social-embeds");
-  if (embeds) {
-    embeds.innerHTML = "";
-    registerEditable(embeds, {
-      kind: "social",
-      path: "site.tapahtumia.social",
-      title: "Muokkaa sosiaalisen median linkkejä",
-    });
-
-    if (tapahtumia.social.facebookUrl || tapahtumia.social.facebookEmbedUrl) {
-      embeds.append(
-        createSocialEmbedCard({
-          label: "Facebook",
-          url: tapahtumia.social.facebookUrl,
-          embedUrl: buildFacebookEmbedUrl(tapahtumia.social.facebookEmbedUrl),
-          themeClass: "social-embed-card--facebook",
-        }),
-      );
-    }
-
-    if (tapahtumia.social.instagramUrl || tapahtumia.social.instagramEmbedUrl) {
-      embeds.append(
-        createSocialEmbedCard({
-          label: "Instagram",
-          url: tapahtumia.social.instagramUrl,
-          embedUrl:
-            buildInstagramEmbedUrl(tapahtumia.social.instagramEmbedUrl) ||
-            tapahtumia.social.instagramEmbedUrl,
-          themeClass: "social-embed-card--instagram",
-        }),
-      );
-    }
-  }
 };
 
 const renderGlobal = (data) => {

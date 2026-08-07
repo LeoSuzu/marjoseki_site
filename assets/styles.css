@@ -39,6 +39,7 @@
   --tb-green: #c9deb3;
   --tb-green-deep: #6f8f56;
   --tb-gradient: linear-gradient(135deg, var(--peach) 0%, var(--tb-pink) 55%, var(--tb-green) 100%);
+  --button-hover-background: var(--tb-gradient);
 
   --danger-rgb: 179, 63, 79;
   --danger: #b33f4f;
@@ -167,17 +168,18 @@ button {
 
 .site-header__inner {
   position: relative;
+  padding: 0.8rem 0 0.9rem;
+}
+
+.site-header__row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 0;
+  min-height: 2.5rem;
 }
 
 .brand {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
+  flex: 0 0 auto;
 }
 
 .brand__eyebrow,
@@ -188,7 +190,12 @@ button {
 }
 
 .brand__eyebrow {
+  display: block;
+  margin-bottom: 0.45rem;
   color: var(--accent-deep);
+  text-transform: none;
+  letter-spacing: 0.06em;
+  line-height: 1.35;
 }
 
 .eyebrow {
@@ -205,19 +212,16 @@ button {
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  width: auto;
+  margin-left: auto;
 }
 
 .site-nav a {
   padding: 0.78rem 1rem;
   border-radius: 999px;
   transition: 180ms ease;
-}
-
-.site-nav a:hover,
-.site-nav a.is-active {
-  background: rgba(var(--accent-rgb), 0.12);
-  color: var(--accent-deep);
 }
 
 .owner-access {
@@ -259,7 +263,7 @@ button {
 .button:focus-visible {
   transform: translateY(-2px);
   box-shadow: 0 20px 44px rgba(var(--accent-deep-rgb), 0.3);
-  background: var(--tb-gradient);
+  background: var(--button-hover-background);
   color: var(--text);
 }
 
@@ -296,12 +300,16 @@ button {
 .button--nav:hover,
 .button--nav:focus-visible,
 .button--nav.is-active {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
-  color: #fff9f9;
+  transform: translateY(-2px);
+  box-shadow: 0 20px 44px rgba(var(--accent-deep-rgb), 0.3);
+  background: var(--button-hover-background);
+  color: var(--text);
 }
 
 .button--footer {
   font-size: 0.9rem;
+  width: 10rem;
+  text-align: center;
 }
 
 .store-card__actions .button {
@@ -397,6 +405,10 @@ button {
   background: rgba(255, 255, 255, 0.7);
 }
 
+.menu-toggle__label {
+  margin-left: 0.35rem;
+}
+
 .hero,
 .page-hero {
   position: relative;
@@ -466,6 +478,21 @@ button {
   font-size: 1.02rem;
 }
 
+/* All small section labels use the same visual language as the home page's
+   TERVETULOA label. The extra specificity keeps page-hero and section text
+   rules from shrinking these labels back to paragraph size. */
+.hero .eyebrow,
+.page-hero .eyebrow,
+.section-heading .eyebrow {
+  color: var(--warm-deep);
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
@@ -476,7 +503,13 @@ button {
 .hero__visual,
 .page-hero__image {
   position: relative;
-  background: linear-gradient(160deg, rgba(var(--pink-rgb), 0.16), rgba(var(--accent-rgb), 0.12));
+  width: min(100%, 340px);
+  margin-inline: auto;
+  padding: 0.8rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, rgba(var(--peach-rgb), 0.28), rgba(var(--pink-rgb), 0.22));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: var(--shadow-card);
 }
 
 .inquiry-image {
@@ -510,8 +543,8 @@ button {
   max-height: 420px;
   margin-inline: auto;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: none;
+  border: 0;
 }
 
 .hero__visual > .image-frame img,
@@ -1030,7 +1063,13 @@ body.admin-mode .editable-target:hover {
 
   .site-footer__inner {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
+  }
+
+  .site-footer__links {
+    justify-content: center;
+    width: 100%;
   }
 }
 
@@ -1057,6 +1096,14 @@ body.admin-mode .editable-target:hover {
     box-shadow: var(--shadow);
   }
 
+  .brand {
+    max-width: calc(100% - 6rem);
+  }
+
+  .site-header__row {
+    position: relative;
+  }
+
   .site-nav.is-open {
     display: flex;
   }
@@ -1077,6 +1124,8 @@ body.admin-mode .editable-target:hover {
    form column isn't a wall of inputs. Sized so it never out-shouts the form.
 --------------------------------------------------------------------------- */
 .photo-frame {
+  width: 50%;
+  min-width: 0;
   margin: 1.6rem 0 0;
   padding: 0.8rem;
   border-radius: var(--radius-md);
@@ -1087,8 +1136,8 @@ body.admin-mode .editable-target:hover {
 
 .photo-frame > .image-frame {
   width: 100%;
-  height: min(280px, 42vw);
-  min-height: 180px;
+  aspect-ratio: 4 / 5;
+  height: auto;
   border-radius: calc(var(--radius-md) - 8px);
 }
 
@@ -1336,6 +1385,15 @@ body.admin-mode img.editable-target:focus-visible {
    Small-screen refinements
 --------------------------------------------------------------------------- */
 @media (max-width: 760px) {
+  .hero__visual,
+  .page-hero__image {
+    width: min(100%, 280px);
+  }
+
+  .photo-frame {
+    width: 100%;
+  }
+
   .hero__visual img,
   .page-hero__image img {
     max-width: 280px;

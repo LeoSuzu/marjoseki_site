@@ -2,7 +2,18 @@
 
 ## Tavoite
 
-Yhtenäistää sivuston painikkeet, eyebrow-otsikot ja kuvatyylit, poistaa Tapahtumia-sivulta päällekkäinen sosiaalisen median osio, korjata Facebook-videolinkkien käsittely sekä tehdä kaikkien kuvakehysten kuvien koon ja sijainnin säätäminen mahdolliseksi muokkaustilassa. Samalla tehdään turvallinen SEO-tarkastus ja korjataan selkeät tekniset puutteet.
+Yhtenäistää sivuston headerin, painikkeet, eyebrow-otsikot ja kuvatyylit. Desktop-headerissa nimi, kuvaava brändilause ja navigaatio ovat omilla vaakariveillään; mobiilissa navigaatio avautuu hamburger-valikolla. Kuvaava brändilause on täsmälleen “Kirjailija, japanilaisen ruoan asiantuntija ja opettaja”. Samalla korjataan media-linkit ja kuvat, pidetään sisältö muokattavana sekä tehdään tekninen SEO-tarkastus.
+
+## Tämän toteutuskierroksen hyväksytty rajaus
+
+- Etusivun, Palvelut-, Tapahtumia-, Kirjat- ja Yhteystiedot-sivujen header käyttää samaa rakennetta ja responsiivisuutta.
+- Kaikki ensisijaiset, navbarin ja footerin linkkipainikkeet käyttävät samaa gradientti- ja hover-järjestelmää kuin “Tutustu palveluihin”; footerin painikkeilla on yhteinen leveys ja keskitetty teksti.
+- Etusivun “Tervetuloa”, “Esittely” ja “Kuvia” pysyvät erillisinä, muokattavina kenttinä, mutta käyttävät samaa eyebrow-typografiaa.
+- Hero-kuvan ympäriltä poistetaan ylimääräinen harmaa tausta; kehys käyttää samaa vaaleaa kuvapintaa kuin lomakekuvat.
+- Lomakekuvat ovat pystysuuntaisissa kehyksissä, jotka toimivat myös tabletilla ja puhelimella.
+- SEO-tila raportoidaan käyttäjälle suomeksi; selkeät tekniset puutteet korjataan samalla kierroksella.
+- Menneet tapahtumat säilyvät “Viimeaikaisia hetkiä” -osiossa 60 päivää tapahtuman päättymisestä, minkä jälkeen ne eivät enää näy julkisessa listassa.
+- Suomenkielinen päivämäärämuoto hyväksyy välilyönnit pisteiden jälkeen, esimerkiksi `8.5. 2026`.
 
 ## Nykytila ja juurisyy
 

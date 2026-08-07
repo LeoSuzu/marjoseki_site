@@ -160,6 +160,7 @@ const registerEditable = (node, meta) => {
 };
 
 const SITE_ORIGIN = "https://marjoseki.fi";
+const RECENT_EVENT_DAYS = 60;
 
 const absoluteUrl = (path) => {
   if (!path) {
@@ -1356,6 +1357,24 @@ const setupMenu = () => {
   toggle.addEventListener("click", () => {
     const isOpen = nav.classList.toggle("is-open");
     toggle.setAttribute("aria-expanded", String(isOpen));
+    toggle.setAttribute("aria-label", isOpen ? "Sulje valikko" : "Avaa valikko");
+  });
+
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("is-open");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Avaa valikko");
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && nav.classList.contains("is-open")) {
+      nav.classList.remove("is-open");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Avaa valikko");
+      toggle.focus();
+    }
   });
 };
 
@@ -1858,7 +1877,7 @@ const parseEventDate = (value) => {
     joulu: 11,
   };
 
-  const simpleDate = trimmed.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  const simpleDate = trimmed.match(/^(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})$/);
   if (simpleDate) {
     const [, day, month, year] = simpleDate;
     return new Date(Number(year), Number(month) - 1, Number(day));
@@ -1892,6 +1911,24 @@ const isPastEvent = (event) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   return parsed < today;
+};
+
+const recentCutoff = (referenceDate = new Date()) => {
+  const cutoff = new Date(referenceDate);
+  cutoff.setHours(0, 0, 0, 0);
+  cutoff.setDate(cutoff.getDate() - RECENT_EVENT_DAYS);
+  return cutoff;
+};
+
+const isWithinRecentEventWindow = (event, referenceDate = new Date()) => {
+  const parsed = parseEventDate(event.dateEnd || event.date);
+  if (!parsed) {
+    return false;
+  }
+
+  const today = new Date(referenceDate);
+  today.setHours(0, 0, 0, 0);
+  return parsed >= recentCutoff(referenceDate) && parsed < today;
 };
 
 // Native <input type="date"> values are always "YYYY-MM-DD"; format those
@@ -2013,6 +2050,7 @@ const renderTapahtumia = (tapahtumia, site) => {
   }));
   const upcomingPastEntries = upcomingEntries.filter(({ event }) => isPastEvent(event));
   const recentEntries = [...pastEntries, ...upcomingPastEntries]
+    .filter(({ event }) => isWithinRecentEventWindow(event))
     .sort((left, right) => compareEventDates(left.event, right.event))
     .slice(0, 4);
 

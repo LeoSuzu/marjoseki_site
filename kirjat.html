@@ -60,23 +60,25 @@
   <body class="site-loading" data-page="kirjat">
     <header class="site-header">
       <div class="shell site-header__inner">
-        <a class="brand" href="index.html">
-          <span class="brand__eyebrow" id="brand-eyebrow">Kirjailija · Japanilaisen ruoan opettaja</span>
-          <span class="brand__name" id="brand-name">Marjo Seki</span>
-        </a>
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-          Valikko
-        </button>
-        <nav class="site-nav" id="site-nav" aria-label="Päävalikko">
+        <span class="brand__eyebrow" id="brand-eyebrow">Kirjailija, japanilaisen ruoan asiantuntija ja opettaja</span>
+        <div class="site-header__row">
+          <a class="brand" href="index.html">
+            <span class="brand__name" id="brand-name">Marjo Seki</span>
+          </a>
+          <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Avaa valikko">
+            <span aria-hidden="true">☰</span><span class="menu-toggle__label">Valikko</span>
+          </button>
+          <nav class="site-nav" id="site-nav" aria-label="Päävalikko">
           <a class="button button--nav" data-nav="home" href="index.html">Etusivu</a>
           <a class="button button--nav" data-nav="palvelut" href="palvelut.html">Palvelut</a>
           <a class="button button--nav" data-nav="tapahtumia" href="tapahtumia.html">Tapahtumia</a>
           <a class="button button--nav" data-nav="kirjat" href="kirjat.html">Kirjat</a>
           <a class="button button--nav" data-nav="yhteystiedot" href="yhteystiedot.html">Yhteystiedot</a>
-        </nav>
-        <button class="owner-access" type="button" aria-label="Omistajan kirjautuminen" title="Omistajan kirjautuminen">
-          ✎
-        </button>
+          </nav>
+          <button class="owner-access" type="button" aria-label="Omistajan kirjautuminen" title="Omistajan kirjautuminen">
+            ✎
+          </button>
+        </div>
       </div>
     </header>
 

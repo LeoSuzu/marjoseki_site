@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Yhtenäistää Marjo Seki -sivuston käyttöliittymä, korjata Tapahtumia-sivun media-linkit, lisätä kuvien asemointi muokkaustilaan, poistaa placeholder-välähdys ja varmistaa tekninen SEO.
+**Goal:** Yhtenäistää Marjo Seki -sivuston header, painikkeet, muokattavat eyebrow-tekstit ja kuvakehykset kaikilla näyttöko’oilla sekä raportoida ja korjata tekniset SEO-puutteet.
 
 **Architecture:** Nykyinen JSON-vetoinen renderöinti säilytetään. Kuvan esitysominaisuudet normalisoidaan pienillä apufunktioilla ja välitetään kaikille staattisille ja dynaamisille kuvakehyksille CSS-muuttujina; editorin nykyistä modaalia laajennetaan range-kentillä ja esikatselun live-päivityksellä. Sivujen staattinen HTML säilyttää layoutin, mutta lataustila piilottaa tekniset placeholderit ja paljastaa oikean kuvan latauksen jälkeen.
 
@@ -17,6 +17,12 @@
 - Sosiaalisen median linkit säilyvät footerissa; Tapahtumia-sivulle ei jää erillistä sosiaalisen median osiota.
 - Älä muuta placeholder-tapahtumien tai muun sisällön tekstejä ilman käyttäjän erillistä päätöstä.
 - Säilytä käyttäjän ennestään tekemä muutos `assets/styles.css`-tiedostossa.
+- Desktop-headerin nimi, brändilause ja navigaatio ovat omilla vaakariveillään.
+- Brändilause on `Kirjailija, japanilaisen ruoan asiantuntija ja opettaja`.
+- Footer-linkkipainikkeilla on sama leveys ja keskitetty teksti.
+- Lomakekuvien kehys on pystysuuntainen ja hero-kehys käyttää samaa vaaleaa kuvataustaa.
+- Viimeaikaisten tapahtumien säilytysaika on 60 päivää tapahtuman päättymisestä.
+- Päivämääräparseri hyväksyy suomalaisen muodon myös välilyönnillä, kuten `8.5. 2026`.
 
 ---
 

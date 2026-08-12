@@ -1,7 +1,7 @@
 {
   "global": {
     "siteName": "Marjo Seki",
-    "brandLine": "Kirjailija, japanilaisen ruoan asiantuntija ja opettaja",
+    "brandLine": "Kirjailija · Japanilaisen ruoan opettaja",
     "footerTagline": "Iloista kokkaamista, mielenkiintoisia tarinoita japanilaisesta ruokakulttuurista yli 40 vuoden kokemuksella, hyviä vinkkejä kotikeittiöön ja paljon muuta. \nJapanilainen keittiö antaa paljon mahdollisuuksia ja ruoka valmistuu helposti keneltä tahansa. Kaikki ovat tervetulleita kursseilleni.",
     "footerLinks": [
       {
@@ -27,7 +27,7 @@
       "title": "Mielenkiintoisia tarinoita, japanilaista ruokaa, sakemaistelua, rentoa ja hauskaa kokkaamista ja ammattitaitoista opetusta vuosien kokemuksella.",
       "text": "Marjo Seki on kirjailija ja japanilaisen ruoan opettaja Kouvolasta. Tällä sivulla voit tutustua hänen taustaansa, palveluihinsa ja tuleviin tapahtumiin.",
       "primaryCtaLabel": "Tutustu palveluihin",
-      "secondaryCtaLabel": "Katso tapahtumat",
+      "secondaryCtaLabel": "",
       "image": "assets/uploads/1784382533900-w72wu3.jpg",
       "imageAlt": "Marjo Seki -muotokuva",
       "badge": "Uusia ruokakursseja syksylle \"Tapahtumia\"- välilehdessä."
@@ -41,15 +41,15 @@
       "images": [
         {
           "image": "assets/uploads/1784202101397-47guek.jpg",
-          "imageAlt": "Viisi naista kokoontumassa, joista keskellä on nainen perinteisessä japanilaisessa kimonoissa"
+          "imageAlt": ""
         },
         {
           "image": "assets/uploads/1784202330427-iahz2a.jpg",
-          "imageAlt": "Marjo Seki pitää käsissään kirjaansa Salaisuuksien sienimetsä puiston rinnalla"
+          "imageAlt": "Kuva 2"
         },
         {
           "image": "assets/uploads/1784383133589-vw4p26.jpg",
-          "imageAlt": "Marjo Seki kirjastossa perinteisessä japanilaisessa vaatteessa pitää käsissään kirjaansa Makumatkoja Japaniin"
+          "imageAlt": "Kuva 3"
         }
       ]
     },
@@ -120,7 +120,7 @@
         "infoLabel": "",
         "infoText": "",
         "image": "assets/uploads/1784199200051-7nsuoa.jpg",
-        "imageAlt": "Vegaaninen chirashi sushi"
+        "imageAlt": "Vegaanine chirashi sushi"
       },
       {
         "title": "Sakekurssi",
@@ -140,7 +140,7 @@
     "title": "Kirjat",
     "lead": "Japani-aiheisia keittokirjoja, satukirjoja lapsille",
     "image": "assets/uploads/1784204264401-hg7uyx.jpg",
-    "imageAlt": "Marjo Sekin kolme kirjaa: Okazu, Makumatkoja Japaniin ja Pörri ja sukkelat sushit",
+    "imageAlt": "Kirjoja",
     "books": [
       {
         "title": "Makumatkoja Japaniin",
@@ -181,16 +181,14 @@
     "order": {
       "title": "Tilaa kirja!",
       "instructions": "Maksu MobilePaylla numeroon 041 44 22 798. Postituskulut lisätään tilaukseen. Toimitamme tällä hetkellä vain Suomeen.",
-      "successMessage": "Kiitos tilauksesta! Vahvistus ja maksuohjeet lähetetään sinulle pian.",
-      "image": "assets/uploads/1784202857550-ehg96i.jpg",
-      "imageAlt": "Marjo Seki ja Makumatkoja Japaniin -kirja"
+      "successMessage": "Kiitos tilauksesta! Vahvistus ja maksuohjeet lähetetään sinulle pian."
     }
   },
   "yhteystiedot": {
     "title": "Yhteystiedot",
     "lead": "Ota yhteyttä kursseja, tapahtumia tai muita kysymyksiä varten.",
     "image": "assets/uploads/1784204138707-ub31ig.jpg",
-    "imageAlt": "Marjo Seki istuilee japanilaistyylisen puutarhan edessä, jossa on bambuja ja kivivalaisin",
+    "imageAlt": "Yhteystiedot",
     "contactItems": [
       {
         "label": "Sähköposti",
@@ -208,16 +206,14 @@
     "inquiry": {
       "title": "Kysely tilaisuudesta",
       "intro": "Suunnitteletko tilaisuutta tai kurssia? Täytä lomake, niin palaan asiaan pian.",
-      "successMessage": "Kiitos kyselystä! Vastaan sinulle mahdollisimman pian.",
-      "image": "assets/uploads/1784200399150-pv8xb0.jpg",
-      "imageAlt": "Marjo Seki opettamassa japanilaisen ruoan kurssilla"
+      "successMessage": "Kiitos kyselystä! Vastaan sinulle mahdollisimman pian."
     }
   },
   "tapahtumia": {
     "title": "Tapahtumia",
     "lead": "Popup-tapahtumia, sakemaisteluja, ruokakursseja, luentoja, kirjastoesiintymisiä",
     "image": "assets/uploads/1784204091815-jnhlnh.jpg",
-    "imageAlt": "Japani-Suomi Pop Up -tapahtuman mainos Kouvolan torilla, näyttäen kaksi naista ja japanilaisia ruoka-annoksia",
+    "imageAlt": "Tapahtumakuva",
     "upcoming": [
       {
         "title": "Japanilainen kotiruokailta",
@@ -233,15 +229,6 @@
         "dateEnd": "2026-08-15",
         "location": "Kontti, Kouvolan torilla",
         "text": "Japani Popup -ravintola Kouvolan torilla Kontissa elokuun 10.-15. päivä. Tarjolla japanilaisia ruoka-annoksia mukaan tai paikan päällä nautittaviksi. Myynnissä myös japaniaiheisia kirjoja ja muuta japanilaista tavaraa.",
-        "buttonLabel": "Kysy lisää",
-        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
-      },
-      {
-        "title": "Sieniruokia ja sienitietoutta",
-        "date": "2026-09-17",
-        "dateEnd": "2026-09-20",
-        "location": "Kontti, Kouvolan torilla",
-        "text": "Tarjolla mm. japanilaisia sieniruokia ja neuvontaa sienten monipuoliseen käyttöön.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       },
@@ -355,47 +342,7 @@
       "title": "Seuraa sosiaalisessa mediassa",
       "note": "Tuoreimmat kuulumiset ja kuvat näkyvät täällä suoraan, kun haluat lisätä sosiaalisen median upotukset.",
       "facebookUrl": "https://www.facebook.com/marjo.seki",
-      "instagramUrl": "https://www.instagram.com/marjo_seki",
-      "facebookEmbedUrl": "",
-      "instagramEmbedUrl": ""
-    },
-    "media": {
-      "title": "Kuvia ja videoita",
-      "note": "Lisää tähän kuvia ja lyhyitä videoita tapahtumista. Videot ovat äänettömiä eivätkä käynnisty itsestään — ne lähtevät soimaan, kun viet hiiren kuvan päälle.",
-      "items": [
-        {
-          "type": "image",
-          "image": "assets/uploads/1784199886974-cli9u5.jpg",
-          "videoUrl": "",
-          "alt": "Sakea kaadetaan pieniin kuppeihin",
-          "caption": "Sakemaistelu",
-          "link": ""
-        },
-        {
-          "type": "image",
-          "image": "assets/uploads/1784199978882-1s0h8o.jpg",
-          "videoUrl": "",
-          "alt": "Sushilautanen tarjolla",
-          "caption": "Kurssilla tehtyä sushia",
-          "link": ""
-        },
-        {
-          "type": "image",
-          "image": "assets/uploads/1784202101397-47guek.jpg",
-          "videoUrl": "",
-          "alt": "Ryhmä kimonoihin pukeutuneita ihmisiä",
-          "caption": "Japanissa ystävien kanssa",
-          "link": ""
-        },
-        {
-          "type": "video",
-          "image": "",
-          "videoUrl": "",
-          "alt": "Kyaraben",
-          "caption": "Character Bento",
-          "link": "https://www.facebook.com/reel/3140108486139002"
-        }
-      ]
+      "instagramUrl": "https://www.instagram.com/marjo_seki"
     }
   }
 }

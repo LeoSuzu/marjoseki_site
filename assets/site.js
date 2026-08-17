@@ -1,6 +1,10 @@
 const currentPage = document.body.dataset.page;
 
 const STORAGE_KEY = "marjo-site-content-v3";
+// A browser draft older than this is more likely to be a forgotten/stale
+// editing session than real in-progress work, so it's discarded in favor of
+// the published content rather than silently overwriting newer edits.
+const DRAFT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 const state = {
   data: null,
@@ -225,7 +229,7 @@ const clearSiteLoadingState = () => {
 };
 
 const saveToBrowser = () => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ savedAt: Date.now(), data: state.data }));
   updateAdminMessage("Tallennettu tähän selaimeen.");
   scheduleDraftSave();
 };
@@ -2178,7 +2182,14 @@ const loadSite = async () => {
   }
 
   try {
-    return JSON.parse(localCopy);
+    const parsed = JSON.parse(localCopy);
+    const savedAt = parsed && parsed.savedAt;
+    const data = parsed && parsed.data;
+    if (!data || typeof savedAt !== "number" || Date.now() - savedAt > DRAFT_MAX_AGE_MS) {
+      localStorage.removeItem(STORAGE_KEY);
+      return fallback;
+    }
+    return data;
   } catch (error) {
     console.error("Tallennetun sisällön jäsentäminen epäonnistui.", error);
     return fallback;

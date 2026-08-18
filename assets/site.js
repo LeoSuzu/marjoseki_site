@@ -1306,6 +1306,19 @@ const createMediaItem = (item, meta) => {
     figure.append(caption);
   }
 
+  // When there's no playable inline video, the whole card should open the
+  // linked post -- otherwise only the small corner pill was clickable and
+  // tapping the big preview area (the obvious target) silently did nothing.
+  if (mediaLink && !isVideo) {
+    figure.classList.add("media-item--linked");
+    figure.addEventListener("click", (event) => {
+      if (state.isAdmin || event.target.closest("a")) {
+        return;
+      }
+      window.open(mediaLink, "_blank", "noopener,noreferrer");
+    });
+  }
+
   return figure;
 };
 
@@ -2168,7 +2181,7 @@ const renderGlobal = (data) => {
 };
 
 const loadSite = async () => {
-  const siteResponse = await fetch("content/site.json");
+  const siteResponse = await fetch("content/site.json", { cache: "no-store" });
 
   if (!siteResponse.ok) {
     throw new Error("Sisältötiedoston lataus epäonnistui.");
@@ -2578,3 +2591,13 @@ const boot = async () => {
 };
 
 boot();
+
+// A page restored from the back/forward cache keeps its frozen JS state and
+// never re-runs boot(), so a visitor returning after Marjo publishes new
+// content would otherwise keep seeing whatever was loaded before. Force a
+// real reload in that case so the fresh content/site.json is fetched.
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) {
+    window.location.reload();
+  }
+});

@@ -368,11 +368,14 @@
       "items": [
         {
           "type": "image",
-          "image": "assets/uploads/1784199886974-cli9u5.jpg",
+          "image": "/Users/LeMac/Desktop/Screenshot 2026-08-18 at 18.40.51.png",
           "videoUrl": "",
-          "alt": "Sakea kaadetaan pieniin kuppeihin",
+          "alt": "Erilaisia sakeja",
           "caption": "Sakemaistelu",
-          "link": ""
+          "link": "",
+          "imageScale": 100,
+          "imagePositionX": 50,
+          "imagePositionY": 50
         },
         {
           "type": "image",

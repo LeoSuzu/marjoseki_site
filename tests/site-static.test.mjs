@@ -53,6 +53,23 @@ test("all page eyebrow headings have editable metadata", () => {
   }
 });
 
+test("all pages include Vercel Web Analytics before the head closes", () => {
+  for (const page of pages) {
+    const html = read(page);
+    const analyticsInitializer = "window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };";
+    const analyticsScript = '<script defer src="/_vercel/insights/script.js"></script>';
+    const headCloseIndex = html.indexOf("</head>");
+
+    assert.notEqual(headCloseIndex, -1, `${page}: missing </head>`);
+    assert.ok(html.includes(analyticsInitializer), `${page}: missing Vercel Analytics initializer`);
+    assert.ok(html.includes(analyticsScript), `${page}: missing Vercel Analytics script`);
+    assert.ok(
+      html.indexOf(analyticsInitializer) < headCloseIndex && html.indexOf(analyticsScript) < headCloseIndex,
+      `${page}: analytics must load from the document head`,
+    );
+  }
+});
+
 test("Tapahtumia has no duplicate social wall", () => {
   const html = read("tapahtumia.html");
   assert.doesNotMatch(html, /social-wall|social-embeds/);

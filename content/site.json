@@ -216,7 +216,7 @@
   "tapahtumia": {
     "title": "Tapahtumia",
     "lead": "Popup-tapahtumia, sakemaisteluja, ruokakursseja, luentoja, kirjastoesiintymisiä",
-    "image": "assets/uploads/1784204091815-jnhlnh.jpg",
+    "image": "assets/uploads/1787065988249-rtbqv9.jpg",
     "imageAlt": "Japani-Suomi Pop Up -tapahtuman mainos Kouvolan torilla, näyttäen kaksi naista ja japanilaisia ruoka-annoksia",
     "upcoming": [
       {
@@ -396,6 +396,9 @@
           "link": "https://www.facebook.com/reel/3140108486139002"
         }
       ]
-    }
+    },
+    "imageScale": 100,
+    "imagePositionX": 50,
+    "imagePositionY": 50
   }
 }

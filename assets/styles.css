@@ -1051,6 +1051,8 @@ body.admin-mode .editable-target:hover {
   max-width: 100%;
   border-radius: 14px;
   border: 1px solid var(--line);
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 /* The preview reuses the real on-page card markup (see previewFrame in

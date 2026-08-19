@@ -473,6 +473,11 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
           mount = layerNode;
         });
         mount.append(preview);
+
+        const dragHint = document.createElement("small");
+        dragHint.className = "editor-field__help";
+        dragHint.textContent = "Vedä kuvaa siirtääksesi, nipistä tai vieritä hiiren rullalla lähentääksesi.";
+        wrap.append(dragHint);
       }
 
       refs[field.name] = { urlInput, upload };
@@ -650,6 +655,110 @@ const setupImageEditorPreview = (modal) => {
 
   IMAGE_SETTING_NAMES.forEach((name) => modal.refs[name]?.addEventListener("input", syncPreview));
   syncPreview();
+
+  setupImageDragAndPinch(preview, modal);
+};
+
+// Direct manipulation on top of the sliders: drag the preview to reposition,
+// pinch (touch) or scroll the wheel (mouse) to zoom. The sliders stay as a
+// precise fallback, but most people -- especially on a phone -- expect to
+// just grab the photo the way they would in Instagram or Canva.
+const setupImageDragAndPinch = (preview, modal) => {
+  const scaleInput = modal.refs.imageScale;
+  const xInput = modal.refs.imagePositionX;
+  const yInput = modal.refs.imagePositionY;
+  if (!scaleInput || !xInput || !yInput) {
+    return;
+  }
+
+  const setValue = (input, value) => {
+    input.value = String(clamp(value, Number(input.min), Number(input.max)));
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  };
+
+  preview.draggable = false;
+  preview.style.touchAction = "none";
+  preview.style.cursor = "grab";
+
+  const pointers = new Map();
+  const activePoints = () => Array.from(pointers.values());
+  const distanceBetween = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+  let dragStart = null;
+  let pinchStart = null;
+
+  const startDragFrom = (point) => ({
+    x: point.x,
+    y: point.y,
+    posX: Number(xInput.value),
+    posY: Number(yInput.value),
+  });
+
+  preview.addEventListener("pointerdown", (event) => {
+    preview.setPointerCapture(event.pointerId);
+    pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    preview.style.cursor = "grabbing";
+
+    if (pointers.size === 1) {
+      dragStart = startDragFrom({ x: event.clientX, y: event.clientY });
+    } else if (pointers.size === 2) {
+      const [a, b] = activePoints();
+      pinchStart = { distance: distanceBetween(a, b), scale: Number(scaleInput.value) };
+      dragStart = null;
+    }
+  });
+
+  preview.addEventListener("pointermove", (event) => {
+    if (!pointers.has(event.pointerId)) {
+      return;
+    }
+    pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+    if (pointers.size === 2 && pinchStart) {
+      const [a, b] = activePoints();
+      const ratio = distanceBetween(a, b) / (pinchStart.distance || 1);
+      setValue(scaleInput, pinchStart.scale * ratio);
+      return;
+    }
+
+    if (pointers.size === 1 && dragStart) {
+      const rect = preview.getBoundingClientRect();
+      const dxPercent = ((event.clientX - dragStart.x) / rect.width) * 100;
+      const dyPercent = ((event.clientY - dragStart.y) / rect.height) * 100;
+      // Dragging right should slide the visible photo right, which means
+      // showing more of its left side -- i.e. the position percentage moves
+      // the opposite way from the finger.
+      setValue(xInput, dragStart.posX - dxPercent);
+      setValue(yInput, dragStart.posY - dyPercent);
+    }
+  });
+
+  const endPointer = (event) => {
+    pointers.delete(event.pointerId);
+    if (pointers.size === 0) {
+      preview.style.cursor = "grab";
+      dragStart = null;
+      pinchStart = null;
+    } else if (pointers.size === 1) {
+      // Dropped from two fingers to one -- restart the drag reference from
+      // here so the remaining finger doesn't cause a jump.
+      dragStart = startDragFrom(activePoints()[0]);
+      pinchStart = null;
+    }
+  };
+
+  preview.addEventListener("pointerup", endPointer);
+  preview.addEventListener("pointercancel", endPointer);
+
+  // Desktop mice don't pinch -- the wheel is the equivalent zoom gesture.
+  preview.addEventListener(
+    "wheel",
+    (event) => {
+      event.preventDefault();
+      setValue(scaleInput, Number(scaleInput.value) + (event.deltaY > 0 ? -4 : 4));
+    },
+    { passive: false },
+  );
 };
 
 const openImageEditor = (meta) => {

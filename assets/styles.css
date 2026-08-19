@@ -1205,6 +1205,26 @@ body.admin-mode .editable-target:hover {
   border: none;
 }
 
+.media-item--add {
+  display: grid;
+  place-items: center;
+  min-height: 18rem;
+  aspect-ratio: 4 / 5;
+  border: 2px dashed rgba(var(--accent-rgb), 0.45);
+  background: transparent;
+  color: var(--accent-deep);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.media-item--add:hover {
+  background: rgba(var(--pink-rgb), 0.12);
+  border-color: rgba(var(--accent-rgb), 0.75);
+}
+
 .media-item__fallback {
   display: grid;
   place-items: center;

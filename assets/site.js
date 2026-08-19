@@ -1429,7 +1429,7 @@ const renderMediaWall = (media) => {
   wall.innerHTML = "";
   const items = media?.items || [];
 
-  if (items.length === 0) {
+  if (items.length === 0 && !state.isAdmin) {
     const empty = document.createElement("p");
     empty.className = "empty-state";
     empty.textContent = "Ei vielä kuvia tai videoita.";
@@ -1448,6 +1448,27 @@ const renderMediaWall = (media) => {
       }),
     );
   });
+
+  // The admin bar already has a page-action button for this, but it's easy
+  // to miss among the other buttons up there. A tile right in the grid
+  // itself, where new items actually end up, is much harder to overlook.
+  if (state.isAdmin) {
+    const addTile = document.createElement("button");
+    addTile.type = "button";
+    addTile.className = "media-item media-item--add";
+    addTile.textContent = "+ Lisää kuva tai video";
+    addTile.addEventListener("click", () =>
+      addListItem("site.tapahtumia.media.items", {
+        type: "image",
+        image: "assets/uploads/event-placeholder.svg",
+        videoUrl: "",
+        alt: "Uusi kuva",
+        caption: "",
+        link: "",
+      }),
+    );
+    wall.append(addTile);
+  }
 };
 
 const setupMenu = () => {

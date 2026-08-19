@@ -1244,6 +1244,23 @@ const isDirectVideoSource = (value) => {
   }
 };
 
+// Facebook reels/videos aren't direct video files -- they can't be played in
+// a <video> tag -- but Facebook's own embedded player can show them inline
+// via an iframe, so a card linking to one of these gets a click-to-load
+// embed instead of just a "goes to Facebook" pill.
+const isFacebookVideoLink = (value) => {
+  if (!value) {
+    return false;
+  }
+
+  try {
+    const url = new URL(value);
+    return /^https?:$/i.test(url.protocol) && /(^|\.)(facebook\.com|fb\.watch)$/i.test(url.hostname);
+  } catch (error) {
+    return false;
+  }
+};
+
 const createMediaItem = (item, meta) => {
   const figure = document.createElement("figure");
   figure.className = "media-item";
@@ -1252,6 +1269,9 @@ const createMediaItem = (item, meta) => {
   const videoUrl = isDirectVideoSource(item.videoUrl) ? item.videoUrl : "";
   const mediaLink = item.link || (!videoUrl && item.videoUrl ? item.videoUrl : "");
   const isVideo = item.type === "video" && videoUrl;
+  const isFacebookEmbed = !isVideo && item.type === "video" && isFacebookVideoLink(mediaLink);
+
+  let posterNode = null;
 
   if (isVideo) {
     const video = document.createElement("video");
@@ -1275,6 +1295,47 @@ const createMediaItem = (item, meta) => {
     figure.append(play);
 
     attachHoverPlayback(figure, video);
+  } else if (isFacebookEmbed) {
+    if (item.image) {
+      const poster = document.createElement("img");
+      poster.alt = item.alt || "";
+      prepareImage(poster, item.image);
+      applyImageSettings(poster, item);
+      markLazyImage(poster);
+      figure.append(poster);
+      posterNode = poster;
+    } else {
+      const fallback = document.createElement("div");
+      fallback.className = "media-item__fallback";
+      fallback.textContent = "Katso video Facebookissa";
+      figure.append(fallback);
+      posterNode = fallback;
+    }
+
+    const play = document.createElement("span");
+    play.className = "media-item__play";
+    play.textContent = "▶ Katso video";
+    figure.append(play);
+
+    figure.classList.add("media-item--fb-loadable");
+    let embedLoaded = false;
+    figure.addEventListener("click", (event) => {
+      if (state.isAdmin || event.target.closest("a") || embedLoaded) {
+        return;
+      }
+      embedLoaded = true;
+
+      const iframe = document.createElement("iframe");
+      iframe.className = "media-item__fb-iframe";
+      iframe.src = `https://www.facebook.com/plugins/video.php?height=600&href=${encodeURIComponent(mediaLink)}&show_text=false&width=400`;
+      iframe.setAttribute("width", "100%");
+      iframe.setAttribute("height", "100%");
+      iframe.loading = "lazy";
+      iframe.allow = "clipboard-write; encrypted-media; picture-in-picture; web-share";
+      iframe.allowFullscreen = true;
+      posterNode.replaceWith(iframe);
+      play.remove();
+    });
   } else if (item.image) {
     const image = document.createElement("img");
     image.alt = item.alt || "";
@@ -1306,10 +1367,11 @@ const createMediaItem = (item, meta) => {
     figure.append(caption);
   }
 
-  // When there's no playable inline video, the whole card should open the
-  // linked post -- otherwise only the small corner pill was clickable and
-  // tapping the big preview area (the obvious target) silently did nothing.
-  if (mediaLink && !isVideo) {
+  // When there's no playable inline video or embed, the whole card should
+  // open the linked post -- otherwise only the small corner pill was
+  // clickable and tapping the big preview area (the obvious target) did
+  // nothing.
+  if (mediaLink && !isVideo && !isFacebookEmbed) {
     figure.classList.add("media-item--linked");
     figure.addEventListener("click", (event) => {
       if (state.isAdmin || event.target.closest("a")) {

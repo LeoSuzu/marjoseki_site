@@ -1193,8 +1193,16 @@ body.admin-mode .editable-target:hover {
   transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.media-item--linked {
+.media-item--linked,
+.media-item--fb-loadable {
   cursor: pointer;
+}
+
+.media-item__fb-iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border: none;
 }
 
 .media-item__fallback {

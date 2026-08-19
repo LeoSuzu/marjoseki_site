@@ -288,19 +288,6 @@ const resetBrowserEdits = async () => {
   updateAdminChrome();
 };
 
-const downloadBackup = () => {
-  const blob = new Blob([JSON.stringify(state.data, null, 2)], {
-    type: "application/json",
-  });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = "marjo-site-backup.json";
-  anchor.click();
-  URL.revokeObjectURL(url);
-  updateAdminMessage("Varmuuskopio ladattu.");
-};
-
 const publishChanges = async () => {
   updateAdminMessage("Julkaistaan muutoksia…");
   try {
@@ -1449,25 +1436,23 @@ const renderMediaWall = (media) => {
     );
   });
 
-  // The admin bar already has a page-action button for this, but it's easy
-  // to miss among the other buttons up there. A tile right in the grid
-  // itself, where new items actually end up, is much harder to overlook.
   if (state.isAdmin) {
-    const addTile = document.createElement("button");
-    addTile.type = "button";
-    addTile.className = "media-item media-item--add";
-    addTile.textContent = "+ Lisää kuva tai video";
-    addTile.addEventListener("click", () =>
-      addListItem("site.tapahtumia.media.items", {
-        type: "image",
-        image: "assets/uploads/event-placeholder.svg",
-        videoUrl: "",
-        alt: "Uusi kuva",
-        caption: "",
-        link: "",
-      }),
+    wall.append(
+      createAddTile("+ Lisää kuva tai video", "media-item", () =>
+        addListItem(
+          "site.tapahtumia.media.items",
+          {
+            type: "image",
+            image: "assets/uploads/event-placeholder.svg",
+            videoUrl: "",
+            alt: "Uusi kuva",
+            caption: "",
+            link: "",
+          },
+          { kind: "media", title: "Muokkaa uutta kuvaa tai videota" },
+        ),
+      ),
     );
-    wall.append(addTile);
   }
 };
 
@@ -1566,6 +1551,17 @@ const renderHome = (home) => {
         }),
       );
     });
+    if (state.isAdmin) {
+      grid.append(
+        createAddTile("+ Lisää kohokohta", "feature-card", () =>
+          addListItem(
+            "site.home.features",
+            { title: "Uusi kohokohta", text: "Klikkaa tätä korttia muokataksesi tekstiä." },
+            { kind: "feature", title: "Muokkaa uutta kohokohtaa" },
+          ),
+        ),
+      );
+    }
   }
 
   text("home-gallery-title", home.gallery?.title, {
@@ -1596,6 +1592,17 @@ const renderHome = (home) => {
       figure.append(image);
       gallery.append(figure);
     });
+    if (state.isAdmin) {
+      gallery.append(
+        createAddTile("+ Lisää kuva", "gallery-item", () =>
+          addListItem(
+            "site.home.gallery.images",
+            { image: "assets/uploads/portrait-placeholder.svg", imageAlt: "Uusi kuva" },
+            { kind: "gallery-image", title: "Muokkaa uutta kuvaa" },
+          ),
+        ),
+      );
+    }
   }
 };
 
@@ -1695,6 +1702,28 @@ const renderPalvelut = (palvelut, site) => {
       article.append(imageFrame, meta, heading, paragraph, price, actions);
       grid.append(article);
     });
+    if (state.isAdmin) {
+      grid.append(
+        createAddTile("+ Lisää kurssi", "store-card", () =>
+          addListItem(
+            "site.palvelut.courses",
+            {
+              title: "Uusi kurssi",
+              format: "Muoto",
+              text: "Kuvaile kurssi tässä.",
+              priceLabel: "Kysy hintaa",
+              buyLabel: "Tiedustele sähköpostilla",
+              buyUrl: "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
+              infoLabel: "Tarkemmat tiedot",
+              infoText: "Kirjoita tähän kurssin tarkemmat tiedot.",
+              image: "assets/uploads/food-placeholder.svg",
+              imageAlt: "Uuden kurssin kuva",
+            },
+            { kind: "course", title: "Muokkaa uutta kurssia" },
+          ),
+        ),
+      );
+    }
   }
 
   // Modelled as Service rather than Course on purpose: Google's Course rich
@@ -1837,6 +1866,23 @@ const renderKirjat = (kirjat, site) => {
         }),
       );
     });
+    if (state.isAdmin) {
+      grid.append(
+        createAddTile("+ Lisää kirja", "store-card book-card", () =>
+          addListItem(
+            "site.kirjat.books",
+            {
+              title: "Uusi kirja",
+              status: "Tulossa",
+              text: "Kuvaile kirja tässä.",
+              image: "assets/uploads/books-placeholder.svg",
+              imageAlt: "Uuden kirjan kansi",
+            },
+            { kind: "book", title: "Muokkaa uutta kirjaa" },
+          ),
+        ),
+      );
+    }
   }
 
   const bookItems = (kirjat.books || [])
@@ -1959,6 +2005,17 @@ const renderYhteystiedot = (yhteystiedot, site) => {
       block.append(heading, paragraph);
       contactList.append(block);
     });
+    if (state.isAdmin) {
+      contactList.append(
+        createAddTile("+ Lisää yhteystieto", "contact-item", () =>
+          addListItem(
+            "site.yhteystiedot.contactItems",
+            { label: "Uusi kenttä", value: "Lisää arvo" },
+            { kind: "contact", title: "Muokkaa uutta yhteystietoa" },
+          ),
+        ),
+      );
+    }
   }
 
   text("inquiry-title", yhteystiedot.inquiry?.title, {
@@ -2178,11 +2235,30 @@ const renderTapahtumia = (tapahtumia, site) => {
     .sort((left, right) => compareEventDates(left.event, right.event))
     .slice(0, 4);
 
+  const newUpcomingEvent = () => ({
+    title: "Uusi tuleva tapahtuma",
+    date: "",
+    dateEnd: "",
+    location: "",
+    text: "Kuvaile tapahtuma tässä.",
+    buttonLabel: "Kysy lisää",
+    buttonUrl: "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys",
+  });
+  const newPastEvent = () => ({
+    title: "Uusi mennyt tapahtuma",
+    date: "",
+    dateEnd: "",
+    location: "",
+    text: "Kuvaile tapahtuma tässä.",
+    buttonLabel: "",
+    buttonUrl: "",
+  });
+
   const list = document.getElementById("events-list");
   if (list) {
     list.innerHTML = "";
 
-    if (upcomingEvents.length === 0) {
+    if (upcomingEvents.length === 0 && !state.isAdmin) {
       const empty = document.createElement("p");
       empty.className = "empty-state";
       empty.textContent = "Ei tulevia tapahtumia juuri nyt.";
@@ -2192,13 +2268,24 @@ const renderTapahtumia = (tapahtumia, site) => {
         list.append(createEventCard(event, meta));
       });
     }
+
+    if (state.isAdmin) {
+      list.append(
+        createAddTile("+ Lisää tuleva tapahtuma", "event-card", () =>
+          addListItem("site.tapahtumia.upcoming", newUpcomingEvent(), {
+            kind: "event",
+            title: "Muokkaa uutta tulevaa tapahtumaa",
+          }),
+        ),
+      );
+    }
   }
 
   const pastList = document.getElementById("past-events-list");
   if (pastList) {
     pastList.innerHTML = "";
 
-    if (recentEntries.length === 0) {
+    if (recentEntries.length === 0 && !state.isAdmin) {
       const empty = document.createElement("p");
       empty.className = "empty-state";
       empty.textContent = "Ei vielä viimeaikaisia hetkiä.";
@@ -2207,6 +2294,17 @@ const renderTapahtumia = (tapahtumia, site) => {
       recentEntries.forEach(({ event, meta }) => {
         pastList.append(createEventCard(event, meta, true));
       });
+    }
+
+    if (state.isAdmin) {
+      pastList.append(
+        createAddTile("+ Lisää mennyt tapahtuma", "event-card", () =>
+          addListItem("site.tapahtumia.past", newPastEvent(), {
+            kind: "event",
+            title: "Muokkaa uutta mennyttä tapahtumaa",
+          }),
+        ),
+      );
     }
   }
 
@@ -2342,14 +2440,10 @@ const createAdminChrome = () => {
       </div>
       <div class="admin-bar__actions">
         <button type="button" class="button" data-admin-action="publish">Julkaise sivulle</button>
-        <button type="button" class="button button--ghost" data-admin-action="download">Lataa varmuuskopio</button>
-        <button type="button" class="button button--ghost" data-admin-action="upload">Tuo varmuuskopio</button>
-        <button type="button" class="button button--ghost" data-admin-action="restore-draft">Hae palvelimen luonnos</button>
-        <button type="button" class="button button--ghost" data-admin-action="reset">Nollaa muutokset</button>
-        <button type="button" class="button button--ghost" data-admin-action="logout">Kirjaudu ulos</button>
+        <button type="button" class="button button--ghost" data-admin-action="restore-draft">Hae luonnos toiselta laitteelta</button>
+        <button type="button" class="button button--ghost" data-admin-action="reset">Peru tallentamattomat muutokset</button>
+        <button type="button" class="button button--danger" data-admin-action="logout">Kirjaudu ulos</button>
       </div>
-      <div class="admin-bar__page-actions" data-page-actions></div>
-      <input type="file" accept="application/json" hidden data-upload-input />
     </div>
   `;
   document.body.append(bar);
@@ -2362,127 +2456,34 @@ const createAdminChrome = () => {
   syncAdminBarOffset();
 };
 
-const addListItem = (path, item) => {
+// metaTemplate, if given, opens the new item's editor immediately after it's
+// added -- important for lists like Tapahtumia's "menneet" events, where the
+// freshly added blank card might not even be visible in its own filtered
+// display (recent-only, capped) for the admin to go find and click.
+const addListItem = (path, item, metaTemplate) => {
   const confirmed = confirm(
-    "Lisätäänkö UUSI, tyhjä kortti listan loppuun?\n\nJos tarkoitit muokata jo olemassa olevaa korttia, paina Peruuta ja klikkaa sen sijaan suoraan sitä korttia sivulla.",
+    "Lisätäänkö UUSI, tyhjä kortti listan loppuun? Voit täyttää sen tiedot heti seuraavaksi avautuvassa ikkunassa.",
   );
   if (!confirmed) {
     return;
   }
   const list = getByPath(state.data, path);
   list.push(item);
+  const index = list.length - 1;
   saveToBrowser();
   renderPage();
+  if (metaTemplate) {
+    openEditor({ ...metaTemplate, path: `${path}.${index}`, listPath: path, index });
+  }
 };
 
-const createPageActionButtons = () => {
-  const actions = [];
-
-  if (currentPage === "home") {
-    actions.push({
-      label: "Lisää kohokohta",
-      onClick: () =>
-        addListItem("site.home.features", {
-          title: "Uusi kohokohta",
-          text: "Klikkaa tätä korttia muokataksesi tekstiä.",
-        }),
-    });
-    actions.push({
-      label: "Lisää kuva galleriaan",
-      onClick: () =>
-        addListItem("site.home.gallery.images", {
-          image: "assets/uploads/portrait-placeholder.svg",
-          imageAlt: "Uusi kuva",
-        }),
-    });
-  }
-
-  if (currentPage === "yhteystiedot") {
-    actions.push({
-      label: "Lisää yhteystieto",
-      onClick: () =>
-        addListItem("site.yhteystiedot.contactItems", {
-          label: "Uusi kenttä",
-          value: "Lisää arvo",
-        }),
-    });
-  }
-
-  if (currentPage === "tapahtumia") {
-    actions.push({
-      label: "Lisää tuleva tapahtuma",
-      onClick: () =>
-        addListItem("site.tapahtumia.upcoming", {
-          title: "Uusi tuleva tapahtuma",
-          date: "",
-          dateEnd: "",
-          location: "",
-          text: "Kuvaile tapahtuma tässä.",
-          buttonLabel: "Kysy lisää",
-          buttonUrl: "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys",
-        }),
-    });
-    actions.push({
-      label: "Lisää kuva tai video",
-      onClick: () =>
-        addListItem("site.tapahtumia.media.items", {
-          type: "image",
-          image: "assets/uploads/event-placeholder.svg",
-          videoUrl: "",
-          alt: "Uusi kuva",
-          caption: "",
-          link: "",
-        }),
-    });
-    actions.push({
-      label: "Lisää mennyt tapahtuma",
-      onClick: () =>
-        addListItem("site.tapahtumia.past", {
-          title: "Uusi mennyt tapahtuma",
-          date: "",
-          dateEnd: "",
-          location: "",
-          text: "Kuvaile tapahtuma tässä.",
-          buttonLabel: "",
-          buttonUrl: "",
-        }),
-    });
-  }
-
-  if (currentPage === "palvelut") {
-    actions.push({
-      label: "Lisää kurssi",
-      onClick: () =>
-        addListItem("site.palvelut.courses", {
-          title: "Uusi kurssi",
-          format: "Muoto",
-          text: "Kuvaile kurssi tässä.",
-          priceLabel: "Kysy hintaa",
-          buyLabel: "Tiedustele sähköpostilla",
-          buyUrl: "mailto:marjoseki@hotmail.com?subject=Uusi%20kurssi",
-          infoLabel: "Tarkemmat tiedot",
-          infoText: "Kirjoita tähän kurssin tarkemmat tiedot.",
-          image: "assets/uploads/food-placeholder.svg",
-          imageAlt: "Uuden kurssin kuva",
-        }),
-    });
-  }
-
-  if (currentPage === "kirjat") {
-    actions.push({
-      label: "Lisää kirja",
-      onClick: () =>
-        addListItem("site.kirjat.books", {
-          title: "Uusi kirja",
-          status: "Tulossa",
-          text: "Kuvaile kirja tässä.",
-          image: "assets/uploads/books-placeholder.svg",
-          imageAlt: "Uuden kirjan kansi",
-        }),
-    });
-  }
-
-  return actions;
+const createAddTile = (label, className, onClick) => {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = `add-tile ${className}`;
+  button.textContent = label;
+  button.addEventListener("click", onClick);
+  return button;
 };
 
 // Edit mode has to be operable without a mouse. While signed in, every
@@ -2523,21 +2524,6 @@ const updateAdminChrome = () => {
   createAdminChrome();
   document.body.classList.add("admin-mode");
   syncAdminBarOffset();
-
-  const pageActions = document.querySelector("[data-page-actions]");
-  if (!pageActions) {
-    return;
-  }
-
-  pageActions.innerHTML = "";
-  createPageActionButtons().forEach((action) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "button button--secondary";
-    button.textContent = action.label;
-    button.addEventListener("click", action.onClick);
-    pageActions.append(button);
-  });
 };
 
 const renderPage = () => {
@@ -2594,14 +2580,6 @@ const setupEditorEvents = () => {
         await publishChanges();
       }
 
-      if (action === "download") {
-        downloadBackup();
-      }
-
-      if (action === "upload") {
-        document.querySelector("[data-upload-input]")?.click();
-      }
-
       if (action === "restore-draft") {
         await restoreServerDraft();
       }
@@ -2654,26 +2632,6 @@ const setupEditorEvents = () => {
     if (editable && editable.__editMeta) {
       event.preventDefault();
       openEditor(editable.__editMeta);
-    }
-  });
-
-  document.addEventListener("change", async (event) => {
-    const input = event.target.closest("[data-upload-input]");
-    if (!input || !input.files[0]) {
-      return;
-    }
-
-    try {
-      const textValue = await input.files[0].text();
-      state.data = JSON.parse(textValue);
-      saveToBrowser();
-      renderPage();
-      updateAdminMessage("Varmuuskopio tuotu.");
-    } catch (error) {
-      console.error(error);
-      updateAdminMessage("Tuonti epäonnistui. Tarkista varmuuskopiotiedosto.");
-    } finally {
-      input.value = "";
     }
   });
 };

@@ -908,8 +908,7 @@ button {
   font-size: 0.95rem;
 }
 
-.admin-bar__actions,
-.admin-bar__page-actions {
+.admin-bar__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
@@ -921,6 +920,36 @@ button {
 
 body.admin-mode {
   padding-top: var(--admin-bar-offset, 11rem);
+}
+
+/* Shared "+" placeholder tile used to add a new card at the end of every
+   editable grid/list, in place of the old admin-bar page-action buttons. */
+.add-tile {
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+  padding: 1.5rem;
+  border: 2px dashed rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--accent-deep);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.add-tile:hover {
+  background: rgba(var(--pink-rgb), 0.12);
+  border-color: rgba(var(--accent-rgb), 0.75);
+}
+
+.media-item.add-tile,
+.gallery-item.add-tile {
+  aspect-ratio: 4 / 5;
+  min-height: 18rem;
 }
 
 .editable-target {
@@ -1205,26 +1234,6 @@ body.admin-mode .editable-target:hover {
   border: none;
 }
 
-.media-item--add {
-  display: grid;
-  place-items: center;
-  min-height: 18rem;
-  aspect-ratio: 4 / 5;
-  border: 2px dashed rgba(var(--accent-rgb), 0.45);
-  background: transparent;
-  color: var(--accent-deep);
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 200ms ease, border-color 200ms ease;
-}
-
-.media-item--add:hover {
-  background: rgba(var(--pink-rgb), 0.12);
-  border-color: rgba(var(--accent-rgb), 0.75);
-}
-
 .media-item__fallback {
   display: grid;
   place-items: center;
@@ -1413,16 +1422,14 @@ body.admin-mode img.editable-target:focus-visible {
 /* The admin bar's action row could grow several lines tall on a phone and
    push the whole page down. It scrolls sideways instead. */
 @media (max-width: 760px) {
-  .admin-bar__actions,
-  .admin-bar__page-actions {
+  .admin-bar__actions {
     flex-wrap: nowrap;
     overflow-x: auto;
     padding-bottom: 0.3rem;
     scrollbar-width: thin;
   }
 
-  .admin-bar__actions .button,
-  .admin-bar__page-actions .button {
+  .admin-bar__actions .button {
     flex: 0 0 auto;
   }
 }

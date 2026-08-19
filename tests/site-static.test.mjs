@@ -113,7 +113,11 @@ test("Facebook media is represented as a publication link", () => {
   const site = JSON.parse(read("content/site.json"));
   const facebookMedia = site.tapahtumia.media.items.find((item) => item.link.includes("facebook.com"));
   assert.ok(facebookMedia);
-  assert.equal(facebookMedia.videoUrl, "");
+  // videoUrl is allowed to also hold the Facebook link (editors sometimes
+  // paste it into both fields) -- what matters is it's never a direct
+  // video file, which is what would make the renderer try to load it as
+  // an HTML5 <video> instead of the Facebook embed.
+  assert.doesNotMatch(facebookMedia.videoUrl, /\.(mp4|webm|mov)([?#]|$)/i);
   assert.match(facebookMedia.link, /^https:\/\/www\.facebook\.com\//);
 });
 

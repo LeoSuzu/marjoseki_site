@@ -1296,7 +1296,11 @@ const createMediaItem = (item, meta) => {
 
     attachHoverPlayback(figure, video);
   } else if (isFacebookEmbed) {
-    if (item.image) {
+    // The image field is meant for an actual thumbnail. If someone pastes
+    // the Facebook link in there too, treat it the same as no poster rather
+    // than trying (and failing) to load Facebook's page as an <img>.
+    const hasPoster = item.image && !isFacebookVideoLink(item.image);
+    if (hasPoster) {
       const poster = document.createElement("img");
       poster.alt = item.alt || "";
       prepareImage(poster, item.image);

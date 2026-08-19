@@ -36,6 +36,19 @@ async function putFile(path, branch, token, { content, message, sha }) {
   return response.json();
 }
 
+async function deleteFile(path, branch, token, { sha, message }) {
+  const response = await fetch(`https://api.github.com/repos/${OWNER_REPO}/contents/${path}`, {
+    method: "DELETE",
+    headers: { ...githubHeaders(token), "Content-Type": "application/json" },
+    body: JSON.stringify({ message, sha, branch }),
+  });
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`GitHub delete error (${response.status}): ${detail}`);
+  }
+  return response.json();
+}
+
 async function ensureBranch(branch, token) {
   const refResponse = await fetch(
     `https://api.github.com/repos/${OWNER_REPO}/git/ref/heads/${encodeURIComponent(branch)}`,
@@ -71,4 +84,4 @@ async function ensureBranch(branch, token) {
   }
 }
 
-module.exports = { OWNER_REPO, getFile, putFile, ensureBranch };
+module.exports = { OWNER_REPO, getFile, putFile, deleteFile, ensureBranch };

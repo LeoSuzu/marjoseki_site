@@ -454,10 +454,25 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
 
       if (field.value) {
         const preview = document.createElement("img");
-        preview.className = "editor-field__preview";
+        // Same classes real on-page images get, so the crop/scale sliders
+        // preview against the exact aspect-ratio and object-fit the image
+        // will actually be shown with -- not a generic, unrelated box.
+        preview.className = "editor-field__preview site-image";
         preview.src = field.value;
         preview.alt = "Esikatselu";
-        wrap.append(preview);
+
+        // previewFrame mirrors the real destination markup (e.g. the
+        // .gallery-item figure or .book-card__image div an image like this
+        // actually renders inside), from outermost to innermost, so the
+        // preview reuses the site's own CSS instead of duplicating it.
+        let mount = wrap;
+        (field.previewFrame || []).forEach((layer) => {
+          const layerNode = document.createElement(layer.tag || "div");
+          layerNode.className = layer.className;
+          mount.append(layerNode);
+          mount = layerNode;
+        });
+        mount.append(preview);
       }
 
       refs[field.name] = { urlInput, upload };
@@ -650,6 +665,10 @@ const openImageEditor = (meta) => {
         label: "Kuva",
         type: "image",
         value: getByPath(state.data, meta.path) || "",
+        previewFrame: [
+          { tag: "div", className: "page-hero__image" },
+          { tag: "div", className: "image-frame" },
+        ],
       },
       {
         name: "alt",
@@ -754,7 +773,12 @@ const openEditor = (meta) => {
 
   if (meta.kind === "gallery-image") {
     openObjectEditor(meta, [
-      { name: "image", label: "Kuva", type: "image" },
+      {
+        name: "image",
+        label: "Kuva",
+        type: "image",
+        previewFrame: [{ tag: "figure", className: "gallery-item" }],
+      },
       { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
       ...imageSettingFields(),
     ]);
@@ -819,6 +843,7 @@ const openEditor = (meta) => {
         name: "image",
         label: "Kuva (tai videon esikatselukuva)",
         type: "image",
+        previewFrame: [{ tag: "figure", className: "media-item" }],
       },
       {
         name: "videoUrl",
@@ -844,7 +869,12 @@ const openEditor = (meta) => {
       { name: "title", label: "Kirjan nimi", type: "text" },
       { name: "status", label: "Tila", type: "select", options: ["Myynnissä", "Loppuunmyyty", "Tulossa"] },
       { name: "text", label: "Kuvaus", type: "textarea" },
-      { name: "image", label: "Kansikuva", type: "image" },
+      {
+        name: "image",
+        label: "Kansikuva",
+        type: "image",
+        previewFrame: [{ tag: "div", className: "book-card__image" }],
+      },
       { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
       ...imageSettingFields(),
     ]);
@@ -861,7 +891,12 @@ const openEditor = (meta) => {
       { name: "buyUrl", label: "Painikkeen linkki", type: "text" },
       { name: "infoLabel", label: "Tarkemmat tiedot -painikkeen teksti", type: "text" },
       { name: "infoText", label: "Tarkemmat tiedot -ikkunan teksti", type: "textarea", rows: 6 },
-      { name: "image", label: "Kurssin kuva", type: "image" },
+      {
+        name: "image",
+        label: "Kurssin kuva",
+        type: "image",
+        previewFrame: [{ tag: "div", className: "course-card__image" }],
+      },
       { name: "imageAlt", label: "Kuvan kuvaus", type: "text" },
       ...imageSettingFields(),
     ]);

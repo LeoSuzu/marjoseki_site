@@ -1053,6 +1053,19 @@ body.admin-mode .editable-target:hover {
   border: 1px solid var(--line);
 }
 
+/* The preview reuses the real on-page card markup (see previewFrame in
+   site.js) so the crop is accurate, but capped to a sane thumbnail size
+   here so a tall aspect-ratio (e.g. 4:5 media cards) doesn't blow out the
+   modal's height. */
+.editor-field .gallery-item,
+.editor-field .media-item,
+.editor-field .course-card__image,
+.editor-field .book-card__image,
+.editor-field .page-hero__image {
+  max-width: 260px;
+  margin-inline: 0;
+}
+
 .editor-field input[type="range"] {
   width: 100%;
   accent-color: var(--accent-deep);

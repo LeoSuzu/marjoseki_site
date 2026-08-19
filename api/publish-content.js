@@ -1,6 +1,7 @@
 const { isSessionValid } = require("./_auth");
 const { getFile, putFile } = require("./_github");
 const { isValidSitePayload } = require("./_site-payload");
+const { cleanupOrphanedUploads } = require("./_uploads-cleanup");
 
 const BRANCH = process.env.GITHUB_BRANCH || "main";
 const FILE_PATH = "content/site.json";
@@ -49,6 +50,8 @@ module.exports = async function handler(req, res) {
       message: "Sisällön päivitys muokkaustilasta",
       sha: currentFile ? currentFile.sha : undefined,
     });
+
+    await cleanupOrphanedUploads(site, BRANCH, token);
 
     return res.status(200).json({ ok: true });
   } catch (error) {

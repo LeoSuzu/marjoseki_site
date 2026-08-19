@@ -395,12 +395,12 @@
         },
         {
           "type": "video",
-          "image": "https://www.facebook.com/reel/1014183844821274",
-          "videoUrl": "https://www.facebook.com/reel/1014183844821274",
+          "image": "assets/uploads/1787127411186-sxlg1w.jpg",
+          "videoUrl": "https://www.facebook.com/reel/3140108486139002",
           "alt": "Kyaraben",
           "caption": "Character Bento",
-          "link": "",
-          "imageScale": 100,
+          "link": "https://www.facebook.com/reel/3140108486139002",
+          "imageScale": 110,
           "imagePositionX": 50,
           "imagePositionY": 50
         }

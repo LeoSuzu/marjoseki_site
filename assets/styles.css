@@ -1261,6 +1261,20 @@ body.admin-mode .editable-target:hover {
   font-weight: 700;
 }
 
+.media-item__reload {
+  position: absolute;
+  inset: auto auto 0.7rem 0.7rem;
+  padding: 0.4rem 0.7rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(26, 20, 16, 0.62);
+  color: #fdfbf5;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
 /* ---------------------------------------------------------------------------
    Visual effects
 --------------------------------------------------------------------------- */

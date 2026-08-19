@@ -1321,24 +1321,44 @@ const createMediaItem = (item, meta) => {
     play.textContent = "▶ Katso video";
     figure.append(play);
 
-    figure.classList.add("media-item--fb-loadable");
-    let embedLoaded = false;
-    figure.addEventListener("click", (event) => {
-      if (state.isAdmin || event.target.closest("a") || embedLoaded) {
-        return;
-      }
-      embedLoaded = true;
-
+    // Facebook's plugin can end up stuck (e.g. after its own internal "view
+    // on Facebook" link is clicked and it fails to re-render), so a fresh
+    // iframe is cheap to build and swap in without reloading the whole page.
+    const buildFacebookIframe = () => {
       const iframe = document.createElement("iframe");
       iframe.className = "media-item__fb-iframe";
-      iframe.src = `https://www.facebook.com/plugins/video.php?height=600&href=${encodeURIComponent(mediaLink)}&show_text=false&width=400`;
+      iframe.src = `https://www.facebook.com/plugins/video.php?height=600&href=${encodeURIComponent(mediaLink)}&show_text=false&width=400&autoplay=false`;
       iframe.setAttribute("width", "100%");
       iframe.setAttribute("height", "100%");
       iframe.loading = "lazy";
       iframe.allow = "clipboard-write; encrypted-media; picture-in-picture; web-share";
       iframe.allowFullscreen = true;
-      posterNode.replaceWith(iframe);
+      return iframe;
+    };
+
+    figure.classList.add("media-item--fb-loadable");
+    let embedLoaded = false;
+    figure.addEventListener("click", (event) => {
+      if (state.isAdmin || event.target.closest("a, button") || embedLoaded) {
+        return;
+      }
+      embedLoaded = true;
+
+      let currentIframe = buildFacebookIframe();
+      posterNode.replaceWith(currentIframe);
       play.remove();
+
+      const reload = document.createElement("button");
+      reload.type = "button";
+      reload.className = "media-item__reload";
+      reload.textContent = "↻ Lataa video uudelleen";
+      reload.addEventListener("click", (reloadEvent) => {
+        reloadEvent.stopPropagation();
+        const fresh = buildFacebookIframe();
+        currentIframe.replaceWith(fresh);
+        currentIframe = fresh;
+      });
+      figure.append(reload);
     });
   } else if (item.image) {
     const image = document.createElement("img");

@@ -30,7 +30,10 @@
       "secondaryCtaLabel": "Katso tapahtumat",
       "image": "assets/uploads/1784382533900-w72wu3.jpg",
       "imageAlt": "Marjo Seki -muotokuva",
-      "badge": "Uusia ruokakursseja syksylle \"Tapahtumia\"- välilehdessä."
+      "badge": "Uusia ruokakursseja syksylle \"Tapahtumia\"- välilehdessä.",
+      "imageScale": 100,
+      "imagePositionX": 50,
+      "imagePositionY": 50
     },
     "intro": {
       "title": "Tervehdys",
@@ -182,10 +185,10 @@
       "title": "Tilaa kirja!",
       "instructions": "Maksu MobilePaylla numeroon 041 44 22 798. Postituskulut lisätään tilaukseen. Toimitamme tällä hetkellä vain Suomeen.",
       "successMessage": "Kiitos tilauksesta! Vahvistus ja maksuohjeet lähetetään sinulle pian.",
-      "image": "assets/uploads/1787066717779-06a0mh.jpg",
+      "image": "assets/uploads/1787203802393-w4ooma.jpg",
       "imageAlt": "Marjo Seki ja Makumatkoja Japaniin -kirja",
       "imageScale": 100,
-      "imagePositionX": 43,
+      "imagePositionX": 50,
       "imagePositionY": 50
     }
   },

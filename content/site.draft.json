@@ -301,6 +301,15 @@
         "text": "",
         "buttonLabel": "Ilmoittaudu kurssille",
         "buttonUrl": "https://ilmonet.fi/course/H264393"
+      },
+      {
+        "title": "Uusi tuleva tapahtuma",
+        "date": "",
+        "dateEnd": "",
+        "location": "",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }
     ],
     "past": [

@@ -303,11 +303,11 @@
         "buttonUrl": "https://ilmonet.fi/course/H264393"
       },
       {
-        "title": "Uusi tuleva tapahtuma",
-        "date": "",
+        "title": "Makumatkoja Japaniin",
+        "date": "2026-09-09",
         "dateEnd": "",
-        "location": "",
-        "text": "Kuvaile tapahtuma tässä.",
+        "location": "Oriveden kaupunginkirjasto",
+        "text": "Asiaa japanilaisesta ruokakulttuurista, reseptivinkkejä, kokemuksia Japanissa asumisesta 20 vuoden ajalta ja paljon muuta.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }

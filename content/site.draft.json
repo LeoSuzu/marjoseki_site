@@ -394,15 +394,15 @@
           "link": ""
         },
         {
-          "type": "video",
-          "image": "assets/uploads/1787127411186-sxlg1w.jpg",
-          "videoUrl": "https://www.facebook.com/reel/3140108486139002",
+          "type": "image",
+          "image": "assets/uploads/1787225077801-jub6ls.jpg",
+          "videoUrl": "",
           "alt": "Kyaraben",
-          "caption": "Character Bento",
-          "link": "https://www.facebook.com/reel/3140108486139002",
+          "caption": "Kirjatilaisuus",
+          "link": "",
           "imageScale": 100,
-          "imagePositionX": 50,
-          "imagePositionY": 50
+          "imagePositionX": 12.249192760491837,
+          "imagePositionY": 90.21435465767166
         }
       ]
     },

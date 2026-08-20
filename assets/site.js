@@ -19,6 +19,12 @@ const IMAGE_DEFAULTS = {
 
 const IMAGE_SETTING_NAMES = Object.keys(IMAGE_DEFAULTS);
 
+// Neutral grey box shown by the image editor's preview before any image has
+// ever been set, so there's a real (non-broken) crop area to drag into
+// instead of nothing at all.
+const EMPTY_IMAGE_PREVIEW_SRC =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5'%3E%3Crect width='4' height='5' fill='%23d8d8d8'/%3E%3C/svg%3E";
+
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
 const normalizeImageSettings = (value = {}) =>
@@ -47,26 +53,14 @@ const applyImageSettings = (image, value) => {
 
 const imageSettingsPathFromImagePath = (path) => path.replace(/\.image$/, "");
 
+// No longer rendered as visible sliders -- size and position are set by
+// dragging/pinching the preview image directly (setupImageDragAndPinch).
+// These stay as hidden fields purely so the existing value get/set/submit
+// plumbing (openObjectEditor, openImageEditor) doesn't need to change.
 const imageSettingFields = () => [
-  { name: "imageScale", label: "Kuvan koko", type: "range", min: 80, max: 180, step: 1, unit: "%" },
-  {
-    name: "imagePositionX",
-    label: "Kuvan sijainti vaakasuunnassa",
-    type: "range",
-    min: 0,
-    max: 100,
-    step: 1,
-    unit: "%",
-  },
-  {
-    name: "imagePositionY",
-    label: "Kuvan sijainti pystysuunnassa",
-    type: "range",
-    min: 0,
-    max: 100,
-    step: 1,
-    unit: "%",
-  },
+  { name: "imageScale", label: "Kuvan koko", type: "range", hidden: true, min: 80, max: 180, step: 1 },
+  { name: "imagePositionX", label: "Kuvan sijainti vaakasuunnassa", type: "range", hidden: true, min: 0, max: 100, step: 1 },
+  { name: "imagePositionY", label: "Kuvan sijainti pystysuunnassa", type: "range", hidden: true, min: 0, max: 100, step: 1 },
 ];
 
 const getByPath = (object, path) => {
@@ -403,6 +397,28 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
   errorNode.hidden = true;
 
   fields.forEach((field) => {
+    // Image size/position live entirely on the drag-and-pinch preview now
+    // (see setupImageDragAndPinch) -- these fields still exist so the
+    // existing get/set/sync plumbing works unchanged, they just never
+    // render as visible sliders.
+    if (field.hidden) {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.value = String(field.value ?? "");
+      // Not a real <input type="range">, so min/max aren't reflected IDL
+      // properties here -- set them explicitly since setupImageDragAndPinch
+      // reads them to clamp drag/pinch/wheel values.
+      if (field.min !== undefined) {
+        input.min = String(field.min);
+      }
+      if (field.max !== undefined) {
+        input.max = String(field.max);
+      }
+      form.append(input);
+      refs[field.name] = input;
+      return;
+    }
+
     const wrap = document.createElement("label");
     wrap.className = "editor-field";
 
@@ -452,33 +468,52 @@ const showModal = ({ title, description, fields, submitLabel, onSubmit, dangerAc
       upload.accept = "image/*";
       wrap.append(upload);
 
-      if (field.value) {
-        const preview = document.createElement("img");
-        // Same classes real on-page images get, so the crop/scale sliders
-        // preview against the exact aspect-ratio and object-fit the image
-        // will actually be shown with -- not a generic, unrelated box.
-        preview.className = "editor-field__preview site-image";
-        preview.src = field.value;
-        preview.alt = "Esikatselu";
+      const preview = document.createElement("img");
+      // Same classes real on-page images get, so the crop/scale preview
+      // matches the exact aspect-ratio and object-fit the image will
+      // actually be shown with -- not a generic, unrelated box.
+      preview.className = "editor-field__preview site-image";
+      preview.src = field.value || EMPTY_IMAGE_PREVIEW_SRC;
+      preview.alt = "Esikatselu";
 
-        // previewFrame mirrors the real destination markup (e.g. the
-        // .gallery-item figure or .book-card__image div an image like this
-        // actually renders inside), from outermost to innermost, so the
-        // preview reuses the site's own CSS instead of duplicating it.
-        let mount = wrap;
-        (field.previewFrame || []).forEach((layer) => {
-          const layerNode = document.createElement(layer.tag || "div");
-          layerNode.className = layer.className;
-          mount.append(layerNode);
-          mount = layerNode;
-        });
-        mount.append(preview);
+      // previewFrame mirrors the real destination markup (e.g. the
+      // .gallery-item figure or .book-card__image div an image like this
+      // actually renders inside), from outermost to innermost, so the
+      // preview reuses the site's own CSS instead of duplicating it.
+      let mount = wrap;
+      (field.previewFrame || []).forEach((layer) => {
+        const layerNode = document.createElement(layer.tag || "div");
+        layerNode.className = layer.className;
+        mount.append(layerNode);
+        mount = layerNode;
+      });
+      mount.append(preview);
 
-        const dragHint = document.createElement("small");
-        dragHint.className = "editor-field__help";
-        dragHint.textContent = "Vedä kuvaa siirtääksesi, nipistä tai vieritä hiiren rullalla lähentääksesi.";
-        wrap.append(dragHint);
-      }
+      const dragHint = document.createElement("small");
+      dragHint.className = "editor-field__help";
+      dragHint.textContent = "Vedä kuvaa siirtääksesi, nipistä tai vieritä hiiren rullalla lähentääksesi.";
+      wrap.append(dragHint);
+
+      // The preview only ever showed whatever image was already saved --
+      // picking a new file or pasting a new URL never updated it, so there
+      // was nothing to actually drag/pinch for the photo being added.
+      let pickedObjectUrl = null;
+      upload.addEventListener("change", () => {
+        const file = upload.files[0];
+        if (!file) {
+          return;
+        }
+        if (pickedObjectUrl) {
+          URL.revokeObjectURL(pickedObjectUrl);
+        }
+        pickedObjectUrl = URL.createObjectURL(file);
+        preview.src = pickedObjectUrl;
+      });
+      urlInput.addEventListener("change", () => {
+        if (urlInput.value.trim()) {
+          preview.src = urlInput.value.trim();
+        }
+      });
 
       refs[field.name] = { urlInput, upload };
     } else if (field.type === "range") {

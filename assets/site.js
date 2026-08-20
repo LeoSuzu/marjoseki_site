@@ -714,6 +714,11 @@ const setupImageDragAndPinch = (preview, modal) => {
   preview.draggable = false;
   preview.style.touchAction = "none";
   preview.style.cursor = "grab";
+  // Safari in particular can still start its native "drag this image out"
+  // gesture on mousedown+move despite draggable=false/-webkit-user-drag,
+  // which swallows the pointermove sequence our own dragging depends on.
+  // Explicitly blocking the dragstart event is the reliable fix.
+  preview.addEventListener("dragstart", (event) => event.preventDefault());
 
   const pointers = new Map();
   const activePoints = () => Array.from(pointers.values());
@@ -730,7 +735,12 @@ const setupImageDragAndPinch = (preview, modal) => {
   });
 
   preview.addEventListener("pointerdown", (event) => {
-    preview.setPointerCapture(event.pointerId);
+    try {
+      preview.setPointerCapture(event.pointerId);
+    } catch (error) {
+      // Capture failing shouldn't stop the drag itself from tracking --
+      // pointermove still fires on the element without it in most cases.
+    }
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     preview.style.cursor = "grabbing";
 

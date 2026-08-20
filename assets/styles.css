@@ -1378,6 +1378,9 @@ body.admin-mode .editable-target:focus-visible {
   outline-offset: 4px;
 }
 
+/* Visible at all times in edit mode -- on touch there's no hover to reveal
+   it first, so a badge that only appears on interaction is invisible right
+   up until the moment you've already committed to tapping something. */
 body.admin-mode .editable-target::after {
   content: "✎";
   position: absolute;
@@ -1391,8 +1394,9 @@ body.admin-mode .editable-target::after {
   background: var(--accent-deep);
   color: #fdfbf5;
   font-size: 0.78rem;
-  opacity: 0;
-  transform: scale(0.7);
+  opacity: 0.85;
+  box-shadow: 0 2px 8px rgba(var(--accent-deep-rgb), 0.35);
+  transform: scale(0.92);
   transition: opacity 180ms ease, transform 180ms ease;
   pointer-events: none;
 }
@@ -1403,7 +1407,14 @@ body.admin-mode .editable-target:focus-visible::after {
   transform: scale(1);
 }
 
-/* An <img> can't paint ::after, so images get a ring instead of a badge. */
+/* An <img> can't paint ::after, so images get a ring instead of a badge --
+   shown at a lighter weight by default, same reasoning as above. */
+body.admin-mode img.editable-target {
+  outline: 2px solid rgba(var(--accent-deep-rgb), 0.45);
+  outline-offset: 4px;
+  transition: outline-color 180ms ease, outline-width 180ms ease;
+}
+
 body.admin-mode img.editable-target:hover,
 body.admin-mode img.editable-target:focus-visible {
   outline: 3px solid var(--accent-deep);

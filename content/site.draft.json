@@ -30,7 +30,10 @@
       "secondaryCtaLabel": "Katso tapahtumat",
       "image": "assets/uploads/1784382533900-w72wu3.jpg",
       "imageAlt": "Marjo Seki -muotokuva",
-      "badge": "Uusia ruokakursseja syksylle \"Tapahtumia\"- välilehdessä."
+      "badge": "Uusia ruokakursseja syksylle \"Tapahtumia\"- välilehdessä.",
+      "imageScale": 100,
+      "imagePositionX": 50,
+      "imagePositionY": 50
     },
     "intro": {
       "title": "Tervehdys",
@@ -334,22 +337,6 @@
         "date": "12.5.2026",
         "location": "Lahden pääkirjasto",
         "text": "Omiin kokemuksiin perustuvia tarinoita Japani-vuosilta ja japanilaisen ruokakulttuurin esittelyä.",
-        "buttonLabel": "",
-        "buttonUrl": ""
-      },
-      {
-        "title": "Uusi mennyt tapahtuma",
-        "date": "",
-        "location": "",
-        "text": "Kuvaile tapahtuma tässä.",
-        "buttonLabel": "",
-        "buttonUrl": ""
-      },
-      {
-        "title": "Uusi mennyt tapahtuma",
-        "date": "",
-        "location": "",
-        "text": "Kuvaile tapahtuma tässä.",
         "buttonLabel": "",
         "buttonUrl": ""
       }

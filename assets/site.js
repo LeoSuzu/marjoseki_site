@@ -809,10 +809,11 @@ const openImageEditor = (meta) => {
         label: "Kuva",
         type: "image",
         value: getByPath(state.data, meta.path) || "",
-        previewFrame: [
-          { tag: "div", className: "page-hero__image" },
-          { tag: "div", className: "image-frame" },
-        ],
+        // .image-frame is the one shared crop component every single-photo
+        // context (hero, page header, order/inquiry photo) wraps its <img>
+        // in, so this preview always crops exactly like the real page does
+        // -- regardless of which of those contexts meta.path points at.
+        previewFrame: [{ tag: "div", className: "image-frame" }],
       },
       {
         name: "alt",

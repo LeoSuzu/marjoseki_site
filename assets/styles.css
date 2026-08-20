@@ -516,45 +516,33 @@ button {
   margin-top: 1.8rem;
 }
 
-/* Capped rather than a percentage of the column: a hero photo that grows with
-   the viewport dominates the page on a large screen and shrinks to a stamp on
-   a narrow one. Fixed ceiling, centred in whatever space it gets. */
-.hero__visual img,
-.page-hero__image img {
-  width: 100%;
-  max-width: 340px;
-  max-height: 420px;
-  object-fit: cover;
-  margin-inline: auto;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(255, 255, 255, 0.65);
-}
-
+/* Single base "photo frame" component: every place a lone editable photo
+   appears (hero, page headers, order/inquiry photos) wraps its <img> in
+   this. One crop rule, everywhere -- so the drag/pinch/scale editor
+   behaves identically no matter which photo is being edited, instead of
+   each context quietly having (or not having) its own forced aspect
+   ratio. Contexts below only ever adjust width/decoration, never
+   cropping. */
 .image-frame {
   position: relative;
   overflow: hidden;
   border-radius: inherit;
+  aspect-ratio: 4 / 5;
+}
+
+.image-frame img,
+.image-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .hero__visual > .image-frame,
 .page-hero__image > .image-frame {
   width: min(100%, 340px);
-  max-height: 420px;
   margin-inline: auto;
   border-radius: var(--radius-lg);
-  box-shadow: none;
-  border: 0;
-}
-
-.hero__visual > .image-frame img,
-.page-hero__image > .image-frame img {
-  width: 100%;
-  max-width: none;
-  max-height: 420px;
-  border: 0;
-  border-radius: inherit;
-  box-shadow: none;
 }
 
 .hero__badge {
@@ -1063,7 +1051,7 @@ body.admin-mode .editable-target:hover {
 .editor-field .media-item,
 .editor-field .course-card__image,
 .editor-field .book-card__image,
-.editor-field .page-hero__image {
+.editor-field .image-frame {
   max-width: 260px;
   margin-inline: 0;
 }
@@ -1180,19 +1168,7 @@ body.admin-mode .editable-target:hover {
 
 .photo-frame > .image-frame {
   width: 100%;
-  aspect-ratio: 4 / 5;
-  height: auto;
   border-radius: calc(var(--radius-md) - 8px);
-}
-
-/* Keep the form-side photos in the same rounded, contained visual language as
-   the rest of the site while the edit-mode position controls choose the crop. */
-.photo-frame img {
-  width: 100%;
-  height: 100%;
-  max-height: none;
-  object-fit: cover;
-  border-radius: inherit;
 }
 
 .photo-frame figcaption {
@@ -1462,16 +1438,9 @@ body.admin-mode img.editable-target:focus-visible {
     width: 100%;
   }
 
-  .hero__visual img,
-  .page-hero__image img {
-    max-width: 280px;
-    max-height: 340px;
-  }
-
   .hero__visual > .image-frame,
   .page-hero__image > .image-frame {
     width: min(100%, 280px);
-    max-height: 340px;
   }
 
   .book-card__image img {

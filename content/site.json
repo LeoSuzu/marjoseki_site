@@ -185,8 +185,8 @@
       "image": "assets/uploads/1787206403764-25yb0d.jpg",
       "imageAlt": "Marjo Seki ja Makumatkoja Japaniin -kirja",
       "imageScale": 100,
-      "imagePositionX": 50,
-      "imagePositionY": 50
+      "imagePositionX": 0,
+      "imagePositionY": 8.479609834590022
     }
   },
   "yhteystiedot": {
@@ -401,8 +401,8 @@
           "caption": "Kirjatilaisuus",
           "link": "",
           "imageScale": 100,
-          "imagePositionX": 12.249192760491837,
-          "imagePositionY": 90.21435465767166
+          "imagePositionX": 0,
+          "imagePositionY": 0
         }
       ]
     },

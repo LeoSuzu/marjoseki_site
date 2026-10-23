@@ -310,6 +310,24 @@
         "text": "Asiaa japanilaisesta ruokakulttuurista, reseptivinkkejä, kokemuksia Japanissa asumisesta 20 vuoden ajalta ja paljon muuta.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Temppeliruokakurssi",
+        "date": "2027-01-30",
+        "dateEnd": "",
+        "location": "Helsingin työväenopisto, Opistotalo",
+        "text": "Kurssilla valmistetaan kasvisruokia japanilaisen temppeliruokafilosofian mukaisin opein.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Temppeliruokakurssi",
+        "date": "2027-04-10",
+        "dateEnd": "",
+        "location": "Helsingin työväenopisto, Opistotalo",
+        "text": "Kurssilla valmistetaan kasvisruokia japanilaisen temppeliruokafilosofian mukaisin opein.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }
     ],
     "past": [

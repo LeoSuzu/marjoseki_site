@@ -312,11 +312,11 @@
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       },
       {
-        "title": "Uusi tuleva tapahtuma",
-        "date": "",
+        "title": "Temppeliruokakurssi",
+        "date": "2027-01-30",
         "dateEnd": "",
-        "location": "",
-        "text": "Kuvaile tapahtuma tässä.",
+        "location": "Helsingin työväenopisto, Opistotalo",
+        "text": "Kurssilla valmistetaan kasvisruokia japanilaisen temppeliruokafilosofian mukaisin opein.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }

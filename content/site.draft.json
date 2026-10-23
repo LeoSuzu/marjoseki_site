@@ -185,8 +185,8 @@
       "image": "assets/uploads/1787206403764-25yb0d.jpg",
       "imageAlt": "Marjo Seki ja Makumatkoja Japaniin -kirja",
       "imageScale": 100,
-      "imagePositionX": 0,
-      "imagePositionY": 8.479609834590022
+      "imagePositionX": 50,
+      "imagePositionY": 50
     }
   },
   "yhteystiedot": {
@@ -310,6 +310,15 @@
         "text": "Asiaa japanilaisesta ruokakulttuurista, reseptivinkkejä, kokemuksia Japanissa asumisesta 20 vuoden ajalta ja paljon muuta.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Uusi tuleva tapahtuma",
+        "date": "",
+        "dateEnd": "",
+        "location": "",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }
     ],
     "past": [
@@ -401,8 +410,8 @@
           "caption": "Kirjatilaisuus",
           "link": "",
           "imageScale": 100,
-          "imagePositionX": 0,
-          "imagePositionY": 0
+          "imagePositionX": 50,
+          "imagePositionY": 50
         }
       ]
     },

@@ -421,6 +421,17 @@
           "imageScale": 100,
           "imagePositionX": 50,
           "imagePositionY": 50
+        },
+        {
+          "type": "image",
+          "image": "assets/uploads/1793421722466-rqsexu.jpg",
+          "videoUrl": "",
+          "alt": "Uusi kuva",
+          "caption": "",
+          "link": "",
+          "imageScale": 100,
+          "imagePositionX": 53.74677002583979,
+          "imagePositionY": 83.48837209302297
         }
       ]
     },

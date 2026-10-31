@@ -424,11 +424,14 @@
         },
         {
           "type": "image",
-          "image": "assets/uploads/event-placeholder.svg",
+          "image": "assets/uploads/1793421722466-rqsexu.jpg",
           "videoUrl": "",
           "alt": "Uusi kuva",
           "caption": "",
-          "link": ""
+          "link": "",
+          "imageScale": 100,
+          "imagePositionX": 53.74677002583979,
+          "imagePositionY": 83.48837209302297
         }
       ]
     },

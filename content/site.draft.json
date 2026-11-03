@@ -52,8 +52,11 @@
           "imageAlt": "Marjo Seki kirjastossa perinteisessä japanilaisessa vaatteessa pitää käsissään kirjaansa Makumatkoja Japaniin"
         },
         {
-          "image": "assets/uploads/portrait-placeholder.svg",
-          "imageAlt": "Uusi kuva"
+          "image": "assets/uploads/1793687051592-zxw4my.jpg",
+          "imageAlt": "UusiItä-Hämeen opistolla kuva",
+          "imageScale": 100,
+          "imagePositionX": 21.576227390180886,
+          "imagePositionY": 53.7898363479762
         }
       ]
     },

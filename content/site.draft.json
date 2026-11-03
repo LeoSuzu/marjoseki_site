@@ -440,6 +440,14 @@
           "alt": "Uusi kuva",
           "caption": "",
           "link": ""
+        },
+        {
+          "type": "image",
+          "image": "assets/uploads/event-placeholder.svg",
+          "videoUrl": "",
+          "alt": "Uusi kuva",
+          "caption": "",
+          "link": ""
         }
       ]
     },

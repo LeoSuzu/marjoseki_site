@@ -50,6 +50,13 @@
         {
           "image": "assets/uploads/1784383133589-vw4p26.jpg",
           "imageAlt": "Marjo Seki kirjastossa perinteisessä japanilaisessa vaatteessa pitää käsissään kirjaansa Makumatkoja Japaniin"
+        },
+        {
+          "image": "assets/uploads/1793687051592-zxw4my.jpg",
+          "imageAlt": "UusiItä-Hämeen opistolla kuva",
+          "imageScale": 100,
+          "imagePositionX": 21.576227390180886,
+          "imagePositionY": 53.7898363479762
         }
       ]
     },
@@ -432,6 +439,22 @@
           "imageScale": 100,
           "imagePositionX": 53.74677002583979,
           "imagePositionY": 83.48837209302297
+        },
+        {
+          "type": "image",
+          "image": "assets/uploads/event-placeholder.svg",
+          "videoUrl": "",
+          "alt": "Uusi kuva",
+          "caption": "",
+          "link": ""
+        },
+        {
+          "type": "image",
+          "image": "assets/uploads/event-placeholder.svg",
+          "videoUrl": "",
+          "alt": "Uusi kuva",
+          "caption": "",
+          "link": ""
         }
       ]
     },

@@ -459,11 +459,14 @@
         },
         {
           "type": "image",
-          "image": "assets/uploads/event-placeholder.svg",
+          "image": "assets/uploads/1793820525967-i19pjr.jpg",
           "videoUrl": "",
           "alt": "Uusi kuva",
-          "caption": "",
-          "link": ""
+          "caption": "Itä-Hämeen opistolla",
+          "link": "",
+          "imageScale": 100,
+          "imagePositionX": 49.87080103359172,
+          "imagePositionY": 82.04134366925084
         }
       ]
     },

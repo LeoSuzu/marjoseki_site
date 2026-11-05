@@ -479,11 +479,14 @@
         },
         {
           "type": "image",
-          "image": "assets/uploads/event-placeholder.svg",
+          "image": "assets/uploads/1793852973428-2qinam.jpg",
           "videoUrl": "",
           "alt": "Uusi kuva",
-          "caption": "",
-          "link": ""
+          "caption": "Makumatka Japaniin 10.-19.5.2027",
+          "link": "",
+          "imageScale": 100,
+          "imagePositionX": 30.490956072351423,
+          "imagePositionY": 100
         }
       ]
     },

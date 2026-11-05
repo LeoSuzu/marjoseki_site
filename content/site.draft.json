@@ -476,6 +476,14 @@
           "imageScale": 100,
           "imagePositionX": 49.87080103359172,
           "imagePositionY": 82.04134366925084
+        },
+        {
+          "type": "image",
+          "image": "assets/uploads/event-placeholder.svg",
+          "videoUrl": "",
+          "alt": "Uusi kuva",
+          "caption": "",
+          "link": ""
         }
       ]
     },

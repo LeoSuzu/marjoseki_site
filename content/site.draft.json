@@ -344,6 +344,15 @@
         "text": "Lauantaina japanilaisten temppeliruokien valmistusta, sunnuntaina keskitymme japanilaisiin kotiruokiin.",
         "buttonLabel": "Kysy lisää",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
+      },
+      {
+        "title": "Uusi tuleva tapahtuma",
+        "date": "",
+        "dateEnd": "",
+        "location": "",
+        "text": "Kuvaile tapahtuma tässä.",
+        "buttonLabel": "Kysy lisää",
+        "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }
     ],
     "past": [

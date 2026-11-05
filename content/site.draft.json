@@ -346,12 +346,12 @@
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       },
       {
-        "title": "Uusi tuleva tapahtuma",
-        "date": "",
-        "dateEnd": "",
-        "location": "",
-        "text": "Kuvaile tapahtuma tässä.",
-        "buttonLabel": "Kysy lisää",
+        "title": "Makumatka Japaniin",
+        "date": "2027-05-10",
+        "dateEnd": "2027-05-19",
+        "location": "Tokio, Nikko, Hakone",
+        "text": "Japanilaista ruokaa, kulttuuria, nähtävyyksiä, sakea, kuumia lähteitä, luotijunia ja paljon muuta.",
+        "buttonLabel": "Matkaohjelma sähköpostitse",
         "buttonUrl": "mailto:marjoseki@hotmail.com?subject=Tapahtumakysymys"
       }
     ],
